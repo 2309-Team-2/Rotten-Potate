@@ -44,11 +44,12 @@ const dropTables = async () => {
 const createTables = async () => {
     try{
         await db.query(`
-        CREATE TABLE users(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) DEFAULT 'name',
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL
+        CREATE TABLE [users] (
+          [id] integer PRIMARY KEY,
+          [username] nvarchar(255),
+          [email] nvarchar(255),
+          [password] nvarchar(255),
+          [created_at] timestamp
         )`)
     }
     catch(err) {
