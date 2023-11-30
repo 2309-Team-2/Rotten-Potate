@@ -50,7 +50,7 @@ const createTables = async () => {
           [email] nvarchar(255),
           [password] nvarchar(255),
           [created_at] timestamp
-        )`)
+        ))`)
     }
     catch(err) {
         throw err;
