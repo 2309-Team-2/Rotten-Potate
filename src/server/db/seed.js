@@ -67,24 +67,24 @@ const createTables = async () => {
           updated_at timestamp
         )`
         )
-        // await db.query(
-        //   `
-        //   Table comments (
-        //     id integer PRIMARY KEY,
-        //     content varchar,
-        //     users_id integer,
-        //     reviews_id integer
-        //   )`
-        // )
-        // await db.query(
-        //   `CREATE Table movies (
-        //     id integer PRIMARY KEY,
-        //     title varchar,
-        //     description varchar,
-        //     release_date varchar,
-        //     created_at timestamp,            updated_at timestamp
-        //   )`
-        // )
+        await db.query(
+           `
+          CREATE Table comments (
+             id integer PRIMARY KEY,
+             content varchar,
+            users_id integer,
+             reviews_id integer
+           )`
+         )
+         await db.query(
+           `CREATE Table movie (
+             id integer PRIMARY KEY,
+             title varchar,
+             description varchar,
+             release_date varchar,
+             created_at timestamp,            updated_at timestamp
+           )`
+         )
     }
     catch(err) {
         throw err;
