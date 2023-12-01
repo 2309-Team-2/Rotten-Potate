@@ -187,6 +187,7 @@ li {
   padding: 20px;
   background-color: #333;
   border-radius: 8px;
+  width: 150px;
 }
 
 .movie-item h3 {
@@ -208,4 +209,9 @@ li {
 
 .movie-link:hover {
   text-decoration: underline;
+}
+
+.movie-item img {
+  width: auto;
+  height: 200px;
 }
