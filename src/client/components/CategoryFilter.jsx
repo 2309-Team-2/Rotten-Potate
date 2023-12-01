@@ -1,54 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import  moviesSeedData  from '../../server/db/moviesSeedData';
 
+
 const CategoryFilter = ({ onFilterChange }) => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const [selectedCategoryMovies, setSelectedCategoryMovies] = useState([]);
+    
 
-    // Fetch both all genres and single genres from your API
-    const fetchGenres = async () => {
-        try {
-            // Fetch all genres
-            const allGenresResponse = await fetch('/api/genres');
-            if (!allGenresResponse.ok) {
-                throw new Error(`Failed to fetch all genres. Status: ${allGenresResponse.status}`);
+    useEffect(() => {
+        // Use moviesSeedData directly
+        const fetchGenres = () => {
+            try {
+                const allGenres = moviesSeedData.reduce((acc, movie) => {
+                    if (movie.genre) {
+                        // Split genres by comma and trim spaces
+                        const movieGenres = movie.genre.split(',').map(genre => genre.trim());
+                        movieGenres.forEach((genre) => {
+                            if (!acc.includes(genre)) {
+                                acc.push(genre);
+                            }
+                        });
+                    }
+                    return acc;
+                }, []);
+
+                const sortedGenres = allGenres.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
+
+                setCategories(['All', ...sortedGenres]);
+            } catch (error) {
+                console.error('Error fetching genres:', error.message);
             }
-            const allGenresData = await allGenresResponse.json();
+        };
 
-            // Fetch movies for the selected genre
-            const selectedGenreResponse = await fetch(`/api/genres/${selectedCategory}`);
-            if (!selectedGenreResponse.ok) {
-                throw new Error(`Failed to fetch movies for genre. Status: ${selectedGenreResponse.status}`);
-            }
-            const selectedGenreData = await selectedGenreResponse.json();
-
-            // Combine and set categories
-            setCategories(['All', ...allGenresData]);
-            // Update movies for the selected genre in the state
-            setSelectedCategoryMovies(selectedGenreData);
-            // Include movies for the selected genre in the state
-            onFilterChange(selectedCategory, selectedGenreData);
-        } catch (error) {
-            console.error('Error fetching genres:', error.message);
-        }
-    };
+        fetchGenres();
+    }, []);
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
-        if (category === 'All') {
-            // Fetch all genres
-            fetchGenres();
-        } else {
-            // Fetch movies for the selected genre
-            fetchGenres(category);
-        }
+        onFilterChange(category);
     };
-
-    useEffect(() => {
-        // Initial fetch when component mounts
-        fetchGenres();
-    }, []); // Empty dependency array ensures this runs only once on mount
 
     return (
         <div>
@@ -60,13 +50,6 @@ const CategoryFilter = ({ onFilterChange }) => {
                     </option>
                 ))}
             </select>
-
-            <h3>Movies for {selectedCategory}</h3>
-            <ul>
-                {selectedCategoryMovies.map((movie) => (
-                    <li key={movie.id}>{movie.title}</li>
-                ))}
-            </ul>
         </div>
     );
 };
