@@ -73,6 +73,14 @@ const createTables = async () => {
             created_at timestamp,            updated_at timestamp
           )`
         )
+        await db.query(
+          `CREATE Table comments {
+            id integer 
+            content varchar
+            users_id integer
+            reviews_id integer
+          }`
+        )
     }
     catch(err) {
         throw err;
