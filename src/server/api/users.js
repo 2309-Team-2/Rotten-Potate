@@ -1,27 +1,37 @@
 const express = require('express')
 const usersRouter = express.Router();
+const { getAllUsers } = require('../db/users'); 
+
 
 const {
     createUser,
     getUser,
     getUserByEmail
-} = require('../db');
+} = require('../db/');
 
 const jwt = require('jsonwebtoken')
 
 usersRouter.get('/', async (req, res, next) => {
     try {
-        const users = await getUser({}); // Pass an empty object or any required filters
-        const usersEmail = await getUserByEmail({}); // Pass an empty object or any required filters
-
-        res.send({
-            usersEmail,
-            users
-        });
-    } catch ({ name, message }) {
-        next({ name, message });
+        const users = await getAllUsers();
+        res.send({ users });
+    } catch (error) {
+        next(error);
     }
 });
+
+
+// usersRouter.get('/', async (req, res, next) => {
+//     try {
+//         const users = await getUser({}); // Assuming this should fetch all users
+
+//         // Send back the users in the response
+//         res.send({ users });
+//     } catch (error) {
+//         next(error); // Pass the error to the error handling middleware
+//     }
+// });
+
 
 usersRouter.post('/login', async(req, res, next) => {
     const { email, password } = req.body;

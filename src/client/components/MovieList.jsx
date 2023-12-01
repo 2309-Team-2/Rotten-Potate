@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategoryFilter from './CategoryFilter';
 
-
 async function fetchAllMovies() {
   try {
     const response = await fetch('/api/movies');
@@ -54,7 +53,9 @@ function MovieList() {
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">
             <Link to={`/movies/${movie.id}`} className="movie-link">
+              <img src={movie.imageUrl} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
+              {/* Display the movie image */}
               <p>Release Year: {movie.release_year}</p>
               <p>Rating: {movie.rating}</p>
               {/* Add more details as needed */}
@@ -65,4 +66,5 @@ function MovieList() {
     </div>
   );
 }
+
 export default MovieList;
