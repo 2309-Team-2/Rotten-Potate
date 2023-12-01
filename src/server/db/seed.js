@@ -35,6 +35,7 @@ const dropTables = async () => {
         await db.query(`
         DROP TABLE IF EXISTS users;
         DROP TABLE IF EXISTS reviews;
+        DROP TABLE IF EXISTS comments;
         `)
     }
     catch(err) {
@@ -53,8 +54,10 @@ const createTables = async () => {
             created_at timestamp
         )`
       )
+      
       await db.query(
-        ` CREATE TABLE reviews (
+        ` 
+        CREATE TABLE reviews (
           id integer PRIMARY KEY,
           user_id varchar(255),
           movie_id varchar(255),
@@ -64,23 +67,24 @@ const createTables = async () => {
           updated_at timestamp
         )`
         )
-        await db.query(
-          `CREATE Table movies (
-            id integer PRIMARY KEY,
-            title varchar,
-            description varchar,
-            release_date varchar,
-            created_at timestamp,            updated_at timestamp
-          )`
-        )
-        await db.query(
-          `CREATE Table comments {
-            id integer 
-            content varchar
-            users_id integer
-            reviews_id integer
-          }`
-        )
+        // await db.query(
+        //   `
+        //   Table comments (
+        //     id integer PRIMARY KEY,
+        //     content varchar,
+        //     users_id integer,
+        //     reviews_id integer
+        //   )`
+        // )
+        // await db.query(
+        //   `CREATE Table movies (
+        //     id integer PRIMARY KEY,
+        //     title varchar,
+        //     description varchar,
+        //     release_date varchar,
+        //     created_at timestamp,            updated_at timestamp
+        //   )`
+        // )
     }
     catch(err) {
         throw err;
