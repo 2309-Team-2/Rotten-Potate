@@ -1,5 +1,3 @@
-// // movie.js in the 'db' directory
-
 const db = require('./client'); // Adjust this path to your actual database client
 
 async function getAllMovies() {
@@ -10,6 +8,20 @@ async function getAllMovies() {
         throw err;
     }
 }
+
+async function getMovieById(id) {
+  try {
+      const result = await db.query('SELECT * FROM movies WHERE id = $1', [id]);
+      if (result.rows.length) {
+          return result.rows[0];
+      } else {
+          return null;
+      }
+  } catch (err) {
+      throw err;
+  }
+}
+
 
 async function addMovie(movieData) {
     try {
@@ -27,5 +39,6 @@ async function addMovie(movieData) {
 
 module.exports = {
     getAllMovies,
+    getMovieById,
     addMovie
 };
