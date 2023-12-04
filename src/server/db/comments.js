@@ -1,28 +1,5 @@
 const db = require ('./client')
 
-async function getAllComments() {
-  try {
-    const result = await db.query(`SELECT * FROM comments;`);
-    return result.rows;
-  } catch (err) {
-    console.error('Error retrieving comments:', err.stack);
-    throw err;
-  }
-}
-async function processComments() {
-  try {
-    const comments = await getAllComments();
-    console.log('All Comments:', comments);
-    // Process the comments array as needed
-  } catch (err) {
-    // Handle error
-    console.error('Error processing comments:', err.stack);
-  }
-}
-
-// Call the function
-processComments();
-
 const createComment = async (content, reviewId, userId) => {
   try {
     const { rows } = await db.query(
@@ -37,10 +14,38 @@ const createComment = async (content, reviewId, userId) => {
   }
 }
 
-
-
+const getCommentById = async (id) => {
+  try {
+     const { rows } = await 
+     db.query('SELECT * FROM comments WHERE id = $1',[id]);
+     return rows [0];
+  } catch (error) {
+    throw error;
+  }
+}
+const getAllComments = async () => {
+  try {
+    const { rows } = await db.query('SELECT * FROM commdnts')
+    return rows;
+  } catch (error){
+    throw error;
+  }
+}
+const updateComments = async (id, content, reviewId) => {
+  try {
+    const { rows } = await db.query(
+      'UPDATE comments SET CONTENT = $2, review_id = $3 WHERE id = $1 RETURNING *', [id, content, reviewId]
+    );
+    return rows [0];
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
-  createComment,
-  getAllComments
+createComment,
+getCommentById,
+getAllComments,
+updateComments
 };
+
