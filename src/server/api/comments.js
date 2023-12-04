@@ -1,19 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db');
+const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db/comments');
 
 // GET all comments
-router.get('/comments', (req, res) => {
-  const comments = getAllComments();
-  res.json(comments);
+router.get('/comments', async (req, res) => {
+  try {
+    const comments = await getAllComments();
+    res.json(comments);
+  } catch (err) {
+    console.error('Error in /comments endpoint:', err.stack);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 // GET comment by ID
 router.get('/comments/:id', (req, res) => {
   const commentId = req.params.id;
-  const comment = getCommentById(commentId);
+  //const comment = getCommentById(commentId);
   
-  if (comment) {
+  if (commentsId) {
     res.json(comment);
   } else {
     res.status(404).json({ message: 'Comment not found' });
