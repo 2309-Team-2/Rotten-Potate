@@ -30,45 +30,19 @@ const users = [
   // Add more user objects as needed
 ];  
 
-const moviesSeedData = [
-  {
-      title: "Inception",
-      description: "A thief who steals corporate secrets through the use of dream-sharing technology...",
-      genre: "Sci-Fi",
-      releaseYear: 2010,
-      rating: 8.8
-  },
-  // ... more movie data ...
-];
-
 const dropTables = async () => {
     try {
         await db.query(`
         DROP TABLE IF EXISTS users;
         DROP TABLE IF EXISTS reviews;
         DROP TABLE IF EXISTS comments;
-        DROP TABLE IF EXISTS movie
+        DROP TABLE IF EXISTS movies
         `)
     }
     catch(err) {
         throw err;
     }
 }
-
-async function seedDatabase() {
-  try {
-      for (let movie of moviesSeedData) {
-          await db.query(
-              'INSERT INTO movies (title, description, genre, release_year, rating) VALUES ($1, $2, $3, $4, $5)',
-              [movie.title, movie.description, movie.genre, movie.releaseYear, movie.rating]
-          );
-      }
-      console.log('Database seeded successfully');
-  } catch (err) {
-      console.error('Error seeding database:', err);
-  }
-}
-
 
 const createTables = async () => {
     try{
@@ -104,12 +78,15 @@ const createTables = async () => {
            )`
          )
          await db.query(
-           `CREATE Table movie (
-             id integer PRIMARY KEY,
-             title varchar,
-             description varchar,
-             release_date varchar,
-             created_at timestamp,            updated_at timestamp
+           `CREATE Table movies (
+            id SERIAL PRIMARY KEY,
+            title VARCHAR,
+            description VARCHAR,
+            genre VARCHAR,
+            release_year INTEGER,
+            rating DECIMAL,
+            created_at TIMESTAMP,
+            updated_at TIMESTAMP
            )`
          )
     }
