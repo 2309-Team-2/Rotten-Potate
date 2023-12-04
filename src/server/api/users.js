@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken')
 
 usersRouter.get('/', async( req, res, next) => {
     try {
-        const users = await getAllUsers();
+        const users = await getUser();
 
         res.send({
             users
@@ -61,7 +61,7 @@ usersRouter.post('/register', async(req, res, next) => {
     try {
         const _user = await getUserByEmail(email);
 
-        if(_user) {
+        if(!_user) {
             next({
                 name: 'UserExistsError',
                 message: 'A user with that email already exists'
