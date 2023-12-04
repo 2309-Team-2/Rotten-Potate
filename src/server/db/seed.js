@@ -126,6 +126,19 @@ const moviesSeedData = [
   // ... more movie data ...
 ];
 
+const dropTables = async () => {
+    try {
+        await db.query(`
+        DROP TABLE IF EXISTS users;
+        DROP TABLE IF EXISTS reviews;
+        DROP TABLE IF EXISTS comments;
+        DROP TABLE IF EXISTS movies
+        `)
+    }
+    catch(err) {
+        throw err;
+    }
+}
 const reviews = [
   {
   movie_id: 1,
@@ -208,6 +221,18 @@ async function createTables() {
              content varchar,
             users_id integer,
              reviews_id integer
+           )`
+         )
+         await db.query(
+           `CREATE Table movies (
+            id SERIAL PRIMARY KEY,
+            title VARCHAR,
+            description VARCHAR,
+            genre VARCHAR,
+            release_year INTEGER,
+            rating DECIMAL,
+            created_at TIMESTAMP,
+            updated_at TIMESTAMP
            )`
          )
     }
