@@ -12,9 +12,12 @@ import Register from './components/Register'
 import ReviewList from './components/ReviewList'
 import SearchBar from './components/SearchBar'
 import SingleMovie from './components/SingleMovie'
+import Profile from './components/Profile';
 
 function App() {
   const [count, setCount] = useState(0);
+  const [token, setToken] = useState(null);
+  // const [user, setUser] = useState(null);
 
   return (
     <Router>
@@ -33,14 +36,24 @@ function App() {
               <button type="button">&#128269;</button>
               </div>
             </div>
+            {token ? (
+            // If the user is logged in, display the profile link and a logout button
+            <div>
+              <Link to="/profile" className="login-register-link">My Profile</Link>
+            </div>
+          ) : (
+            // If the user is not logged in, display the login/register link
             <Link to="/login" className="login-register-link">Login/Register</Link>
+          )}
         </div>
+
 
         <Navigations />
         
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element = {<Login />} />
+          <Route path="/" element={<Home token={token} />} />
+          <Route path="/login" element={<Login setToken={setToken} />} />
+          {/* <Route path="/profile" element={<Profile token={token} />} /> */}
         </Routes>
       </>
     </Router>

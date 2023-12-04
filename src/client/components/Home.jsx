@@ -9,7 +9,7 @@ export default function Home() {
           </div>
         </div>
         {/* All Movies Section */}
-        <div className="all-movies-box">
+        <div className="top-movies-box">
           <h2>Top Movies</h2>
         {/* Add all movies content here */}
         </div>
