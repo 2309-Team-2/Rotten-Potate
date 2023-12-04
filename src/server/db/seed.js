@@ -55,7 +55,7 @@ const createTables = async () => {
             created_at timestamp
         )`
       )
-      
+
       await db.query(
         ` 
         CREATE TABLE reviews (
