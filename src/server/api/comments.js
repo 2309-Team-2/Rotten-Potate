@@ -1,77 +1,79 @@
 const express = require('express');
 const router = express.Router();
-const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db');
+const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db/comments');
 
 // GET all comments
-router.get('/comments', (req, res) => {
-  const comments = getAllComments();
-  res.json(comments);
+router.get('/', async (req, res) => {
+  try {
+    const comments = await getAllComments(); 
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // GET comment by ID
-router.get('/comments/:id', (req, res) => {
-  const commentId = req.params.id;
-  const comment = getCommentById(commentId);
-  
-  if (comment) {
-    res.json(comment);
-  } else {
-    res.status(404).json({ message: 'Comment not found' });
+router.get('/:id', async (req, res) => { 
+  try {
+    const commentId = req.params.id;
+    const comment = await getCommentById(commentId);
+    if (comment) {
+      res.json(comment);
+    } else {
+      res.status(404).json({ message: 'Comment not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
 // POST new comment
-router.post('/comments', (req, res) => {
-  const { content, review_ID, user_ID } = req.body;
-  
-  if (!content || !review_ID || !user_ID) {
-    res.status(400).json({ message: 'Content, review ID, and user ID are required' });
-  } else {
-    const newComment = {
-      id: generateUniqueId(), // You can use any method to generate a unique ID
-      content,
-      review_ID,
-      user_ID
-    };
-  
-    const createdComment = createComment(newComment);
-    res.status(201).json(createdComment);
+router.post('/', async (req, res) => {
+  try {
+    const { content, review_ID, user_ID } = req.body;
+    if (!content || !review_ID || !user_ID) {
+      res.status(400).json({ message: 'Content, review ID, and user ID are required' });
+    } else {
+      const newComment = await createComment({ content, review_ID, user_ID }); 
+      res.status(201).json(newComment);
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
 // PATCH comment by ID
-router.patch('/comments/:id', (req, res) => {
-  const commentId = req.params.id;
-  const { content, review_ID, user_ID } = req.body;
-  
-  if (!content && !review_ID && !user_ID) {
-    res.status(400).json({ message: 'At least one field (content, review ID, or user ID) is required' });
-  } else {
-    const updatedFields = {
-      content,
-      review_ID,
-      user_ID
-    };
-  
-    const updatedComment = updateComment(commentId, updatedFields);
-  
-    if (updatedComment) {
-      res.json(updatedComment);
+router.patch('/:id', async (req, res) => { 
+  try {
+    const commentId = req.params.id;
+    const { content, review_ID, user_ID } = req.body;
+    if (!content && !review_ID && !user_ID) {
+      res.status(400).json({ message: 'At least one field (content, review ID, or user ID) is required' });
     } else {
-      res.status(404).json({ message: 'Comment not found' });
+      const updatedComment = await updateComment(commentId, { content, review_ID, user_ID }); // Added await
+      if (updatedComment) {
+        res.json(updatedComment);
+      } else {
+        res.status(404).json({ message: 'Comment not found' });
+      }
     }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
 // DELETE comment by ID
-router.delete('/comments/:id', (req, res) => {
-  const commentId = req.params.id;
-  const deletedComment = deleteComment(commentId);
-  
-  if (deletedComment) {
-    res.json({ message: 'Comment deleted successfully' });
-  } else {
-    res.status(404).json({ message: 'Comment not found' });
+router.delete('/:id', async (req, res) => { // Removed '/comments' from the path
+  try {
+    const commentId = req.params.id;
+    const deletedComment = await deleteComment(commentId); // Added await
+    if (deletedComment) {
+      res.json({ message: 'Comment deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Comment not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
