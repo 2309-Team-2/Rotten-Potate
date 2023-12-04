@@ -1,5 +1,6 @@
 const db = require('./client');
 const { createUser } = require('./users');
+const { createComment } = require('./comments')
 
 const users = [
   {
@@ -29,6 +30,19 @@ const users = [
   },
   // Add more user objects as needed
 ];  
+
+const comments = [
+  {
+    content: "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
+    review_id: 1,
+    user_id: 2,
+  },
+  {
+    content: "Live-action version of classic has some crude, scary moments.",
+    review_id: 2,
+    user_id: 1,
+  },
+];
 
 const moviesSeedData = [
   {
@@ -112,16 +126,21 @@ const moviesSeedData = [
   // ... more movie data ...
 ];
 
-const reviewsSeedData = [
+const reviews = [
   {
-    user_id: 1, // Assuming you have user IDs from the users' seed data
-    movie_id: 1, // Assuming you have movie IDs from the movies' seed data
-    rating: 5,
-    comment: 'Great movie!',
-    // ... any other review columns you have
-  },
-  // ... more reviews
-];
+  movie_id: 1,
+  user_id: 2,
+  rating: 4.4, 
+  comment: "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
+    },
+    {
+      movie_id: 2,
+      user_id: 1,
+      rating: 4.4,
+      comment: "As a point of reference, I have always loved the character of the Grinch… As I've got older, I have found myself more and more being able to relate to the Grinch!!!!!! His grumpiness, his depression, his loneliness and even his dislike for Christmas… I've also even been described as a bit of a Grinch myself, so I think that's why it has become a tradition in my household to watch this film every Christmas!",
+    },
+  ];
+
 
 async function dropTables() {
   await db.query(`
@@ -177,7 +196,7 @@ async function createTables() {
           users_id INTEGER REFERENCES users(id),
           movie_id INTEGER REFERENCES movies(id),
           rating varchar(255),
-          comment varchar(255),
+          comment varchar(555),
           created_at timestamp,
           updated_at timestamp
         )`
@@ -195,6 +214,22 @@ async function createTables() {
     catch(err) {
         throw err;
     }
+}
+const insertComments = async () => {
+  try {
+    for (let i = 0; i < comments.length; i++) {
+      // const reviewId = reviews[i % reviews.length].id;
+      // const userId = users[i % users.length].id;
+      const commentContent = comments[i].content;
+      const reviewId = comments[i].review_id
+      const userId = comments[i].user_id
+      await createComment(commentContent, reviewId, userId);
+    }
+
+    console.log('Seed data inserted successfully.');
+  } catch (error) {
+    console.error('Error inserting seed data:', error);
+  }
 }
 
 async function insertUsers() {
@@ -225,7 +260,7 @@ async function insertMovies() {
 
 async function insertReviews() {
   try {
-    for (const review of reviewsSeedData) {
+    for (const review of reviews) {
       const { users_id, movie_id, rating, comment } = review;
       const result = await db.query(
         `INSERT INTO reviews (users_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *;`,
@@ -246,6 +281,7 @@ async function seedDatabase() {
     await insertUsers();
     await insertMovies();
     await insertReviews();
+    await insertComments();
     console.log('Seed data inserted successfully.');
   } catch (err) {
     console.error('Error seeding database:', err);
