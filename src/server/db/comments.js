@@ -1,12 +1,12 @@
 const db = require ('./client')
 
-const createComment = async (content, reviewId, userId) => {
+const createComment = async (content, reviewsId, userId) => {
   try {
     const { rows } = await db.query(
-      `INSERT INTO comments (content, review_id, user_id)
+      `INSERT INTO comments (content, reviews_id, user_id)
        VALUES ($1, $2, $3)
        RETURNING *`,
-      [content, reviewId, userId]
+      [content, reviewsId, userId]
     );
     return rows[0];
   } catch (error) {
@@ -25,16 +25,16 @@ const getCommentById = async (id) => {
 }
 const getAllComments = async () => {
   try {
-    const { rows } = await db.query('SELECT * FROM commdnts')
+    const { rows } = await db.query('SELECT * FROM comments'); // Corrected table name
     return rows;
-  } catch (error){
+  } catch (error) {
     throw error;
   }
-}
-const updateComments = async (id, content, reviewId) => {
+};
+const updateComments = async (id, content, reviewsId) => {
   try {
     const { rows } = await db.query(
-      'UPDATE comments SET CONTENT = $2, review_id = $3 WHERE id = $1 RETURNING *', [id, content, reviewId]
+      'UPDATE comments SET CONTENT = $2, review_id = $3 WHERE id = $1 RETURNING *', [id, content, reviewsId]
     );
     return rows [0];
   } catch (error) {
@@ -48,4 +48,3 @@ getCommentById,
 getAllComments,
 updateComments
 };
-

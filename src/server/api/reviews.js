@@ -32,9 +32,9 @@ router.get('/:id', async (req, res) => {
 // POST new review
 router.post('/', async (req, res) => {
   try {
-    const { users_id, movie_id, rating, comment } = req.body;
+    const { user_id, movie_id, rating, comment } = req.body;
     // Validate input fields
-    if (!users_id || !movie_id || !rating || !comment) {
+    if (!user_id || !movie_id || !rating || !comment) {
       return res.status(400).json({ message: 'User ID, movie ID, rating, and comment are required' });
     }
     // The data structure should match your database columns and datatypes

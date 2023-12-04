@@ -1,3 +1,5 @@
+// // movie.js in the 'db' directory
+
 const db = require('./client'); // Adjust this path to your actual database client
 
 async function getAllMovies() {

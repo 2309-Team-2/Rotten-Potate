@@ -14,7 +14,7 @@ const users = [
     password: 'strongpass',
   },
   {
-    name: 'Isabella GarcÃ­a',
+    name: 'Isabella García',
     email: 'bella@example.com',
     password: 'pass1234',
   },
@@ -126,34 +126,21 @@ const moviesSeedData = [
   // ... more movie data ...
 ];
 
-const dropTables = async () => {
-    try {
-        await db.query(`
-        DROP TABLE IF EXISTS users;
-        DROP TABLE IF EXISTS reviews;
-        DROP TABLE IF EXISTS comments;
-        DROP TABLE IF EXISTS movies
-        `)
-    }
-    catch(err) {
-        throw err;
-    }
-}
-const reviews = [
+const reviewsSeedData = [
   {
-  movie_id: 1,
-  user_id: 2,
-  rating: 4.4, 
-  comment: "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
-    },
-    {
-      movie_id: 2,
-      user_id: 1,
-      rating: 4.4,
-      comment: "As a point of reference, I have always loved the character of the Grinch… As I've got older, I have found myself more and more being able to relate to the Grinch!!!!!! His grumpiness, his depression, his loneliness and even his dislike for Christmas… I've also even been described as a bit of a Grinch myself, so I think that's why it has become a tradition in my household to watch this film every Christmas!",
-    },
-  ];
-
+    movie_id: 1,
+    user_id: 2,
+    rating: 4.4, 
+    comment: "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
+      },
+  {
+    movie_id: 2,
+    user_id: 1,
+    rating: 4.4,
+    comment: "As a point of reference, I have always loved the character of the Grinch… As I've got older, I have found myself more and more being able to relate to the Grinch!!!!!! His grumpiness, his depression, his loneliness and even his dislike for Christmas… I've also even been described as a bit of a Grinch myself, so I think that's why it has become a tradition in my household to watch this film every Christmas!",
+  },
+  // ... more reviews
+];
 
 async function dropTables() {
   await db.query(`
@@ -206,7 +193,7 @@ async function createTables() {
         ` 
         CREATE TABLE IF NOT EXISTS reviews (
           id SERIAL PRIMARY KEY,
-          users_id INTEGER REFERENCES users(id),
+          user_id INTEGER REFERENCES users(id),
           movie_id INTEGER REFERENCES movies(id),
           rating varchar(255),
           comment varchar(555),
@@ -223,24 +210,24 @@ async function createTables() {
              reviews_id integer
            )`
          )
-         await db.query(
-           `CREATE Table movies (
-            id SERIAL PRIMARY KEY,
-            title VARCHAR,
-            description VARCHAR,
-            genre VARCHAR,
-            release_year INTEGER,
-            rating DECIMAL,
-            created_at TIMESTAMP,
-            updated_at TIMESTAMP
-           )`
-         )
     }
     catch(err) {
         throw err;
     }
 }
-const insertComments = async () => {
+
+async function insertUsers() {
+  try {
+    for (const user of users) {
+      await createUser({name: user.name, email: user.email, password: user.password});
+    }
+    console.log('Seed data inserted successfully.');
+  } catch (error) {
+    console.error('Error inserting seed data:', error);
+  }
+};
+
+async function insertComments() {
   try {
     for (let i = 0; i < comments.length; i++) {
       // const reviewId = reviews[i % reviews.length].id;
@@ -256,17 +243,6 @@ const insertComments = async () => {
     console.error('Error inserting seed data:', error);
   }
 }
-
-async function insertUsers() {
-  try {
-    for (const user of users) {
-      await createUser({name: user.name, email: user.email, password: user.password});
-    }
-    console.log('Seed data inserted successfully.');
-  } catch (error) {
-    console.error('Error inserting seed data:', error);
-  }
-};
 
 async function insertMovies() {
   try {
@@ -285,11 +261,11 @@ async function insertMovies() {
 
 async function insertReviews() {
   try {
-    for (const review of reviews) {
-      const { users_id, movie_id, rating, comment } = review;
+    for (const review of reviewsSeedData) {
+      const { user_id, movie_id, rating, comment } = review;
       const result = await db.query(
-        `INSERT INTO reviews (users_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *;`,
-        [users_id, movie_id, rating, comment]
+        `INSERT INTO reviews (user_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *;`,
+        [user_id, movie_id, rating, comment]
       );
       console.log(result.rows[0]); // This will log the inserted review to the console
     }
