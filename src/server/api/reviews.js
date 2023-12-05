@@ -1,102 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const { getAllReviews, getReviewById, createReview, updateReview, deleteReview } = require('../db');
-const axios = require('axios');
+const { getAllReviews, getReviewById, createReview, updateReview } = require('../db/reviews'); 
+// const axios = require('axios');
 
 // GET all reviews
-router.get('/reviews', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const reviews = await getAllReviews();
     res.json(reviews);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', error: error.toString() });
   }
 });
 
 // GET review by ID
-router.get('/reviews/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const reviewId = req.params.id;
+    const reviewId = parseInt(req.params.id); // Ensure the ID is an integer
     const review = await getReviewById(reviewId);
-  
+
     if (review) {
       res.json(review);
     } else {
       res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', error: error.toString() });
   }
 });
 
 // POST new review
-router.post('/reviews', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
-    const { user_Id, movie_id, rating, comment } = req.body;
-  
-    if (!user_Id || !movie_id || !rating || !comment) {
-      res.status(400).json({ message: 'User ID, movie ID, rating, and comment are required' });
-    } else {
-      const commentPayload = {
-        content: comment,
-        review_ID: generateUniqueId(),
-        user_ID: user_Id
-      };
-  
-      const createdComment = await axios.post('http://your-comments-api-url/comments', commentPayload);
-  
-      const newReview = {
-        id: generateUniqueId(),
-        user_Id,
-        movie_id,
-        rating,
-        comment_ID: createdComment.data.id,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-  
-      const createdReview = await createReview(newReview);
-      res.status(201).json(createdReview);
+    const { user_id, movie_id, rating, comment } = req.body;
+    // Validate input fields
+    if (!user_id || !movie_id || !rating || !comment) {
+      return res.status(400).json({ message: 'User ID, movie ID, rating, and comment are required' });
     }
+    // The data structure should match your database columns and datatypes
+    const reviewData = { user_id, movie_id, rating, comment };
+    // Directly insert the review into the database without external API call
+    const newReview = await createReview(reviewData);
+    res.status(201).json(newReview);
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', error: error.toString() });
   }
 });
 
 // PATCH review by ID
-router.patch('/reviews/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
-    const reviewId = req.params.id;
-    const { user_Id, movie_id, rating, comment } = req.body;
-  
-    if (!user_Id && !movie_id && !rating && !comment) {
-      res.status(400).json({ message: 'At least one field (user ID, movie ID, rating, or comment) is required' });
+    const reviewId = parseInt(req.params.id); // Ensure the ID is an integer
+    const { rating, comment } = req.body; // Only allow updating rating and comment
+    // Validate input fields
+    if (rating == null && comment == null) {
+      return res.status(400).json({ message: 'Rating or comment is required to update a review' });
+    }
+    const updatedFields = { ...(rating && { rating }), ...(comment && { comment }) };
+    // Update the review in the database
+    const updatedReview = await updateReview(reviewId, updatedFields);
+    if (updatedReview) {
+      res.json(updatedReview);
     } else {
-      const updatedFields = {
-        user_Id,
-        movie_id,
-        rating,
-        updated_at: new Date().toISOString()
-      };
-  
-      if (comment) {
-        const commentPayload = {
-          content: comment,
-          review_ID: generateUniqueId(),
-          user_ID: user_Id
-        };
-  
-        const createdComment = await axios.post('http://your-comments-api-url/comments', commentPayload);
-        updatedFields.comment_ID = createdComment.data.id;
-      }
-  
-      const updatedReview = await updateReview(reviewId, updatedFields);
-  
-      if (updatedReview) {
-        res.json(updatedReview);
-      } else {
-        res.status(404).json({ message: 'Review not found' });
-      }
+      res.status(404).json({ message: 'Review not found' });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' })}})
+    res.status(500).json({ message: 'Internal server error', error: error.toString() });
+  }
+});
+
+    module.exports = router;
