@@ -149,6 +149,76 @@ const moviesSeedData = [
   releaseYear: 1960,
   rating: 8.5
 },
+{
+  title: "The Grand Budapest Hotel",
+  description: "A famous concierge at a famous European hotel between the wars and his friendship with a young employee who becomes his trusted protégé.",
+  genre: "Comedy",
+  releaseYear: 2014,
+  rating: 8.1
+},
+{
+  title: "Superbad",
+  description: "Two co-dependent high school seniors are forced to deal with separation anxiety after their plan to stage a booze-soaked party goes awry.",
+  genre: "Comedy",
+  releaseYear: 2007,
+  rating: 7.6
+},
+{
+  title: "The Hangover",
+  description: "Three buddies wake up from a bachelor party in Las Vegas, with no memory of the previous night and the bachelor missing.",
+  genre: "Comedy",
+  releaseYear: 2009,
+  rating: 7.7
+},
+{
+  title: "Bridesmaids",
+  description: "Competition between the maid of honor and a bridesmaid, over who is the bride's best friend, threatens to upend the life of an out-of-work pastry chef.",
+  genre: "Comedy",
+  releaseYear: 2011,
+  rating: 6.8
+},
+{
+  title: "Anchorman: The Legend of Ron Burgundy",
+  description: "Ron Burgundy is San Diego's top-rated newsman in the male-dominated broadcasting of the 1970s, but that's all about to change.",
+  genre: "Comedy",
+  releaseYear: 2004,
+  rating: 7.2
+},
+{
+  title: "Step Brothers",
+  description: "Two aimless middle-aged losers still living at home are forced against their will to become roommates when their parents marry.",
+  genre: "Comedy",
+  releaseYear: 2008,
+  rating: 6.9
+},
+{
+  title: "Zoolander",
+  description: "At the end of his career, a clueless fashion model is brainwashed to kill the Prime Minister of Malaysia.",
+  genre: "Comedy",
+  releaseYear: 2001,
+  rating: 6.5
+},
+{
+  title: "Napoleon Dynamite",
+  description: "A listless and alienated teenager decides to help his new friend win the class presidency in their small western high school, while he must deal with his bizarre family life back home.",
+  genre: "Comedy",
+  releaseYear: 2004,
+  rating: 6.9
+},
+{
+  title: "Tropic Thunder",
+  description: "Through a series of freak occurrences, a group of actors shooting a big-budget war movie are forced to become the soldiers they are portraying.",
+  genre: "Comedy",
+  releaseYear: 2008,
+  rating: 7.0
+},
+{
+  title: "The 40-Year-Old Virgin",
+  description: "Goaded by his buddies, a nerdy guy who's never done the deed only finds the pressure mounting when he meets a single mother.",
+  genre: "Comedy",
+  releaseYear: 2005,
+  rating: 7.1
+}
 ];
 
 module.exports = moviesSeedData;
