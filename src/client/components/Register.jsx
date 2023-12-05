@@ -58,7 +58,46 @@ const Register = () => {
       <h1>Register</h1>
       {errorMessage && <p className="error">{errorMessage}</p>}
       <form onSubmit={handleRegister}>
-        {/* ... (form fields) */}
+        <label>
+          First Name:
+          <input
+            type="text"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Last Name:
+          <input
+            type="text"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        <br />
         <button type="submit">Register</button>
       </form>
     </div>
