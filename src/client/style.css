@@ -111,7 +111,9 @@ li {
   width:500px;
 }
 
-.login-register-link {
+.login-link,
+.register-link,
+.profile-link {
   margin-left: auto;
   text-decoration: none;
   font-weight: bold;
@@ -124,7 +126,9 @@ li {
   background-color: transparent;
 }
 
-.login-register-link:hover {
+.login-link:hover,
+.register-link:hover,
+.profile-link:hover {
   background-color: #ffffff;
   color: #333;
 }
