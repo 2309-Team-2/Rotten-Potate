@@ -78,6 +78,76 @@ const moviesSeedData = [
   releaseYear: 2014,
   rating: 8.6
 },
+{
+  title: "The Exorcist",
+  description: "When a teenage girl is possessed by a mysterious entity, her mother seeks the help of two priests to save her daughter.",
+  genre: "Horror",
+  releaseYear: 1973,
+  rating: 8.0
+},
+{
+  title: "Halloween",
+  description: "Fifteen years after murdering his sister on Halloween night, Michael Myers escapes from a mental hospital and returns to the small town of Haddonfield to kill again.",
+  genre: "Horror",
+  releaseYear: 1978,
+  rating: 7.8
+},
+{
+  title: "A Nightmare on Elm Street",
+  description: "The monstrous spirit of a slain child murderer seeks revenge by invading the dreams of teenagers whose parents were responsible for his untimely death.",
+  genre: "Horror",
+  releaseYear: 1984,
+  rating: 7.5
+},
+{
+  title: "The Shining",
+  description: "A family heads to an isolated hotel for the winter where a sinister presence influences the father into violence, while his psychic son sees horrific forebodings from both past and future.",
+  genre: "Horror",
+  releaseYear: 1980,
+  rating: 8.4
+},
+{
+  title: "The Texas Chain Saw Massacre",
+  description: "Two siblings and three of their friends en route to visit their grandfather's grave in Texas end up falling victim to a family of cannibalistic psychopaths.",
+  genre: "Horror",
+  releaseYear: 1974,
+  rating: 7.5
+},
+{
+  title: "It",
+  description: "In the summer of 1989, a group of bullied kids band together to destroy a shape-shifting monster, which disguises itself as a clown and preys on the children of Derry, their small Maine town.",
+  genre: "Horror",
+  releaseYear: 2017,
+  rating: 7.3
+},
+{
+  title: "Get Out",
+  description: "A young African-American visits his white girlfriend's parents for the weekend, where his simmering uneasiness about their reception of him eventually reaches a boiling point.",
+  genre: "Horror",
+  releaseYear: 2017,
+  rating: 7.7
+},
+{
+  title: "Hereditary",
+  description: "A grieving family is haunted by tragic and disturbing occurrences after the death of their secretive grandmother.",
+  genre: "Horror",
+  releaseYear: 2018,
+  rating: 7.3
+},
+{
+  title: "The Conjuring",
+  description: "Paranormal investigators work to help a family terrorized by a dark presence in their farmhouse.",
+  genre: "Horror",
+  releaseYear: 2013,
+  rating: 7.5
+},
+{
+  title: "Psycho",
+  description: "A Phoenix secretary embezzles forty thousand dollars from her employer's client, goes on the run, and checks into a remote motel run by a young man under the domination of his mother.",
+  genre: "Horror",
+  releaseYear: 1960,
+  rating: 8.5
+},
 ];
 
 module.exports = moviesSeedData;
