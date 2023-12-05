@@ -11,6 +11,31 @@ async function getAllMovies() {
     }
 }
 
+async function updateMovie(id, movieData) {
+  const { title, description, genre, releaseYear, rating } = movieData;
+  try {
+      const result = await db.query(
+          'UPDATE movies SET title = $2, description = $3, genre = $4, release_year = $5, rating = $6 WHERE id = $1 RETURNING *',
+          [id, title, description, genre, releaseYear, rating]
+      );
+      return result.rows[0];
+  } catch (err) {
+      throw err;
+  }
+}
+
+async function deleteMovie(id) {
+  try {
+      const result = await db.query(
+          'DELETE FROM movies WHERE id = $1 RETURNING *',
+          [id]
+      );
+      return result.rows[0];
+  } catch (err) {
+      throw err;
+  }
+}
+
 async function getMovieById(id) {
   try {
       const result = await db.query('SELECT * FROM movies WHERE id = $1', [id]);
@@ -42,5 +67,7 @@ async function addMovie(movieData) {
 module.exports = {
     getAllMovies,
     getMovieById,
-    addMovie
+    addMovie, 
+    updateMovie, 
+    deleteMovie  
 };
