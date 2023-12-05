@@ -3,7 +3,7 @@ const db = require ('./client')
 const createComment = async (content, reviewsId, userId) => {
   try {
     const { rows } = await db.query(
-      `INSERT INTO comments (content, reviews_id, user_id)
+      `INSERT INTO comments (content, reviews_id, users_id)
        VALUES ($1, $2, $3)
        RETURNING *`,
       [content, reviewsId, userId]
