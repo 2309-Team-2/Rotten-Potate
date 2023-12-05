@@ -58,11 +58,14 @@ function App() {
             {token ? (
             // If the user is logged in, display the profile link and a logout button
             <div>
-              <Link to="/profile" className="login-register-link">My Profile</Link>
+              <Link to="/profile" className="profile-link">My Profile</Link>
             </div>
           ) : (
             // If the user is not logged in, display the login/register link
-            <Link to="/login" className="login-register-link">Login/Register</Link>
+            <div>
+            <Link to="/login" className="login-link">Log In</Link>
+            <Link to="/register" className="register-link">Register</Link>
+            </div>
           )}
         </div>
 
@@ -75,7 +78,9 @@ function App() {
           <Route path="/profile"
             element={<Profile user={user} onUpdateProfile={handleUpdateProfile} />}
           />
-</Routes>     
+          <Route path="/register" element={<Register />} />
+         </Routes> 
+
       </>
     </Router>
   );
