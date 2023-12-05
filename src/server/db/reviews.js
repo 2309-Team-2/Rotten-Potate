@@ -14,10 +14,10 @@ async function getReviewById(id) {
 
 // Function to create a new review
 async function createReview(reviewData) {
-  const { user_id, movie_id, rating, comment } = reviewData;
+  const { users_id, movie_id, rating, comment } = reviewData;
   const result = await db.query(
-    'INSERT INTO reviews (user_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *',
-    [user_id, movie_id, rating, comment]
+    'INSERT INTO reviews (users_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *',
+    [users_id, movie_id, rating, comment]
   );
   return result.rows[0]; // Return the new review
 }

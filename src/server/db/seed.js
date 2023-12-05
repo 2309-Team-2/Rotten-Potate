@@ -193,7 +193,7 @@ async function createTables() {
         ` 
         CREATE TABLE IF NOT EXISTS reviews (
           id SERIAL PRIMARY KEY,
-          user_id INTEGER REFERENCES users(id),
+          users_id INTEGER REFERENCES users(id),
           movie_id INTEGER REFERENCES movies(id),
           rating varchar(255),
           comment varchar(555),
@@ -204,7 +204,7 @@ async function createTables() {
         await db.query(
            `
            CREATE TABLE IF NOT EXISTS comments (
-             id integer PRIMARY KEY,
+             id SERIAL PRIMARY KEY,
              content varchar,
             users_id integer,
              reviews_id integer
@@ -234,8 +234,8 @@ async function insertComments() {
       // const userId = users[i % users.length].id;
       const commentContent = comments[i].content;
       const reviewId = comments[i].review_id
-      const userId = comments[i].user_id
-      await createComment(commentContent, reviewId, userId);
+      const usersId = comments[i].user_id
+      await createComment(commentContent, reviewId, usersId);
     }
 
     console.log('Seed data inserted successfully.');
@@ -262,10 +262,10 @@ async function insertMovies() {
 async function insertReviews() {
   try {
     for (const review of reviewsSeedData) {
-      const { user_id, movie_id, rating, comment } = review;
+      const { users_id, movie_id, rating, comment } = review;
       const result = await db.query(
-        `INSERT INTO reviews (user_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *;`,
-        [user_id, movie_id, rating, comment]
+        `INSERT INTO reviews (users_id, movie_id, rating, comment) VALUES ($1, $2, $3, $4) RETURNING *;`,
+        [users_id, movie_id, rating, comment]
       );
       console.log(result.rows[0]); // This will log the inserted review to the console
     }
