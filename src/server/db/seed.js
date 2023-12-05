@@ -167,53 +167,49 @@ async function seedDatabase() {
 
 
 async function createTables() {
-    try{
-        await db.query(`
-        CREATE TABLE IF NOT EXISTS users(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) DEFAULT 'name',
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
-            created_at timestamp
-        )`
-      )
-      await db.query(
-        `CREATE TABLE IF NOT EXISTS movies (
-         id SERIAL PRIMARY KEY,
-         title VARCHAR,
-         description VARCHAR,
-         genre VARCHAR,
-         release_year INTEGER,
-         rating DECIMAL,
-         created_at TIMESTAMP,
-         updated_at TIMESTAMP
-        )`
-      )
-      await db.query(
-        ` 
-        CREATE TABLE IF NOT EXISTS reviews (
+  try {
+      await db.query(`
+      CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) DEFAULT 'name',
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          created_at timestamp
+      )`);
+
+      await db.query(`
+      CREATE TABLE IF NOT EXISTS movies (
+          id SERIAL PRIMARY KEY,
+          title VARCHAR,
+          description VARCHAR,
+          genre VARCHAR,
+          release_year INTEGER,
+          rating DECIMAL,
+          created_at TIMESTAMP,
+          updated_at TIMESTAMP
+      )`);
+
+      await db.query(`
+      CREATE TABLE IF NOT EXISTS reviews (
           id SERIAL PRIMARY KEY,
           users_id INTEGER REFERENCES users(id),
           movie_id INTEGER REFERENCES movies(id),
-          rating varchar(255),
-          comment varchar(555),
+          rating VARCHAR(255),
+          comment VARCHAR(555),
           created_at timestamp,
           updated_at timestamp
-        )`
-        )
-        await db.query(
-           `
-           CREATE TABLE IF NOT EXISTS comments (
-             id SERIAL PRIMARY KEY,
-             content varchar,
-            users_id integer,
-             reviews_id integer
-           )`
-         )
-    }
-    catch(err) {
-        throw err;
-    }
+      )`);
+
+      await db.query(`
+      CREATE TABLE IF NOT EXISTS comments (
+          id SERIAL PRIMARY KEY,
+          content VARCHAR,
+          users_id INTEGER REFERENCES users(id),
+          reviews_id INTEGER REFERENCES reviews(id)
+      )`);
+  } catch (err) {
+      throw err;
+  }
 }
 
 async function insertUsers() {
