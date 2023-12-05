@@ -18,7 +18,25 @@ import Profile from './components/Profile';
 function App() {
   const [count, setCount] = useState(0);
   const [token, setToken] = useState(null);
-  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
+
+  const handleUpdateProfile = async (updatedProfileData) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/users/updateProfile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProfileData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   return (
     <Router>
@@ -57,9 +75,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home token={token} />} />
           <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path="/profile"
+            element={<Profile user={user} onUpdateProfile={handleUpdateProfile} />}
+          />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile token={token} setToken={setToken} />} />
-        </Routes>
+         </Routes> 
+
       </>
     </Router>
   );
