@@ -1,4 +1,4 @@
-const db = require('./client');
+const db = require('./client')
 const { createUser } = require('./users');
 const { createComment } = require('./comments')
 
@@ -46,6 +46,7 @@ const comments = [
 
 const moviesSeedData = [
   {
+      imageUrl: 'https://m.media-amazon.com/images/I/71uKM+LdgFL._AC_SY300_SX300_.jpg',
       title: "Inception",
       description: "A thief who steals corporate secrets through the use of dream-sharing technology...",
       genre: "Sci-Fi",
@@ -180,6 +181,7 @@ async function createTables() {
       await db.query(`
       CREATE TABLE IF NOT EXISTS movies (
           id SERIAL PRIMARY KEY,
+          imageUrl TEXT UNIQUE,
           title VARCHAR,
           description VARCHAR,
           genre VARCHAR,
