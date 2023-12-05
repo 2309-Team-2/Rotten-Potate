@@ -63,23 +63,12 @@ async function addMovie(movieData) {
           throw err;
       }
     }
-    async function getReviewsByMovieId(movieId) {
-        try {
-            const query = 'SELECT * FROM reviews WHERE movie_id = $1';
-            const values = [movieId];
-      
-            const result = await db.query(query, values);
-            return result.rows;
-        } catch (error) {
-            throw error;
-        }
-      }
+    
 
 module.exports = {
     getAllMovies,
     getMovieById,
     addMovie, 
     updateMovie, 
-    deleteMovie,
-    getReviewsByMovieId
+    deleteMovie  
 };

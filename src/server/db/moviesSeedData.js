@@ -2,6 +2,7 @@
 
 const moviesSeedData = [
   {
+    imageUrl: 'https://m.media-amazon.com/images/I/71uKM+LdgFL._AC_SY300_SX300_.jpg',
     title: "Inception",
     description: "A thief who steals corporate secrets through the use of dream-sharing technology...",
     genre: "Sci-Fi",

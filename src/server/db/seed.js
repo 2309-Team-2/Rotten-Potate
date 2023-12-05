@@ -1,4 +1,4 @@
-const db = require('./client');
+const db = require('./client')
 const { createUser } = require('./users');
 const { createComment } = require('./comments')
 const moviesSeedData = require('./moviesSeedData'); // Adjust the path as necessary
@@ -102,6 +102,7 @@ async function createTables() {
       await db.query(`
       CREATE TABLE IF NOT EXISTS movies (
           id SERIAL PRIMARY KEY,
+          imageUrl TEXT UNIQUE,
           title VARCHAR,
           description VARCHAR,
           genre VARCHAR,
