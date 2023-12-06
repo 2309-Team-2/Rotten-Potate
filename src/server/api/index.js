@@ -27,10 +27,12 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
-apiRouter.use('/users', usersRouter);
 
 apiRouter.use((err, req, res, next) => {
-    res.status(500).send(err)
-  })
+  const status = err.status || 500;
+  const message = err.message || 'Something went wrong on the server';
+  res.status(status).send({ error: message });
+});
+
 
 module.exports = apiRouter;
