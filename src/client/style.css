@@ -111,7 +111,9 @@ li {
   width:500px;
 }
 
-.login-register-link {
+.login-link,
+.register-link,
+.profile-link {
   margin-left: auto;
   text-decoration: none;
   font-weight: bold;
@@ -124,7 +126,9 @@ li {
   background-color: transparent;
 }
 
-.login-register-link:hover {
+.login-link:hover,
+.register-link:hover,
+.profile-link:hover {
   background-color: #ffffff;
   color: #333;
 }
@@ -158,4 +162,49 @@ li {
 .top-movies-box h2 {
   font-size: 24px;
   margin-bottom: 10px;
+}
+
+
+/* Movie List */
+
+.movies-list-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: orange;
+}
+
+.all-movies-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+}
+
+.movie-item {
+  margin-bottom: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 8px;
+}
+
+.movie-item h3 {
+  font-size: 20px;
+  margin: 0;
+  color: white;
+}
+
+.movie-item p {
+  margin: 5px 0;
+  color: #ccc;
+}
+
+.movie-link {
+  text-decoration: none;
+  color: white;
+}
+
+.movie-link:hover {
+  text-decoration: underline;
 }

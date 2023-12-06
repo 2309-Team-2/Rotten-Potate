@@ -218,7 +218,7 @@ const moviesSeedData = [
   genre: "Comedy",
   releaseYear: 2005,
   rating: 7.1
-}
+},
 ];
 
 module.exports = moviesSeedData;
