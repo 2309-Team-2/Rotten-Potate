@@ -15,17 +15,23 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:genre', async (req, res) => {
-    const { genre } = req.params;
-    console.log('Requested genre:', genre);
-    try {
-      const result = await db.query('SELECT * FROM movies WHERE genre = $1', [genre]);
-      const movies = result.rows;
-      res.json(movies);
-    } catch (error) {
-      console.error(`Error fetching movies for genre '${genre}':`, error);
+router.get('/:genre?', async (req, res) => {
+  try {
+      if (req.params.genre) {
+          // Fetch movies for the specific genre
+          const result = await db.query('SELECT * FROM movies WHERE genre = $1', [req.params.genre]);
+          const movies = result.rows;
+          res.json(movies);
+      } else {
+          // Fetch all genres
+          const result = await db.query('SELECT DISTINCT genre FROM movies');
+          const genres = result.rows.map((row) => row.genre);
+          res.json(genres);
+      }
+  } catch (error) {
+      console.error('Error fetching genres/movies:', error);
       res.status(500).json({ error: 'Internal Server Error' });
-    }
-  }); 
+  }
+})
 
 module.exports = router;
