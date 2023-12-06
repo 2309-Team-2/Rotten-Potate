@@ -59,7 +59,7 @@ const moviesSeedData = [
   rating: 8.8
 },
 {
-  imageUrl: 'https://furiousreviews.files.wordpress.com/2015/03/7736093674_2e8414a35c_o.jpg'
+  imageUrl: 'https://furiousreviews.files.wordpress.com/2015/03/7736093674_2e8414a35c_o.jpg',
   title: "Inglourious Basterds",
   description: "In Nazi-occupied France during World War II, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans for the same.",
   genre: "Adventure, Drama, War",
@@ -67,7 +67,7 @@ const moviesSeedData = [
   rating: 8.3
 },
 {
-  imageUrl: 'https://image.tmdb.org/t/p/original/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg'
+  imageUrl: 'https://image.tmdb.org/t/p/original/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
   title: "The Matrix",
   description: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
   genre: "Action, Sci-Fi",
@@ -75,7 +75,7 @@ const moviesSeedData = [
   rating: 8.7
 },
 {
-  imageUrl: 'https://www.themoviedb.org/t/p/original/8yHuuCyL9sWWGbqTYLG3bStjFts.jpg'
+  imageUrl: 'https://www.themoviedb.org/t/p/original/8yHuuCyL9sWWGbqTYLG3bStjFts.jpg',
   title: "Se7en",
   description: "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
   genre: "Crime, Drama, Mystery",
@@ -83,7 +83,7 @@ const moviesSeedData = [
   rating: 8.6
 },
 {
-  imageUrl: 'https://i.pinimg.com/originals/4c/29/d6/4c29d6753e61511d6369567214af2f53.jpg'
+  imageUrl: 'https://i.pinimg.com/originals/4c/29/d6/4c29d6753e61511d6369567214af2f53.jpg',
   title: "Interstellar",
   description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
   genre: "Adventure, Drama, Sci-Fi",
@@ -91,7 +91,7 @@ const moviesSeedData = [
   rating: 8.6
 },
 {
-  imageUrl: 'https://www.themoviedb.org/t/p/original/6u1F2BnzZsT4kpX6V1iYmeXQ5iY.jpg'
+  imageUrl: 'https://www.themoviedb.org/t/p/original/6u1F2BnzZsT4kpX6V1iYmeXQ5iY.jpg',
   title: "The Exorcist",
   description: "When a teenage girl is possessed by a mysterious entity, her mother seeks the help of two priests to save her daughter.",
   genre: "Horror",
@@ -99,7 +99,7 @@ const moviesSeedData = [
   rating: 8.0
 },
 {
-  imageUrl: 'http://4.bp.blogspot.com/-kPLV9lP66vI/UJCWw4bOlrI/AAAAAAAAB7U/RtWwU2F8TM0/s1600/halloween_1_poster_01.jpg'
+  imageUrl: 'http://4.bp.blogspot.com/-kPLV9lP66vI/UJCWw4bOlrI/AAAAAAAAB7U/RtWwU2F8TM0/s1600/halloween_1_poster_01.jpg',
   title: "Halloween",
   description: "Fifteen years after murdering his sister on Halloween night, Michael Myers escapes from a mental hospital and returns to the small town of Haddonfield to kill again.",
   genre: "Horror",
