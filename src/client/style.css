@@ -199,7 +199,9 @@ li {
   margin: 5px 0;
   color: #ccc;
 }
-
+.movie-link image {
+ width: 150px;
+}
 .movie-link {
   text-decoration: none;
   color: white;
