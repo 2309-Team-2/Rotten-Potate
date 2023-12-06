@@ -21,16 +21,16 @@ usersRouter.get('/', async (req, res, next) => {
 });
 
 
-usersRouter.get('/', async (req, res, next) => {
-    try {
-        const users = await getUser({}); // Assuming this should fetch all users
+// usersRouter.get('/', async (req, res, next) => {
+//     try {
+//         const users = await getUser({}); // Assuming this should fetch all users
 
-        // Send back the users in the response
-        res.send({ users });
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
-    }
-});
+//         // Send back the users in the response
+//         res.send({ users });
+//     } catch (error) {
+//         next(error); // Pass the error to the error handling middleware
+//     }
+// });
 
 
 usersRouter.post('/login', async(req, res, next) => {

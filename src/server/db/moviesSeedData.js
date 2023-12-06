@@ -11,6 +11,7 @@ const moviesSeedData = [
     rating: 8.8
 },
 {
+  imageUrl: 'http://www.reelworldtheology.com/wp-content/uploads/2018/08/the-shawshank-redemption-movie-poster-29x41-in-r2000-franck-darabont-tim-robbins.jpg',
   title: "The Shawshank Redemption",
   description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
   genre: "Drama",
@@ -18,6 +19,7 @@ const moviesSeedData = [
   rating: 9.3
 },
 {
+  imageUrl: 'https://movietalkexpress.files.wordpress.com/2015/12/the-godfather.jpeg'
   title: "The Godfather",
   description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
   genre: "Crime, Drama",
@@ -25,6 +27,7 @@ const moviesSeedData = [
   rating: 9.2
 },
 {
+  imageUrl: 'http://media2.firstshowing.net/firstshowing/img/darkknightposter-fullhuge.jpg'
   title: "The Dark Knight",
   description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
   genre: "Action, Crime, Drama",
