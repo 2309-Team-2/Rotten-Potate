@@ -77,7 +77,7 @@ function App() {
           <Route path="/" element={<Home token={token} />} />
           <Route path="/login" element={<Login setToken={setToken} />} />
           <Route path="/profile"
-            element={<Profile user={user} onUpdateProfile={handleUpdateProfile} />}
+            element={<Profile token={token} setToken={setToken} />}
           />
           <Route path="/register" element={<Register />} />
           <Route path="/allmovies" element={<MovieList />} />
