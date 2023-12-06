@@ -1,4 +1,5 @@
 // moviesSeedData.js
+const db = require("./client");
 
 const moviesSeedData = [
   {
@@ -260,5 +261,5 @@ const moviesSeedData = [
 },
 ];
 
-export default moviesSeedData;
+module.exports = moviesSeedData
 
