@@ -14,11 +14,30 @@ import ReviewList from './components/ReviewList'
 import SearchBar from './components/SearchBar'
 import SingleMovie from './components/SingleMovie'
 import Profile from './components/Profile';
+import MovieList from './components/MovieList';
 
 function App() {
   const [count, setCount] = useState(0);
   const [token, setToken] = useState(null);
-  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
+
+  const handleUpdateProfile = async (updatedProfileData) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/users/updateProfile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProfileData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   return (
     <Router>
@@ -40,11 +59,14 @@ function App() {
             {token ? (
             // If the user is logged in, display the profile link and a logout button
             <div>
-              <Link to="/profile" className="login-register-link">My Profile</Link>
+              <Link to="/profile" className="profile-link">My Profile</Link>
             </div>
           ) : (
             // If the user is not logged in, display the login/register link
-            <Link to="/login" className="login-register-link">Login/Register</Link>
+            <div>
+            <Link to="/login" className="login-link">Log In</Link>
+            <Link to="/register" className="register-link">Register</Link>
+            </div>
           )}
         </div>
 
@@ -54,8 +76,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home token={token} />} />
           <Route path="/login" element={<Login setToken={setToken} />} />
-          {/* <Route path="/profile" element={<Profile token={token} />} /> */}
-        </Routes>
+          <Route path="/profile"
+            element={<Profile user={user} onUpdateProfile={handleUpdateProfile} />}
+          />
+          <Route path="/register" element={<Register />} />
+          <Route path="/allmovies" element={<MovieList />} />
+        </Routes> 
+
       </>
     </Router>
   );

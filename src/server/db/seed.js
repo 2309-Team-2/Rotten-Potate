@@ -166,10 +166,10 @@ async function insertComments() {
 async function insertMovies() {
   try {
     for (const movie of moviesSeedData) {
-      const { title, description, genre, releaseYear, rating } = movie;
+      const { imageUrl, title, description, genre, releaseYear, rating } = movie;
       const result = await db.query(
-        `INSERT INTO movies (title, description, genre, release_year, rating, created_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [title, description, genre, releaseYear, rating, new Date()]
+        `INSERT INTO movies (imageUrl, title, description, genre, release_year, rating, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+        [imageUrl, title, description, genre, releaseYear, rating, new Date()]
       );
       console.log(result.rows[0]); 
     }
