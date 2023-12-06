@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CategoryFilter from './CategoryFilter';
 
 async function fetchAllMovies() {
   try {
@@ -31,13 +32,14 @@ function MovieList() {
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
+      <CategoryFilter />
       <ul className='all-movies-list'>
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">
-            <Link to={`/movies/${movie.id}`} 
-            className="movie-link">
+            <Link to={`/movies/${movie.id}`} className="movie-link">
+              <img src={movie.imageUrl} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
-              <img src={movie.imageUrl} alt={movie.title} />
+              {/* Display the movie image */}
               <p>Release Year: {movie.release_year}</p>
               <p>Rating: {movie.rating}</p>
               {/* Add more details as needed */}
@@ -48,4 +50,5 @@ function MovieList() {
     </div>
   );
 }
+
 export default MovieList;
