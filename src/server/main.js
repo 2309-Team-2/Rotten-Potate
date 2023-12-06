@@ -3,11 +3,14 @@ require('dotenv').config()
 const express = require('express');
 const router = require('vite-express');
 const app = express();
+const genreRouter = require('./api/genre');
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
 app.use(express.static('public'))
+
+app.use('/api/genres', genreRouter);
 
 const db = require('./db/client')
 db.connect()

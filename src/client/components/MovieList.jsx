@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CategoryFilter from './CategoryFilter';
+
 
 async function fetchAllMovies() {
   try {
@@ -31,6 +33,7 @@ function MovieList() {
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
+      <CategoryFilter />
       <ul className='all-movies-list'>
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">
