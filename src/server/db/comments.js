@@ -1,50 +1,58 @@
-const db = require ('./client')
+const db = require("./client");
 
-const createComment = async (content, reviewsId, userId) => {
+const createComment = async (
+  content,
+  reviewId,
+  userId,
+  createdAt,
+  updatedAt
+) => {
   try {
     const { rows } = await db.query(
-      `INSERT INTO comments (content, reviews_id, users_id)
-       VALUES ($1, $2, $3)
+      `INSERT INTO comments (content, review_id, user_id, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [content, reviewsId, userId]
+      [content, reviewId, userId, createdAt, updatedAt]
     );
     return rows[0];
   } catch (error) {
     throw error;
   }
-}
+};
 
 const getCommentById = async (id) => {
   try {
-     const { rows } = await 
-     db.query('SELECT * FROM comments WHERE id = $1',[id]);
-     return rows [0];
+    const { rows } = await db.query("SELECT * FROM comments WHERE id = $1", [
+      id,
+    ]);
+    return rows[0];
   } catch (error) {
     throw error;
   }
-}
+};
 const getAllComments = async () => {
   try {
-    const { rows } = await db.query('SELECT * FROM comments'); // Corrected table name
+    const { rows } = await db.query("SELECT * FROM comments"); // Corrected table name
     return rows;
   } catch (error) {
     throw error;
   }
 };
-const updateComments = async (id, content, reviewsId) => {
+const updateComments = async (id, content, reviewId, updatedAt) => {
   try {
     const { rows } = await db.query(
-      'UPDATE comments SET CONTENT = $2, review_id = $3 WHERE id = $1 RETURNING *', [id, content, reviewsId]
+      "UPDATE comments SET CONTENT = $2, review_id = $3, updated_at = $4 WHERE id = $1 RETURNING *",
+      [id, content, reviewId, updatedAt]
     );
-    return rows [0];
+    return rows[0];
   } catch (error) {
     throw error;
   }
-}
+};
 
 module.exports = {
-createComment,
-getCommentById,
-getAllComments,
-updateComments
+  createComment,
+  getCommentById,
+  getAllComments,
+  updateComments,
 };
