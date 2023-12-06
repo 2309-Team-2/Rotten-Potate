@@ -13,6 +13,7 @@ import ReviewList from './components/ReviewList'
 import SearchBar from './components/SearchBar'
 import SingleMovie from './components/SingleMovie'
 import Profile from './components/Profile';
+import MovieList from './components/MovieList';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -78,7 +79,8 @@ function App() {
             element={<Profile user={user} onUpdateProfile={handleUpdateProfile} />}
           />
           <Route path="/register" element={<Register />} />
-         </Routes> 
+          <Route path="/allmovies" element={<MovieList />} />
+        </Routes> 
 
       </>
     </Router>

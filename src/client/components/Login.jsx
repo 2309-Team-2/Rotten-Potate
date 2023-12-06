@@ -34,11 +34,6 @@ const Login = ({ setToken }) => {
         if (result.token) {
           console.log('Login successful!');
           setToken(result.token)
-          setUser({
-            id: result.user.id,
-            name: result.user.name,
-            email: result.user.email,
-          });
           navigate('/',{state:{email,password}})
         } else {
           setError('Invalid email or password.');
