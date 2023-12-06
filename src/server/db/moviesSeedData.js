@@ -221,4 +221,5 @@ const moviesSeedData = [
 }
 ];
 
-module.exports = moviesSeedData;
+export default moviesSeedData;
+

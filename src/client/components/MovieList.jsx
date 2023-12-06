@@ -20,20 +20,36 @@ async function fetchAllMovies() {
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const moviesData = await fetchAllMovies();
       setMovies(moviesData);
+      setFilteredMovies(moviesData); // Initialize filtered movies with all movies
     }
 
     fetchData();
   }, []);
+
+  const handleFilterChange = async (selectedCategory) => {
+    try {
+      const response = await fetch(`/api/genres?category=${selectedCategory}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+      }
+
+      const moviesData = await response.json();
+      setFilteredMovies(moviesData);
+    } catch (error) {
+      console.error('Error fetching movies:', error.message);
+    }
+  };
   
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
-      <CategoryFilter />
+      <CategoryFilter onFilterChange={handleFilterChange} />
       <ul className='all-movies-list'>
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">

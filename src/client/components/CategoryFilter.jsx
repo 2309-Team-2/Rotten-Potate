@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import  moviesSeedData  from '../../server/db/moviesSeedData';
 
 
 const CategoryFilter = ({ onFilterChange }) => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
+    
 
     useEffect(() => {
-        // Fetch both all genres and single genres from your API
-        const fetchGenres = async () => {
+        // Use moviesSeedData directly
+        const fetchGenres = () => {
             try {
-                // Fetch all genres
-                const allGenresResponse = await fetch('/api/genres');
-                if (!allGenresResponse.ok) {
-                    throw new Error(`Failed to fetch all genres. Status: ${allGenresResponse.status}`);
-                }
-                const allGenresData = await allGenresResponse.json();
+                const allGenres = moviesSeedData.reduce((acc, movie) => {
+                    if (movie.genre) {
+                        // Split genres by comma and trim spaces
+                        const movieGenres = movie.genre.split(',').map(genre => genre.trim());
+                        movieGenres.forEach((genre) => {
+                            if (!acc.includes(genre)) {
+                                acc.push(genre);
+                            }
+                        });
+                    }
+                    return acc;
+                }, []);
 
-                // Fetch single genres
-                const singleGenresResponse = await fetch('/api/genres/:genre');
-                if (!singleGenresResponse.ok) {
-                    throw new Error(`Failed to fetch single genres. Status: ${singleGenresResponse.status}`);
-                }
-                const singleGenresData = await singleGenresResponse.json();
+                const sortedGenres = allGenres.sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
 
-                // Combine and set categories
-                setCategories(['All', ...allGenresData, ...singleGenresData]);
+                setCategories(['All', ...sortedGenres]);
             } catch (error) {
                 console.error('Error fetching genres:', error.message);
             }
