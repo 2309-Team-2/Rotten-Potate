@@ -11,6 +11,14 @@ const moviesSeedData = [
     rating: 8.8
 },
 {
+  imageUrl: 'https://www.themoviedb.org/t/p/original/qYYIxgm9qxz1Fvu6mA6gKs9iLZC.jpg',  
+  title: "The Grinch",
+  description: "A grumpy, green creature known as the Grinch attempts to ruin Christmas for the cheerful residents of Whoville. Living alone on the snowy Mount Crumpit, the Grinch despises the holiday season and the joy it brings to the townsfolk. His heart set on stopping Christmas from coming, the Grinch devises a mischievous plan to steal all the Christmas decorations, gifts, and feast. However, his encounter with the kind-hearted Cindy Lou Who may lead to an unexpected change of heart.",
+  genre: "Family, Fantasy, Comedy",
+  releaseYear: 2000,  
+  rating: 6.2  
+},
+{
   imageUrl: 'http://www.reelworldtheology.com/wp-content/uploads/2018/08/the-shawshank-redemption-movie-poster-29x41-in-r2000-franck-darabont-tim-robbins.jpg',
   title: "The Shawshank Redemption",
   description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
