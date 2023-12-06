@@ -1,27 +1,37 @@
 const express = require('express')
 const usersRouter = express.Router();
+const { getAllUsers } = require('../db/users'); 
+
 
 const {
     createUser,
     getUser,
     getUserByEmail
-} = require('../db');
+} = require('../db/');
 
 const jwt = require('jsonwebtoken')
 
-usersRouter.get('/', async( req, res, next) => {
+usersRouter.get('/', async (req, res, next) => {
     try {
-        const users = await getUser();
-        const usersEmail = await getUserByEmail();
-
-        res.send({
-          usersEmail,
-            users
-        });
-    } catch ({name, message}) {
-        next({name, message})
+        const users = await getAllUsers();
+        res.send({ users });
+    } catch (error) {
+        next(error);
     }
 });
+
+
+// usersRouter.get('/', async (req, res, next) => {
+//     try {
+//         const users = await getUser({}); // Assuming this should fetch all users
+
+//         // Send back the users in the response
+//         res.send({ users });
+//     } catch (error) {
+//         next(error); // Pass the error to the error handling middleware
+//     }
+// });
+
 
 usersRouter.post('/login', async(req, res, next) => {
     const { email, password } = req.body;
@@ -63,7 +73,7 @@ usersRouter.post('/register', async(req, res, next) => {
     try {
         const _user = await getUserByEmail(email);
 
-        if(!_user) {
+        if(_user) {
             next({
                 name: 'UserExistsError',
                 message: 'A user with that email already exists'
