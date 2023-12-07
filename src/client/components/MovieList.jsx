@@ -55,7 +55,7 @@ function MovieList() {
       console.error('Error fetching movies:', error.message);
     }
   };
-  
+
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
