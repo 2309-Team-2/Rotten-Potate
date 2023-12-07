@@ -34,8 +34,8 @@ function MovieList() {
       <ul className='all-movies-list'>
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">
-            <Link to={`/movies/${movie.id}`} 
-            className="movie-link">
+            <Link to={`/movies/${movie.id}`} className="movie-link">
+              <img src={movie.image_url} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
               <img src={movie.imageUrl} alt={movie.title} />
               <p>Release Year: {movie.release_year}</p>
