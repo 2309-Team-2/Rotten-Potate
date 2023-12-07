@@ -43,9 +43,9 @@ const MovieDetail = () => {
   }
 
   return (
-    <div>
+    <div className='single-movie-container'>
       <h2>{movie.title}</h2>
-      <img src={movie.imageUrl} alt={movie.title} style={{ width: '100%', height: 'auto' }} />
+      <img src={movie.image_url} alt={movie.title} />
       <p>Genre: {movie.genre}</p>
       <p>Release Year: {movie.releaseYear}</p>
       <p>Rating: {movie.rating}</p>
