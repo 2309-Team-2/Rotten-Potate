@@ -4,38 +4,41 @@ import { useParams } from 'react-router-dom';
 const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [comments, setComments] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
-    // Fetch movie details
-    fetch(`/api/movies/${movieId}`)
-      .then((response) => {
-        if (!response.ok) {
+    const fetchMovieAndReviews = async () => {
+      try {
+        // Fetch movie details
+        const movieResponse = await fetch(`/api/movies/${movieId}`);
+        if (!movieResponse.ok) {
           throw new Error('Movie not found');
         }
-        return response.json();
-      })
-      .then((data) => {
-        setMovie(data);
-      })
-      .catch((error) => {
-        console.error("Failed to load movies seed data", error);
-      });
+        const movieData = await movieResponse.json();
+        setMovie(movieData);
 
-    // Fetch reviews for the movie
-    fetch(`/api/movies/${movieId}/reviews`)
-      .then((response) => {
-        if (!response.ok) {
+        // Fetch reviews for the movie
+        const reviewsResponse = await fetch(`/api/reviews/${movieId}`);
+        if (!reviewsResponse.ok) {
           throw new Error('Failed to fetch reviews');
         }
-        return response.json();
-      })
-      .then((data) => {
-        setReviews(data);
-      })
-      .catch((error) => {
-        console.error("Failed to load reviews", error);
-      });
+        const reviewsData = await reviewsResponse.json();
+        setReviews(reviewsData);
+
+        // Fetch comments for the reviews
+        const commentsResponse = await fetch(`/api/comments/${movieId}`);
+        if (!commentsResponse.ok) {
+          throw new Error('Failed to fetch comments');
+        }
+        const commentsData = await commentsResponse.json();
+        setComments(commentsData);
+      } catch (error) {
+        console.error('Error fetching movie details, reviews, or comments:', error);
+      }
+    };
+
+    fetchMovieAndReviews();
   }, [movieId]);
 
   if (!movie) {
@@ -47,10 +50,10 @@ const MovieDetail = () => {
       <h2>{movie.title}</h2>
       <img src={movie.image_url} alt={movie.title} />
       <p>Genre: {movie.genre}</p>
-      <p>Release Year: {movie.releaseYear}</p>
+      <p>Release Year: {movie.release_year}</p>
       <p>Rating: {movie.rating}</p>
       <p>Description: {movie.description}</p>
-  
+
       <h3>Reviews:</h3>
       {reviews.length > 0 ? (
         <ul>
@@ -65,8 +68,23 @@ const MovieDetail = () => {
       ) : (
         <p>No reviews available.</p>
       )}
+
+      <h3>Comments:</h3>
+      {comments.length > 0 ? (
+        <ul>
+          {comments.map((comment) => (
+            <li key={comment.id}>
+              <p>{comment.user}</p>
+              <p>{comment.content}</p>
+              {/* Add other relevant comment information */}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No comments available.</p>
+      )}
     </div>
   );
-}
+};
 
-export default MovieDetail
+export default MovieDetail;

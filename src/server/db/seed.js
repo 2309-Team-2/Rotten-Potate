@@ -39,8 +39,8 @@ const comments = [
   {
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    review_id: 1,
     user_id: 2,
+    review_id: 1,
   },
   {
     content: "Live-action version of classic has some crude, scary moments.",
@@ -52,13 +52,15 @@ const comments = [
 // ... reviews data ...
 
 const reviews = [
-  {
-    movie_id: 1,
-    user_id: 2,
-    rating: 4.4,
-    comment:
-      "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
-  },
+    {
+      movie_id: 1,
+      user_id: 2,
+      rating: 4.4,
+      comment:
+        "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
+    },
+
+  
   {
     movie_id: 2,
     user_id: 1,
@@ -146,11 +148,12 @@ async function createTables() {
         updated_at TIMESTAMP,
         FOREIGN KEY (review_id) REFERENCES reviews (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
-      )`);
+      )`); // Added closing parenthesis here
   } catch (err) {
     throw err;
   }
 }
+
 
 async function insertUsers() {
   try {
@@ -177,10 +180,8 @@ async function insertUsers() {
 async function insertComments() {
   try {
     for (let i = 0; i < comments.length; i++) {
-      // const reviewId = reviews[i % reviews.length].id;
-      // const userId = users[i % users.length].id;
       const commentContent = comments[i].content;
-      const reviewId = comments[i].review_id;
+      const reviewId = comments[i].review_id; // Use the review_id from the comments data
       const usersId = comments[i].user_id;
       const createdAt = new Date().toLocaleDateString("en-US", {
         year: "numeric",

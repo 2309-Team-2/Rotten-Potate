@@ -27,7 +27,7 @@ function App() {
         <div className='header-container'>
           <Link to='/' style={{ textDecoration: 'none' }}>
           <h1 className='title'>
-          <img id='logo-img' src='./holderlogo.png'></img>
+          <img id='logo-img' src='/holderlogo.png'></img>
           Rotten Potatoes
           </h1>
           </Link>

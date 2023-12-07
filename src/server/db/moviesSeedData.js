@@ -5,7 +5,7 @@ const moviesSeedData = [
   {
     
     title: "Inception",
-    imageUrl: "../../../public/inception.png",
+    imageUrl: "/inception.png",
     description: "A thief who steals corporate secrets through the use of dream-sharing technology...",
     genre: "Sci-Fi",
     releaseYear: 2010,
