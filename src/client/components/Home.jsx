@@ -1,3 +1,6 @@
+import React from 'react';
+import TopRatedMovies from './TopRatedMovies';
+
 export default function Home() {
   return (
       <>
@@ -10,8 +13,8 @@ export default function Home() {
         </div>
         {/* All Movies Section */}
         <div className="top-movies-box">
-          <h2>Top Movies</h2>
-        {/* Add all movies content here */}
+          <h2>Top Rated Movies</h2>
+          <TopRatedMovies />
         </div>
       </>
     )
