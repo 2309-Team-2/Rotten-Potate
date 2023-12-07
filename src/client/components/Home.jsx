@@ -1,5 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import FeaturedMovie from './FeaturedMovie';
+import TopRatedMovies from './TopRatedMovies';
+
 
 export default function Home() {
   const [moviesData, setMoviesData] = useState([]);
@@ -24,15 +27,20 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="home-container">
-      {/* Featured Movie Section */}
-      <FeaturedMovie movies={moviesData} />
+      <>
+        {/* Featured Movie Section */}
+        <div className='featured-container'>
+          <div className="featured-movie-box">
+            <FeaturedMovie movies={moviesData} />
+        {/* Add featured movie content here */}
+          </div>
+        </div>
+        {/* All Movies Section */}
+        <div className="top-movies-box">
+          <h2>Top Rated Movies</h2>
+          <TopRatedMovies />
+        </div>
+      </>
+    )
 
-      {/* All Movies Section */}
-      <div className="top-movies-box">
-        <h2>Top Movies</h2>
-
-      </div>
-    </div>
-  );
 }
