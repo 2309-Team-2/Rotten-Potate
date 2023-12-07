@@ -9,6 +9,7 @@ body {
   background-color: #282c34;
   color: white;
   font-family: "Arial", sans-serif;
+  font-size: 16px;
 }
 
 .header-container {
@@ -16,26 +17,29 @@ body {
   align-items: center;
   background-color: orange;
   padding: 15px 30px;
+  width: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .title {
-  font-size: 32px;
+  font-size: 24px;
   color: white;
   text-transform: uppercase;
+  margin-right: auto;
 }
 
+/* NavBar */
 .navbar {
   display: flex;
-  flex-direction: row;
-  width: auto;
+  flex-wrap: wrap;
   background-color: gray;
-  padding: 20px;
-  margin-bottom: 0;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .navbar-link {
-  margin-left: 20px;
-  font-size: 18px;
+  margin: 10px;
+  font-size: 16px;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
@@ -49,42 +53,17 @@ body {
   border-radius: 50%;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: gray;
-  min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  z-index: 1;
-  padding: 10px;
-}
-
-li {
-  list-style: none;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
+/* Search Bar */
 .search-bar-container {
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  flex-grow: 1;
   justify-content: center;
 }
 
 .search-bar {
-  margin-top: 10px;
   display: flex;
   align-items: center;
-  margin-right: 200px;
 }
 
 .search-bar input {
@@ -316,3 +295,60 @@ button:disabled {
   height: 500px;
 }
 
+/* Profile styling */
+
+.account {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #555;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.account h2 {
+  color: #fff;
+}
+
+.account p {
+  color: #fff;
+  margin: 10px 0;
+}
+
+.account button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.account button:hover {
+  background-color: #2575b7;
+}
+
+/* Media query for smaller screens */
+@media only screen and (max-width: 768px) {
+  .header-container {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-link {
+    margin: 10px 0;
+  }
+
+  .search-bar-container {
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
