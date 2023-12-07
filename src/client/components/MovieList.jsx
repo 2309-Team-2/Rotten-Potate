@@ -49,6 +49,7 @@ function MovieList() {
     }
   };
   
+
 return (
   <div>
     <h2 className="movies-list-title">Movies List</h2>
@@ -57,7 +58,7 @@ return (
   {filteredMovies.map((movie, index) => (
     <li key={movie.id || index} className="movie-item">
       <Link to={`/movies/${movie.id}`} className="movie-link">
-        <img src={movie.imageUrl} alt={movie.title} className="movie-image" />
+        <img src={movie.image_Url} alt={movie.title} className="movie-image" />
         <h3>{movie.title}</h3>
         {/* Display the movie image */}
         <p>Release Year: {movie.releaseYear}</p>
@@ -69,6 +70,7 @@ return (
 </ul>
   </div>
 );
+
 }
 
 export default MovieList;

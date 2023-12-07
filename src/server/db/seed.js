@@ -226,7 +226,7 @@ async function insertMovies() {
 async function insertReviews() {
   try {
     for (const review of reviews) {
-      const { users_id, movie_id, rating, comment } = review;
+      const { user_id, movie_id, rating, comment } = review;
       const createdAt = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -239,7 +239,7 @@ async function insertReviews() {
       });
       const result = await db.query(
         `INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [users_id, movie_id, rating, comment, createdAt, updatedAt]
+        [user_id, movie_id, rating, comment, createdAt, updatedAt]
       );
       console.log(result.rows[0]); // This will log the inserted review to the console
     }
