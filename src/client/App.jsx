@@ -69,7 +69,6 @@ function App() {
           )}
         </div>
 
-
         <Navigations />
         
         <Routes>
