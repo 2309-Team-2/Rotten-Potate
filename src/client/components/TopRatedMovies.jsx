@@ -15,7 +15,7 @@ const TopRatedMovies = () => {
         // Sort movies by rating in descending order and take the top 5
         const topMovies = movies
           .sort((a, b) => b.rating - a.rating)
-          .slice(0, 5);
+          .slice(0, 10);
 
         setTopRatedMovies(topMovies);
       } catch(error) {

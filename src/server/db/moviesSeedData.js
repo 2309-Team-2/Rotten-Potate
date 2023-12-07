@@ -2,7 +2,6 @@
 const db = require("./client");
 
 const moviesSeedData = [
-  
   {
     
     title: "Inception",
