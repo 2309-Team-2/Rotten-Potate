@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -9,14 +8,14 @@ body {
   padding: 0;
   background-color: #282c34;
   color: white;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .header-container {
   display: flex;
   align-items: center;
-  background-color: orange; 
-  padding: 15px 30px; 
+  background-color: orange;
+  padding: 15px 30px;
 }
 
 .title {
@@ -43,13 +42,12 @@ body {
   color: white;
 }
 
-#logo-img{
+#logo-img {
   width: 50px;
   height: auto;
   margin-right: 10px;
   border-radius: 50%;
 }
-
 
 .dropdown {
   position: relative;
@@ -61,7 +59,7 @@ body {
   position: absolute;
   background-color: gray;
   min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   z-index: 1;
   padding: 10px;
@@ -108,7 +106,7 @@ li {
 }
 
 .search-length {
-  width:500px;
+  width: 500px;
 }
 
 .login-link,
@@ -135,9 +133,9 @@ li {
 
 .featured-movie-box,
 .top-movies-box {
-  margin: 20px; 
+  margin: 20px;
   padding: 20px;
-  background-color: #333; 
+  background-color: #333;
   color: white;
   border-radius: 8px;
 }
@@ -161,7 +159,7 @@ li {
 }
 
 .featured-movie-box img {
-  height:25vh;
+  height: 25vh;
 }
 
 .featured-container {
@@ -198,11 +196,50 @@ li {
   font-weight: bold;
 }
 
-
 .featured-movie-box h2,
 .top-movies-box h2 {
   font-size: 24px;
   margin-bottom: 10px;
+}
+
+.movie-details {
+  flex-grow: 1;
+  padding: 0 20px;
+}
+
+.movie-details h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.movie-details img {
+  width: 100%;
+  height: 300px; 
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.movie-details p {
+  margin: 5px 0;
+  color: #ccc;
+}
+
+/* Navigation buttons and Pagination bar */
+button {
+  background-color: #3498db; /* Button background color */
+  color: #fff; /* Button text color */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+button:disabled {
+  background-color: #555; /* Disabled button background color */
+  cursor: not-allowed;
 }
 
 .pagination-bar {
@@ -212,21 +249,17 @@ li {
 }
 
 .pagination-bar button {
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  margin: 0 5px;
-  cursor: pointer;
+  background-color: #3498db;
+  color: #fff;
 }
 
 .pagination-bar button:hover {
   text-decoration: underline;
 }
 
-.pagination-bar button:disabled {
-  color: #555; /* Disabled button color */
-  cursor: not-allowed;
+.pagination-bar button.active {
+  background-color: #555; /* Highlight color for the active page */
+  text-decoration: none;
 }
 
 /* Movie List */
@@ -265,7 +298,6 @@ li {
   color: #ccc;
 }
 
-
 .movie-link {
   text-decoration: none;
   color: white;
@@ -281,6 +313,6 @@ li {
 }
 
 .single-movie-container img {
-  height:500px;
+  height: 500px;
 }
 
