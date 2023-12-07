@@ -80,6 +80,7 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/allmovies" element={<MovieList />} />
+          <Route path="/movies/:movieId" element={<MovieDetail />} />
         </Routes> 
 
       </>
