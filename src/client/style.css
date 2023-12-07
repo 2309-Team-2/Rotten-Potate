@@ -215,3 +215,7 @@ li {
   width: auto;
   height: 200px;
 }
+
+.single-movie-container img {
+  height:500px;
+}
