@@ -11,6 +11,7 @@ async function fetchAllMovies() {
 
     const moviesData = await response.json();
     return moviesData;
+    
   } catch (error) {
     console.error('Error fetching movies:', error.message);
     return [];
@@ -35,15 +36,21 @@ function MovieList() {
     try {
       console.log('Selected Category:', selectedCategory);
   
-      const response = await fetch(`/api/genres?category=${selectedCategory}`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+      // If the selected category is 'All', set the original list of movies
+      if (selectedCategory === 'All') {
+        setFilteredMovies(movies);
+      } else {
+        const response = await fetch(`/api/genres?category=${selectedCategory}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+        }
+  
+        const moviesData = await response.json();
+        console.log('Filtered Movies:', moviesData);
+  
+        // Update the state with the fetched movies
+        setFilteredMovies(moviesData);
       }
-  
-      const moviesData = await response.json();
-      console.log('Filtered Movies:', moviesData);
-  
-      setFilteredMovies(moviesData);
     } catch (error) {
       console.error('Error fetching movies:', error.message);
     }
