@@ -7,6 +7,8 @@ const createComment = async (
   createdAt,
   updatedAt
 ) => {
+
+
   try {
     const { rows } = await db.query(
       `INSERT INTO comments (content, review_id, user_id, created_at, updated_at)
@@ -30,6 +32,18 @@ const getCommentById = async (id) => {
     throw error;
   }
 };
+const  getCommentsByReviewId = async (reviewId) => {
+  try {
+    const { rows } = await db.query("SELECT * FROM comments WHERE reviews_id = $1", [
+      id,
+    ]);
+    const comments = reviewId.result.rows;
+    return comments;
+  } catch (err) {
+    throw new Error(`Error getting comments by review_id: ${err.message}`);
+  }
+}
+
 const getAllComments = async () => {
   try {
     const { rows } = await db.query("SELECT * FROM comments"); // Corrected table name
@@ -55,4 +69,5 @@ module.exports = {
   getCommentById,
   getAllComments,
   updateComments,
+  getCommentsByReviewId,
 };

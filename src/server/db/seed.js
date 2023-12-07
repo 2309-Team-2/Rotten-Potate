@@ -188,9 +188,7 @@ async function insertUsers() {
 async function insertComments() {
   try {
     for (let i = 0; i < comments.length; i++) {
-      const commentContent = comments[i].content;
-      const reviewId = comments[i].review_id; // Use the review_id from the comments data
-      const usersId = comments[i].user_id;
+      const { content, review_id, user_id } = comments[i];
       const createdAt = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -201,13 +199,8 @@ async function insertComments() {
         month: "long",
         day: "numeric",
       });
-      await createComment(
-        commentContent,
-        reviewId,
-        usersId,
-        createdAt,
-        updatedAt
-      );
+      // Assuming you have a createComment function that correctly inserts comments
+      await createComment(content, review_id, user_id, createdAt, updatedAt);
     }
 
     console.log("Seed data inserted successfully.");

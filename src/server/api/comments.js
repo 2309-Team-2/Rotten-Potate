@@ -11,7 +11,15 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+router.get('/review/:reviewId', async (req, res) => {
+  try {
+    const reviewId = req.params.reviewId;
+    const comments = await getCommentsByReviewId(reviewId);
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // GET comment by ID
 router.get('/:id', async (req, res) => { 
   try {
