@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 
 const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
-    // Replace '/api/movies' with the actual API endpoint provided by your server
+    // Fetch movie details
     fetch(`/api/movies/${movieId}`)
       .then((response) => {
         if (!response.ok) {
@@ -19,6 +20,21 @@ const MovieDetail = () => {
       })
       .catch((error) => {
         console.error("Failed to load movies seed data", error);
+      });
+
+    // Fetch reviews for the movie
+    fetch(`/api/movies/${movieId}/reviews`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch reviews');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setReviews(data);
+      })
+      .catch((error) => {
+        console.error("Failed to load reviews", error);
       });
   }, [movieId]);
 
@@ -34,9 +50,23 @@ const MovieDetail = () => {
       <p>Release Year: {movie.releaseYear}</p>
       <p>Rating: {movie.rating}</p>
       <p>Description: {movie.description}</p>
-      {/* Add other relevant information about the movie */}
+  
+      <h3>Reviews:</h3>
+      {reviews.length > 0 ? (
+        <ul>
+          {reviews.map((review) => (
+            <li key={review.id}>
+              <p>{review.user}</p>
+              <p>{review.comment}</p>
+              {/* Add other relevant review information */}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No reviews available.</p>
+      )}
     </div>
   );
-};
+}
 
-export default MovieDetail;
+export default MovieDetail
