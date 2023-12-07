@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllReviews, getReviewById, createReview, updateReview } = require('../db/reviews'); 
+const { getAllReviews, getReviewById, createReview, updateReview, getReviewsByMovieId} = require('../db/reviews'); 
 // const axios = require('axios');
 
 // GET all reviews
@@ -10,6 +10,22 @@ router.get('/', async (req, res) => {
     res.json(reviews);
   } catch (error) {
     res.status(500).json({ message: 'Internal server error', error: error.toString() });
+  }
+});
+// GET review by movie_id
+// GET review by movie_id
+router.get('/movies/:movie_id', async (req, res) => {
+  try {
+    const reviewByMovieId = parseInt(req.params.movie_id);
+    const reviewByMovie = await getReviewsByMovieId(reviewByMovieId);
+
+    if (reviewByMovie) {
+      res.json(reviewByMovie);
+    } else {
+      res.status(500).json({ message: "No reviews for that movie" });
+    }
+  } catch (err) {
+    res.status(404).json({ message: 'Couldn\'t find reviews for that movie', error: err.toString() });
   }
 });
 

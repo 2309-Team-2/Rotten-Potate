@@ -53,6 +53,14 @@ const comments = [
 
 const reviews = [
     {
+      movie_id: 5,
+      user_id: 1,
+      rating: 8.9,
+      comment: "not bad, not bad at all"
+    },
+
+
+    {
       movie_id: 1,
       user_id: 2,
       rating: 4.4,
@@ -128,10 +136,10 @@ async function createTables() {
     await db.query(`
       CREATE TABLE IF NOT EXISTS reviews (
           id SERIAL PRIMARY KEY,
+          movie_id INTEGER,
           rating DECIMAL(4,2) NOT NULL,
           comment VARCHAR(555),
           user_id INTEGER,
-          movie_id INTEGER,
           created_at TIMESTAMP,
           updated_at TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users (id),

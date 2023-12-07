@@ -5,6 +5,7 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]);
   const { movieId } = useParams();
 
   useEffect(() => {
@@ -19,22 +20,35 @@ const MovieDetail = () => {
         setMovie(movieData);
 
         // Fetch reviews for the movie
-        const reviewsResponse = await fetch(`/api/reviews/${movieId}`);
+        const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
         if (!reviewsResponse.ok) {
           throw new Error('Failed to fetch reviews');
         }
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData);
 
-        // Fetch comments for the reviews
-        const commentsResponse = await fetch(`/api/comments/${movieId}`);
-        if (!commentsResponse.ok) {
-          throw new Error('Failed to fetch comments');
+        // Fetch users for the reviews
+        const userIds = reviewsData.map((review) => review.user_id);
+        const usersResponse = await fetch(`/api/users/${userIds.join(',')}`);
+        if (!usersResponse.ok) {
+          throw new Error('Failed to fetch users');
         }
-        const commentsData = await commentsResponse.json();
+        const usersData = await usersResponse.json();
+        setUsers(usersData);
+
+        // Fetch comments for each review
+        const commentsData = [];
+        for (const review of reviewsData) {
+          const commentsResponse = await fetch(`/api/comments/review/${review.id}`);
+          if (!commentsResponse.ok) {
+            throw new Error('Failed to fetch comments');
+          }
+          const reviewComments = await commentsResponse.json();
+          commentsData.push({ reviewId: review.id, comments: reviewComments });
+        }
         setComments(commentsData);
       } catch (error) {
-        console.error('Error fetching movie details, reviews, or comments:', error);
+        console.error('Error fetching movie details, reviews, users, or comments:', error);
       }
     };
 
@@ -59,29 +73,26 @@ const MovieDetail = () => {
         <ul>
           {reviews.map((review) => (
             <li key={review.id}>
-              <p>{review.user}</p>
+              <p>{users.find((user) => user.id === review.user_id)?.name}</p>
               <p>{review.comment}</p>
               {/* Add other relevant review information */}
+              
+              {/* Display comments for this review */}
+              <h4>Comments:</h4>
+              {comments
+                .find((item) => item.reviewId === review.id)
+                ?.comments.map((comment) => (
+                  <div key={comment.id}>
+                    <p>{comment.user}</p>
+                    <p>{comment.content}</p>
+                    {/* Add other relevant comment information */}
+                  </div>
+                ))}
             </li>
           ))}
         </ul>
       ) : (
         <p>No reviews available.</p>
-      )}
-
-      <h3>Comments:</h3>
-      {comments.length > 0 ? (
-        <ul>
-          {comments.map((comment) => (
-            <li key={comment.id}>
-              <p>{comment.user}</p>
-              <p>{comment.content}</p>
-              {/* Add other relevant comment information */}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No comments available.</p>
       )}
     </div>
   );
