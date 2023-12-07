@@ -13,7 +13,6 @@ const Profile = ({ token, setToken }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            console.log('Full server response:', response);
             if (response.ok) {
                 const userData = await response.json();
                 setUser(userData);

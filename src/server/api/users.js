@@ -41,7 +41,7 @@ usersRouter.get('/', async (req, res, next) => {
 
 usersRouter.get('/me', authenticateToken, async (req, res, next) => {
   try {
-    // Remove the password. Look up how to remove key value pairs in an object
+      delete req.user.password;
       res.send( req.user );
   } catch (error) {
       next(error);
