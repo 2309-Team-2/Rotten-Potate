@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const CategoryFilter = ({ categories, onFilterChange }) => {
+
+const CategoryFilter = ({ onFilterChange }) => {
+    const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('All');
+    
+
+
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
@@ -12,7 +17,6 @@ const CategoryFilter = ({ categories, onFilterChange }) => {
         <div>
             <h2>Filter by Category</h2>
             <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)}>
-                <option value="All">All Categories</option>
                 {categories.map((category) => (
                     <option key={category} value={category}>
                         {category}

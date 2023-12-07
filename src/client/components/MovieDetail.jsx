@@ -3,6 +3,7 @@ import React from 'react';
 const MovieDetail = ({ movie }) => {
     return (
         <div> 
+            
             <h2>{movie.title}</h2>
             <p>Director: {movie.director}</p>
             <p>Release Date: {movie.releaseDate}</p>

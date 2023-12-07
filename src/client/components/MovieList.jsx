@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import CategoryFilter from './CategoryFilter';
 
 async function fetchAllMovies() {
   try {
@@ -18,26 +19,43 @@ async function fetchAllMovies() {
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       const moviesData = await fetchAllMovies();
       setMovies(moviesData);
+      setFilteredMovies(moviesData); // Initialize filtered movies with all movies
     }
 
     fetchData();
   }, []);
+
+  const handleFilterChange = async (selectedCategory) => {
+    try {
+      const response = await fetch(`/api/genres?category=${selectedCategory}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+      }
+
+      const moviesData = await response.json();
+      setFilteredMovies(moviesData);
+    } catch (error) {
+      console.error('Error fetching movies:', error.message);
+    }
+  };
   
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
+      <CategoryFilter onFilterChange={handleFilterChange} />
       <ul className='all-movies-list'>
         {movies.map((movie) => (
           <li key={movie.id} className="movie-item">
             <Link to={`/movies/${movie.id}`} className="movie-link">
               <img src={movie.image_url} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
-              <img src={movie.imageUrl} alt={movie.title} />
+              {/* Display the movie image */}
               <p>Release Year: {movie.release_year}</p>
               <p>Rating: {movie.rating}</p>
               {/* Add more details as needed */}
@@ -48,4 +66,5 @@ function MovieList() {
     </div>
   );
 }
+
 export default MovieList;

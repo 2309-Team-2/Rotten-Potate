@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Navigations from './components/Navigations';
