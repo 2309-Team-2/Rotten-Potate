@@ -13,12 +13,10 @@ const Profile = ({ token, setToken }) => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-
             console.log('Full server response:', response);
             if (response.ok) {
                 const userData = await response.json();
-                console.log('Parsed User Data:', userData);
-                setUser(userData.user); // Assuming the user object is nested under the 'user' key
+                setUser(userData);
                 setIsLoggedIn(true);
             } else {
                 console.error('Error fetching user data:', response.statusText);

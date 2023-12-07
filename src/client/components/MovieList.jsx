@@ -58,7 +58,7 @@ return (
   {filteredMovies.map((movie, index) => (
     <li key={movie.id || index} className="movie-item">
       <Link to={`/movies/${movie.id}`} className="movie-link">
-        <img src={movie.image_Url} alt={movie.title} className="movie-image" />
+        <img src={movie.image_url} alt={movie.title} className="movie-image" />
         <h3>{movie.title}</h3>
         {/* Display the movie image */}
         <p>Release Year: {movie.releaseYear}</p>

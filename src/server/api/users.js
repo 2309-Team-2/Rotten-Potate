@@ -1,6 +1,6 @@
 const express = require('express')
 const usersRouter = express.Router();
-const { getAllUsers } = require('../db/users');
+const { getAllUsers, getUserById } = require('../db/users');
 
 const {
     createUser,
@@ -11,17 +11,18 @@ const {
 const jwt = require('jsonwebtoken')
 
 // Middleware to check if the request has a valid token
-const authenticateToken = (req, res, next) => {
-  const token = req.header('Authorization');
-  console.log('Received Token:', token);
-  if (!token) {
+const authenticateToken = async (req, res, next) => {
+  const auth = req.header('Authorization');
+  if (!auth) {
       return res.status(401).json({ message: 'Unauthorized' });
   }
-
+  const token = auth.slice(7)
+  console.log('Received Token:', token);
   try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log('Decoded Token:', decoded);
-      req.user = decoded;
+      req.user = await getUserById(decoded.id);
+      console.log(req.user)
       next();
   } catch (err) {
       console.error('Token verification error:', err);
@@ -40,8 +41,8 @@ usersRouter.get('/', async (req, res, next) => {
 
 usersRouter.get('/me', authenticateToken, async (req, res, next) => {
   try {
-      const user = await getLoggedInUser(req.header('Authorization'));
-      res.send({ user });
+    // Remove the password. Look up how to remove key value pairs in an object
+      res.send( req.user );
   } catch (error) {
       next(error);
   }
