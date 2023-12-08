@@ -11,15 +11,26 @@ async function fetchAllMovies() {
 
     const moviesData = await response.json();
     return moviesData;
+    
   } catch (error) {
     console.error('Error fetching movies:', error.message);
     return [];
   }
 }
 
-function MovieList() {
+function MovieList({searchResults}) {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
+
+  useEffect(() => {
+    // If there are search results, set them as filteredMovies
+    if (searchResults && searchResults.length > 0) {
+      setFilteredMovies(searchResults);
+    } else {
+      // Otherwise, set the original list of movies
+      setFilteredMovies(movies);
+    }
+  }, [searchResults, movies]);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,30 +44,40 @@ function MovieList() {
 
   const handleFilterChange = async (selectedCategory) => {
     try {
-      const response = await fetch(`/api/genres?category=${selectedCategory}`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+      console.log('Selected Category:', selectedCategory);
+  
+      // If the selected category is 'All', set the original list of movies
+      if (selectedCategory === 'All') {
+        setFilteredMovies(movies);
+      } else {
+        const response = await fetch(`/api/genres?category=${selectedCategory}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch movies. Status: ${response.status}`);
+        }
+  
+        const moviesData = await response.json();
+        console.log('Filtered Movies:', moviesData);
+  
+        // Update the state with the fetched movies
+        setFilteredMovies(moviesData);
       }
-
-      const moviesData = await response.json();
-      setFilteredMovies(moviesData);
     } catch (error) {
       console.error('Error fetching movies:', error.message);
     }
   };
-  
+
   return (
     <div>
       <h2 className="movies-list-title">Movies List</h2>
       <CategoryFilter onFilterChange={handleFilterChange} />
       <ul className='all-movies-list'>
-        {movies.map((movie) => (
-          <li key={movie.id} className="movie-item">
+        {filteredMovies.map((movie, index) => (
+          <li key={movie.id || index} className="movie-item">
             <Link to={`/movies/${movie.id}`} className="movie-link">
-              <img src={movie.imageUrl} alt={movie.title} className="movie-image" />
+              <img src={movie.image_url} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
               {/* Display the movie image */}
-              <p>Release Year: {movie.release_year}</p>
+              <p>Release Year: {movie.releaseYear}</p>
               <p>Rating: {movie.rating}</p>
               {/* Add more details as needed */}
             </Link>

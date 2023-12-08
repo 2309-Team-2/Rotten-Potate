@@ -1,7 +1,6 @@
 const express = require('express')
 const usersRouter = express.Router();
-const { getAllUsers } = require('../db/users'); 
-
+const { getAllUsers, getUserById } = require('../db/users');
 
 const {
     createUser,
@@ -10,6 +9,23 @@ const {
 } = require('../db/');
 
 const jwt = require('jsonwebtoken')
+
+// Middleware to check if the request has a valid token
+const authenticateToken = async (req, res, next) => {
+  const auth = req.header('Authorization');
+  if (!auth) {
+      return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const token = auth.slice(7)
+  try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await getUserById(decoded.id);
+      next();
+  } catch (err) {
+      console.error('Token verification error:', err);
+      return res.status(403).json({ message: 'Forbidden' });
+  }
+};
 
 usersRouter.get('/', async (req, res, next) => {
     try {
@@ -20,17 +36,14 @@ usersRouter.get('/', async (req, res, next) => {
     }
 });
 
-
-// usersRouter.get('/', async (req, res, next) => {
-//     try {
-//         const users = await getUser({}); // Assuming this should fetch all users
-
-//         // Send back the users in the response
-//         res.send({ users });
-//     } catch (error) {
-//         next(error); // Pass the error to the error handling middleware
-//     }
-// });
+usersRouter.get('/me', authenticateToken, async (req, res, next) => {
+  try {
+      delete req.user.password;
+      res.send( req.user );
+  } catch (error) {
+      next(error);
+  }
+});
 
 
 usersRouter.post('/login', async(req, res, next) => {

@@ -5,7 +5,7 @@ const moviesSeedData = [
   {
     
     title: "Inception",
-    imageUrl: "../../../public/inception.png",
+    imageUrl: "/inception.png",
     description: "A thief who steals corporate secrets through the use of dream-sharing technology...",
     genre: "Sci-Fi",
     releaseYear: 2010,
@@ -15,7 +15,7 @@ const moviesSeedData = [
   imageUrl: 'https://www.themoviedb.org/t/p/original/qYYIxgm9qxz1Fvu6mA6gKs9iLZC.jpg',  
   title: "The Grinch",
   description: "A grumpy, green creature known as the Grinch attempts to ruin Christmas for the cheerful residents of Whoville. Living alone on the snowy Mount Crumpit, the Grinch despises the holiday season and the joy it brings to the townsfolk. His heart set on stopping Christmas from coming, the Grinch devises a mischievous plan to steal all the Christmas decorations, gifts, and feast. However, his encounter with the kind-hearted Cindy Lou Who may lead to an unexpected change of heart.",
-  genre: "Family, Fantasy, Comedy",
+  genre: "Family",
   releaseYear: 2000,  
   rating: 6.2  
 },
@@ -31,7 +31,7 @@ const moviesSeedData = [
   imageUrl: 'https://movietalkexpress.files.wordpress.com/2015/12/the-godfather.jpeg',
   title: "The Godfather",
   description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-  genre: "Crime, Drama",
+  genre: "Crime",
   releaseYear: 1972,
   rating: 9.2
 },
@@ -39,7 +39,7 @@ const moviesSeedData = [
   imageUrl: 'http://media2.firstshowing.net/firstshowing/img/darkknightposter-fullhuge.jpg',
   title: "The Dark Knight",
   description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-  genre: "Action, Crime, Drama",
+  genre: "Action",
   releaseYear: 2008,
   rating: 9.0
 },
@@ -47,7 +47,7 @@ const moviesSeedData = [
   imageUrl: 'https://image.tmdb.org/t/p/original/gSnbhR0vftfJ2U6KpGmR7WzZlVo.jpg',
   title: "Pulp Fiction",
   description: "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-  genre: "Crime, Drama",
+  genre: "Crime",
   releaseYear: 1994,
   rating: 8.9
 },
@@ -63,7 +63,7 @@ const moviesSeedData = [
   imageUrl: 'https://1.bp.blogspot.com/-0wpQLAHzsjU/Tomg5okGRpI/AAAAAAAAAyM/2fzQk5bwEnw/s1600/Forrest-Gump-Poster-3.jpg',
   title: "Forrest Gump",
   description: "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.",
-  genre: "Drama, Romance",
+  genre: "Romance",
   releaseYear: 1994,
   rating: 8.8
 },
@@ -71,7 +71,7 @@ const moviesSeedData = [
   imageUrl: 'https://furiousreviews.files.wordpress.com/2015/03/7736093674_2e8414a35c_o.jpg',
   title: "Inglourious Basterds",
   description: "In Nazi-occupied France during World War II, a plan to assassinate Nazi leaders by a group of Jewish U.S. soldiers coincides with a theatre owner's vengeful plans for the same.",
-  genre: "Adventure, Drama, War",
+  genre: "War",
   releaseYear: 2009,
   rating: 8.3
 },
@@ -79,7 +79,7 @@ const moviesSeedData = [
   imageUrl: 'https://image.tmdb.org/t/p/original/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
   title: "The Matrix",
   description: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld, he discovers the shocking truth--the life he knows is the elaborate deception of an evil cyber-intelligence.",
-  genre: "Action, Sci-Fi",
+  genre: "Action",
   releaseYear: 1999,
   rating: 8.7
 },
@@ -87,7 +87,7 @@ const moviesSeedData = [
   imageUrl: 'https://www.themoviedb.org/t/p/original/8yHuuCyL9sWWGbqTYLG3bStjFts.jpg',
   title: "Se7en",
   description: "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
-  genre: "Crime, Drama, Mystery",
+  genre: "Mystery",
   releaseYear: 1995,
   rating: 8.6
 },
@@ -95,7 +95,7 @@ const moviesSeedData = [
   imageUrl: 'https://i.pinimg.com/originals/4c/29/d6/4c29d6753e61511d6369567214af2f53.jpg',
   title: "Interstellar",
   description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-  genre: "Adventure, Drama, Sci-Fi",
+  genre: "Sci-Fi",
   releaseYear: 2014,
   rating: 8.6
 },
