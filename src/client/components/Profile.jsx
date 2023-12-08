@@ -7,7 +7,6 @@ const Profile = ({ token, setToken }) => {
 
     const fetchUserData = async () => {
         try {
-          console.log('Authorization Token:', `Bearer ${token}`);
             const response = await fetch('/api/users/me', {
                 headers: {
                     'Authorization': `Bearer ${token}`

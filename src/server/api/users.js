@@ -17,12 +17,9 @@ const authenticateToken = async (req, res, next) => {
       return res.status(401).json({ message: 'Unauthorized' });
   }
   const token = auth.slice(7)
-  console.log('Received Token:', token);
   try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log('Decoded Token:', decoded);
       req.user = await getUserById(decoded.id);
-      console.log(req.user)
       next();
   } catch (err) {
       console.error('Token verification error:', err);

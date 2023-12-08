@@ -42,7 +42,7 @@ const Register = () => {
         navigate('/login');
       } else {
         // Handling registration failure and displaying an error message
-        setErrorMessage(data.message || 'Registration failed');
+        setErrorMessage(data.message || 'Email already exists. Please try again');
       }
     } catch (error) {
       // Handling network errors
