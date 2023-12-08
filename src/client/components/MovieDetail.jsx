@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
@@ -9,6 +9,7 @@ const MovieDetail = () => {
   const { movieId } = useParams();
   const [newReview, setNewReview] = useState('');
   const [newComment, setNewComment] = useState('');
+
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault(); // Prevents the default form submission behavior
@@ -55,6 +56,7 @@ const MovieDetail = () => {
           content: newComment,
           // You may include other relevant data in the request body
         }),
+
       });
 
       if (!response.ok) {
@@ -131,6 +133,7 @@ const MovieDetail = () => {
   return (
     <div className='single-movie-container'>
       <h2>{movie.title}</h2>
+
       <img src={movie.image_url} alt={movie.title} />
       <p>Genre: {movie.genre}</p>
       <p>Release Year: {movie.release_year}</p>
