@@ -32,12 +32,13 @@ export default function Home() {
           <FeaturedMovie movies={moviesData} />
           {/* Add featured movie content here */}
         </div>
-      </div>
-      {/* All Movies Section */}
-      <div className="top-movies-box">
-        <h2>Top Rated Movies</h2>
-        <TopRatedMovies />
-      </div>
-    </>
-  );
+
+        <div className="top-movies-box">
+          <h2>Top Rated Movies</h2>
+          <TopRatedMovies />
+        </div>
+      </>
+    )
+
 }
+

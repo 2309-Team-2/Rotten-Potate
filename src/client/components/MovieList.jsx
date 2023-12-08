@@ -18,9 +18,19 @@ async function fetchAllMovies() {
   }
 }
 
-function MovieList() {
+function MovieList({searchResults}) {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
+
+  useEffect(() => {
+    // If there are search results, set them as filteredMovies
+    if (searchResults && searchResults.length > 0) {
+      setFilteredMovies(searchResults);
+    } else {
+      // Otherwise, set the original list of movies
+      setFilteredMovies(movies);
+    }
+  }, [searchResults, movies]);
 
   useEffect(() => {
     async function fetchData() {
