@@ -32,13 +32,12 @@ const getCommentById = async (id) => {
     throw error;
   }
 };
-const  getCommentsByReviewId = async (reviewId) => {
+const getCommentsByReviewId = async (reviewId) => {
   try {
-    const { rows } = await db.query("SELECT * FROM comments WHERE reviews_id = $1", [
-      id,
+    const { rows } = await db.query("SELECT * FROM comments WHERE review_id = $1", [
+      reviewId,
     ]);
-    const comments = reviewId.result.rows;
-    return comments;
+    return rows;
   } catch (err) {
     throw new Error(`Error getting comments by review_id: ${err.message}`);
   }

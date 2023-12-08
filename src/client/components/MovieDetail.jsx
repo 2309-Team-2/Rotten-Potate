@@ -107,7 +107,7 @@ const MovieDetail = () => {
       // Fetch comments for each review
       const commentsData = [];
       for (const review of reviewsData) {
-        const commentsResponse = await fetch(`/api/comments/review/${review.id}`);
+        const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
         if (!commentsResponse.ok) {
           throw new Error('Failed to fetch comments');
         }
@@ -146,44 +146,48 @@ const MovieDetail = () => {
               <p>{review.comment}</p>
               {/* Add other relevant review information */}
               
-              {/* Review Box */}
-              <div>
-                <h3>Leave a Review:</h3>
-                <textarea
-                  rows="4"
-                  cols="50"
-                  value={newReview}
-                  onChange={(e) => setNewReview(e.target.value)}
-                />
-                <button type="submit" onClick={handleReviewSubmit}>
-                  Submit Review
-                </button>
-              </div>
-              
-              {/* Display comments for this review */}
-              <h4>Comments:</h4>
-              {comments
-                .find((item) => item.reviewId === review.id)
-                ?.comments.map((comment) => (
-                  <div key={comment.id}>
-                    <p>{comment.user}</p>
-                    <p>{comment.content}</p>
-                    {/* Add other relevant comment information */}
-                    {/* Comment Box */}
-                    <div>
-                      <h3>Leave a Comment:</h3>
-                      <textarea
-                        rows="4"
-                        cols="50"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                      />
-                      <button onClick={() => handleCommentSubmit(review.id)}>
-                        Submit Comment for Review {review.id}
-                      </button>
-                    </div>
-                  </div>
-                ))}
+           {/* Review Box */}
+
+{/* Display comments for this review */}
+<h4>Comments:</h4>
+{comments &&
+  comments
+    .find((item) => item.review_id === review.id)
+    ?.comments.map((comment) => (
+      <div key={comment.id}>
+        {/* Display comment information */}
+        <p>{comment.user}</p>
+        <p>{comment.content}</p>
+        {/* Add other relevant comment information */}
+      </div>
+    ))}
+<div>
+  <h3>Leave a Review:</h3>
+  <textarea
+    rows="4"
+    cols="50"
+    value={newReview}
+    onChange={(e) => setNewReview(e.target.value)}
+  />
+  <button type="submit" onClick={handleReviewSubmit}>
+    Submit Review
+  </button>
+</div>
+
+{/* Comment Box */}
+<div>
+  <h3>Leave a Comment:</h3>
+  <textarea
+    rows="4"
+    cols="50"
+    value={newComment}
+    onChange={(e) => setNewComment(e.target.value)}
+  />
+  <button onClick={() => handleCommentSubmit(review.id)}>
+    Submit Comment for Review {review.id}
+  </button>
+</div>
+                  
             </li>
           ))}
         </ul>

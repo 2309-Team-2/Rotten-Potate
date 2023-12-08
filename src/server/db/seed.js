@@ -156,7 +156,7 @@ async function createTables() {
         updated_at TIMESTAMP,
         FOREIGN KEY (review_id) REFERENCES reviews (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
-      )`); // Added closing parenthesis here
+      )`)
   } catch (err) {
     throw err;
   }
@@ -199,7 +199,7 @@ async function insertComments() {
         month: "long",
         day: "numeric",
       });
-      // Assuming you have a createComment function that correctly inserts comments
+      
       await createComment(content, review_id, user_id, createdAt, updatedAt);
     }
 

@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ message: 'Users ID, movie ID, rating, and comment are required' });
     }
     // The data structure should match your database columns and datatypes
-    const reviewData = { user_id, movie_id, rating, comment };
+    const reviewData = { users_id, movie_id, rating, comment };
     // Directly insert the review into the database without external API call
     const newReview = await createReview(reviewData);
     res.status(201).json(newReview);
