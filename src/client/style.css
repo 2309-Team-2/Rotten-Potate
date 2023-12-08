@@ -19,6 +19,7 @@ body {
   padding: 15px 30px;
   width: auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .title {
@@ -53,7 +54,9 @@ body {
   border-radius: 50%;
 }
 
+
 /* Search Bar */
+
 .search-bar-container {
   flex-grow: 1;
   display: flex;
