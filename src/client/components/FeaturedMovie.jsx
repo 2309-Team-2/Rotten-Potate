@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function FeaturedMovie({ movies }) {
   const moviesPerPage = 1; // Display only one movie at a time
@@ -20,7 +20,9 @@ function FeaturedMovie({ movies }) {
   };
 
   // Sort movies by release year in descending order
-  const sortedMovies = [...movies].sort((a, b) => b.release_year - a.release_year);
+  const sortedMovies = [...movies].sort(
+    (a, b) => b.release_year - a.release_year
+  );
 
   // Select the 10 latest releases
   const latestReleases = sortedMovies.slice(0, 10);
@@ -33,7 +35,7 @@ function FeaturedMovie({ movies }) {
   }
 
   return (
-    <div className='featured-container'>
+    <div className="featured-container">
       <div className="featured-movie-box">
         <div className="featured-content">
           {/* Navigation buttons */}
@@ -43,19 +45,25 @@ function FeaturedMovie({ movies }) {
 
           {/* Movie details */}
           <div className="movie-details">
-          <Link to={`/movies/${featuredMovie.id}`} className="movie-link" style={{textDecoration: 'none'}}>
-            <h3>{featuredMovie.title}</h3>
-            <img src={featuredMovie.image_url} alt={featuredMovie.title} />
-            <p>Genre: {featuredMovie.genre}</p>
-            <p>Release Year: {featuredMovie.release_year}</p>
-            <p>Rating: {featuredMovie.rating}</p>
-            <p>Description: {featuredMovie.description}</p>
+            <Link
+              to={`/movies/${featuredMovie.id}`}
+              className="movie-link"
+              style={{ textDecoration: "none" }}
+            >
+              <h3>{featuredMovie.title}</h3>
+              <img src={featuredMovie.image_url} alt={featuredMovie.title} />
+              <p>Genre: {featuredMovie.genre}</p>
+              <p>Release Year: {featuredMovie.release_year}</p>
+              <p>Rating: {featuredMovie.rating}</p>
+              <p>Description: {featuredMovie.description}</p>
             </Link>
           </div>
 
           <button
             onClick={handleNextClick}
-            disabled={currentPage === Math.ceil(latestReleases.length / moviesPerPage)}
+            disabled={
+              currentPage === Math.ceil(latestReleases.length / moviesPerPage)
+            }
           >
             Next
           </button>
@@ -63,15 +71,19 @@ function FeaturedMovie({ movies }) {
 
         {/* Pagination bar */}
         <div className="pagination-bar">
-          {Array.from({ length: Math.ceil(latestReleases.length / moviesPerPage) }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentPage(index + 1)}
-              disabled={currentPage === index + 1}
-            >
-              {index + 1}
-            </button>
-          ))}
+          {Array.from(
+            { length: Math.ceil(latestReleases.length / moviesPerPage) },
+            (_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentPage(index + 1)}
+                disabled={currentPage === index + 1}
+                className={currentPage === index + 1 ? "active" : ""}
+              >
+                {index + 1}
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>
