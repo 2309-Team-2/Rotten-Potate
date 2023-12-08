@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db/comments');
+const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
 
 // GET all comments
 router.get('/', async (req, res) => {
@@ -12,6 +12,15 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/reviews/:review_id', async (req, res) => {
+  try {
+    const reviewId = req.params.review_id;
+    const comments = await getCommentsByReviewId(reviewId);
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // GET comment by ID
 router.get('/:id', async (req, res) => { 
   try {

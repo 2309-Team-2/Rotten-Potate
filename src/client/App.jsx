@@ -24,12 +24,14 @@ function App() {
   return (
     <Router>
       <>
+
         <div className="header-container">
           <Link to="/" style={{ textDecoration: "none" }}>
             <h1 className="title">
               <img id="logo-img" src="./holderlogo.png"></img>
               Rotten Potatoes
             </h1>
+
           </Link>
           {/* Search Bar */}
           <div className="search-bar-container">
