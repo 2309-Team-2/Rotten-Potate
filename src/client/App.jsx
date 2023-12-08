@@ -20,26 +20,6 @@ function App() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
 
-  const handleUpdateProfile = async (updatedProfileData) => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/users/updateProfile",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedProfileData),
-        }
-      );
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
 
   return (
     <Router>
