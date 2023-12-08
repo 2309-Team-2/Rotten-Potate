@@ -18,8 +18,9 @@ const SearchBar = ({ onSearch }) => {
     };
   
     return (
-      <div>
+      <div className='search-bar'>
         <input
+          className='search-length'
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

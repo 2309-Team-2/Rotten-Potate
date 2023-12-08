@@ -37,15 +37,11 @@ function App() {
               <img id="logo-img" src="./holderlogo.png"></img>
               Rotten Potatoes
             </h1>
-
           </Link>
-
             {/* Search Bar */}
             <div className='search-bar-container'>
             <SearchBar onSearch={handleSearch} />
-
             </div>
-          </div>
           {token ? (
             // If the user is logged in, display the profile link and a logout button
             <div>
@@ -64,6 +60,7 @@ function App() {
               </Link>
             </div>
           )}
+          </div>
         
 
         <Navigations />
