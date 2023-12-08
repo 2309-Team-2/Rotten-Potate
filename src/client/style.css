@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -9,41 +8,46 @@ body {
   padding: 0;
   background-color: #282c34;
   color: white;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
+  font-size: 16px;
 }
 
 .header-container {
   display: flex;
   align-items: center;
-  background-color: orange; 
-  padding: 15px 30px; 
+  background-color: orange;
+  padding: 15px 30px;
+  width: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .title {
-  font-size: 32px;
+  font-size: 24px;
   color: white;
   text-transform: uppercase;
+  margin-right: auto;
 }
 
+/* NavBar */
 .navbar {
   display: flex;
-  flex-direction: row;
-  width: auto;
+  flex-wrap: wrap;
   background-color: gray;
-  padding: 20px;
-  margin-bottom: 0;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 .navbar-link {
-  margin-left: 20px;
-  font-size: 18px;
+  margin: 10px;
+  font-size: 16px;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
   color: white;
 }
 
-#logo-img{
+#logo-img {
   width: 50px;
   height: auto;
   margin-right: 10px;
@@ -51,42 +55,18 @@ body {
 }
 
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: gray;
-  min-width: 200px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  border-radius: 8px;
-  z-index: 1;
-  padding: 10px;
-}
-
-li {
-  list-style: none;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
+/* Search Bar */
 
 .search-bar-container {
+  flex-grow: 1;
   display: flex;
   align-items: center;
-  flex-grow: 1;
   justify-content: center;
 }
 
 .search-bar {
-  margin-top: 10px;
   display: flex;
   align-items: center;
-  margin-right: 200px;
 }
 
 .search-bar input {
@@ -108,7 +88,7 @@ li {
 }
 
 .search-length {
-  width:500px;
+  width: 500px;
 }
 
 .login-link,
@@ -135,9 +115,9 @@ li {
 
 .featured-movie-box,
 .top-movies-box {
-  margin: 20px; 
+  margin: 20px;
   padding: 20px;
-  background-color: #333; 
+  background-color: #333;
   color: white;
   border-radius: 8px;
 }
@@ -161,7 +141,7 @@ li {
 }
 
 .featured-movie-box img {
-  height:25vh;
+  height: 25vh;
 }
 
 .featured-container {
@@ -198,11 +178,50 @@ li {
   font-weight: bold;
 }
 
-
 .featured-movie-box h2,
 .top-movies-box h2 {
   font-size: 24px;
   margin-bottom: 10px;
+}
+
+.movie-details {
+  flex-grow: 1;
+  padding: 0 20px;
+}
+
+.movie-details h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.movie-details img {
+  width: 100%;
+  height: 300px; 
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.movie-details p {
+  margin: 5px 0;
+  color: #ccc;
+}
+
+/* Navigation buttons and Pagination bar */
+button {
+  background-color: #3498db; /* Button background color */
+  color: #fff; /* Button text color */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+button:disabled {
+  background-color: #555; /* Disabled button background color */
+  cursor: not-allowed;
 }
 
 .pagination-bar {
@@ -212,21 +231,17 @@ li {
 }
 
 .pagination-bar button {
-  background-color: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  margin: 0 5px;
-  cursor: pointer;
+  background-color: #3498db;
+  color: #fff;
 }
 
 .pagination-bar button:hover {
   text-decoration: underline;
 }
 
-.pagination-bar button:disabled {
-  color: #555; /* Disabled button color */
-  cursor: not-allowed;
+.pagination-bar button.active {
+  background-color: #555; /* Highlight color for the active page */
+  text-decoration: none;
 }
 
 /* Movie List */
@@ -265,7 +280,6 @@ li {
   color: #ccc;
 }
 
-
 .movie-link {
   text-decoration: none;
   color: white;
@@ -281,6 +295,63 @@ li {
 }
 
 .single-movie-container img {
-  height:500px;
+  height: 500px;
 }
 
+/* Profile styling */
+
+.account {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #555;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.account h2 {
+  color: #fff;
+}
+
+.account p {
+  color: #fff;
+  margin: 10px 0;
+}
+
+.account button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.account button:hover {
+  background-color: #2575b7;
+}
+
+/* Media query for smaller screens */
+@media only screen and (max-width: 768px) {
+  .header-container {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-link {
+    margin: 10px 0;
+  }
+
+  .search-bar-container {
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
