@@ -5,7 +5,6 @@ import Login from './components/Login';
 import Navigations from './components/Navigations';
 import Home from './components/Home';
 import AdminDashboard from './components/AdminDashboard'
-import CategoryFilter from './components/CategoryFilter'
 import CommentSection from './components/CommentSection'
 import MovieDetail from './components/MovieDetail'
 import Register from './components/Register'
@@ -19,6 +18,12 @@ function App() {
   const [count, setCount] = useState(0);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  
+  const handleSearch = (data) => {
+    setSearchResults(data);
+  };
+
 
 
   return (
@@ -33,10 +38,7 @@ function App() {
           </Link>
             {/* Search Bar */}
             <div className='search-bar-container'>
-              <div className='search-bar'>
-              <input className="search-length" type="text" placeholder="Search..." />
-              <button type="button">&#128269;</button>
-              </div>
+            <SearchBar onSearch={handleSearch} />
             </div>
             {token ? (
             // If the user is logged in, display the profile link and a logout button
@@ -62,6 +64,7 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/allmovies" element={<MovieList />} />
+          <Route path="/search" element={<MovieList searchResults={searchResults} />} />
           <Route path="/movies/:movieId" element={<MovieDetail />} />
         </Routes> 
 
