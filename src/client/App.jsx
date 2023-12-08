@@ -12,6 +12,7 @@ import SearchBar from './components/SearchBar'
 import SingleMovie from './components/SingleMovie'
 import Profile from './components/Profile';
 import MovieList from './components/MovieList';
+import RandomMovie from './components/RandomMovie'
 
 
 function App() {
@@ -63,7 +64,7 @@ function App() {
               </Link>
             </div>
           )}
-        </div>
+        
 
         <Navigations />
 
