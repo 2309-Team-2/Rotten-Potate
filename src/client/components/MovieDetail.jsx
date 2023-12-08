@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
@@ -10,7 +10,7 @@ const MovieDetail = () => {
     fetch(`/api/movies/${movieId}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Movie not found');
+          throw new Error("Movie not found");
         }
         return response.json();
       })
@@ -29,7 +29,11 @@ const MovieDetail = () => {
   return (
     <div>
       <h2>{movie.title}</h2>
-      <img src={movie.imageUrl} alt={movie.title} style={{ width: '100%', height: 'auto' }} />
+      <img
+        src={movie.image_url}
+        alt={movie.title}
+        style={{ height: "500px" }}
+      />
       <p>Genre: {movie.genre}</p>
       <p>Release Year: {movie.releaseYear}</p>
       <p>Rating: {movie.rating}</p>
