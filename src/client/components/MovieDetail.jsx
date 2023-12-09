@@ -12,12 +12,21 @@ const MovieDetail = () => {
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
+      const userToken = localStorage.getItem('userToken');
+      console.log('User Token:', userToken);
+      if (!userToken) {
+        console.error('User is not logged in');
+        return;
+      }
+  
+      // Submit review with authentication
       const response = await fetch('/api/reviews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userToken}`,
         },
         body: JSON.stringify({
           users_id: movieId,
@@ -26,12 +35,14 @@ const MovieDetail = () => {
           comment: newReview,
         }),
       });
+  
       if (!response.ok) {
         throw new Error('Failed to submit review');
       }
-
+  
       const createdReview = await response.json();
-
+  
+      // Update reviews state
       setReviews([...reviews, createdReview]);
       setNewReview('');
     } catch (error) {
@@ -46,20 +57,22 @@ const MovieDetail = () => {
         console.error('User is not logged in');
         return;
       }
-
+  
+      // Fetch comments with authentication
       const commentResponse = await fetch(`/api/comments/${comments.id}`, {
         headers: {
           'Authorization': `Bearer ${userToken}`,
         },
       });
-
+  
       if (!commentResponse.ok) {
         throw new Error('Failed to fetch comment');
       }
-
+  
       const commentData = await commentResponse.json();
       const { review_id } = commentData;
-
+  
+      // Submit comment with authentication
       const response = await fetch('/api/comments', {
         method: 'POST',
         headers: {
@@ -71,18 +84,19 @@ const MovieDetail = () => {
           content: newComment,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to submit comment');
       }
-
+  
       const createdComment = await response.json();
-
+  
+      // Update comments state
       setComments((prevComments) => [
         ...prevComments,
         { reviewId: review_id, comments: [createdComment] },
       ]);
-
+  
       setNewComment('');
     } catch (error) {
       console.error('Error submitting comment:', error.message);
