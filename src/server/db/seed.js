@@ -39,8 +39,8 @@ const comments = [
   {
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    user_id: 2,
-    review_id: 1,
+    userId: 2,
+    reviewId: 1,
   },
   {
     content: "Live-action version of classic has some crude, scary moments.",

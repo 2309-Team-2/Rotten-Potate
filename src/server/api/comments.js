@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
-
+const authenticateToken = require('./users')
 // GET all comments
 router.get('/', async (req, res) => {
   try {
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+//GET comment by review_id
 router.get('/reviews/:review_id', async (req, res) => {
   try {
     const reviewId = req.params.review_id;
@@ -37,13 +37,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new comment
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { content, review_ID, user_ID } = req.body;
     if (!content || !review_ID || !user_ID) {
       res.status(400).json({ message: 'Content, review ID, and user ID are required' });
     } else {
-      const newComment = await createComment({ content, review_ID, user_ID }); 
+      const newComment = await createComment({ content, review_ID, user_ID });
       res.status(201).json(newComment);
     }
   } catch (err) {
