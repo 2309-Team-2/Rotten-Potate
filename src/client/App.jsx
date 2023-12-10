@@ -64,6 +64,7 @@ function App() {
         
 
         <Navigations />
+        <AdminDashboard token={token} />
 
         <Routes>
           <Route path="/" element={<Home token={token} />} />
