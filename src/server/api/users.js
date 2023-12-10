@@ -13,18 +13,34 @@ const jwt = require('jsonwebtoken')
 // Middleware to check if the request has a valid token
 const authenticateToken = async (req, res, next) => {
     const auth = req.header('Authorization');
+
     if (!auth) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
+
     const token = auth.slice(7);
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         console.log('Decoded Token:', decoded);
-        req.user = await getUserById(decoded.userId); // Adjusted from id to userId
+
+        const user = await getUserById(decoded.userId);
+
+        if (!user) {
+            console.error('User not found');
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+
+        req.user = user;
         console.log('Authenticated User:', req.user);
         next();
     } catch (err) {
         console.error('Token verification error:', err);
+
+        if (err.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expired' });
+        }
+
         return res.status(403).json({ message: 'Forbidden' });
     }
 };
@@ -38,7 +54,24 @@ usersRouter.get('/', async (req, res, next) => {
         next(error);
     }
 });
+usersRouter.get('/:id', async (req, res, next) => {
+    const userId = req.params.id;
 
+    try {
+        const user = await getUserById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Optionally, you can exclude sensitive information like the password before sending the response
+        delete user.password;
+
+        res.json(user);
+    } catch (error) {
+        next(error);
+    }
+});
 usersRouter.get('/me', authenticateToken, async (req, res, next) => {
   try {
       delete req.user.password;

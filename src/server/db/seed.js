@@ -39,7 +39,7 @@ const comments = [
   {
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    userId: 2,
+    userId: 1,
     reviewId: 1,
   },
   {
@@ -130,7 +130,7 @@ async function createTables() {
           description VARCHAR(500) NOT NULL,
           genre VARCHAR (50) NOT NULL,
           release_year INTEGER NOT NULL,
-          rating DECIMAL(4,2) NOT NULL
+          rating DECIMAL(3, 1) NOT NULL
       )`);
 
     await db.query(`
