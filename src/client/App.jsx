@@ -22,7 +22,7 @@ function App() {
     <Router>
       <>
       <div className="header-container">
-  <Link to="/logo" style={{ textDecoration: "none" }}>
+  <Link to="/" style={{ textDecoration: "none" }}>
     <h1 className="title">
       <img id="logo-img" src="./holderlogo.png" alt="logo" />
       Rotten Potatoes
