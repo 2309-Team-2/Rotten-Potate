@@ -51,7 +51,7 @@ const getAllComments = async () => {
     throw error;
   }
 };
-const updateComments = async (id, content, reviewId, updatedAt) => {
+const updateComment = async (id, content, reviewId, updatedAt) => {
   try {
     const { rows } = await db.query(
       "UPDATE comments SET CONTENT = $2, review_id = $3, updated_at = $4 WHERE id = $1 RETURNING *",
@@ -63,10 +63,22 @@ const updateComments = async (id, content, reviewId, updatedAt) => {
   }
 };
 
+const deleteComment = async (id) => {
+  try {
+    const { rows } = await db.query("DELETE FROM comments WHERE id = $1 RETURNING *", [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createComment,
   getCommentById,
   getAllComments,
-  updateComments,
+  updateComment, // Corrected function name
   getCommentsByReviewId,
+  deleteComment, // Added deleteComment function
 };
+
+

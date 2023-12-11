@@ -13,7 +13,6 @@ router.get('/', async (req, res) => {
   }
 });
 // GET review by movie_id
-// GET review by movie_id
 router.get('/movies/:movie_id', async (req, res) => {
   try {
     const reviewByMovieId = parseInt(req.params.movie_id);

@@ -12,20 +12,23 @@ const jwt = require('jsonwebtoken')
 
 // Middleware to check if the request has a valid token
 const authenticateToken = async (req, res, next) => {
-  const auth = req.header('Authorization');
-  if (!auth) {
-      return res.status(401).json({ message: 'Unauthorized' });
-  }
-  const token = auth.slice(7)
-  try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await getUserById(decoded.id);
-      next();
-  } catch (err) {
-      console.error('Token verification error:', err);
-      return res.status(403).json({ message: 'Forbidden' });
-  }
+    const auth = req.header('Authorization');
+    if (!auth) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    const token = auth.slice(7);
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Decoded Token:', decoded);
+        req.user = await getUserById(decoded.userId); // Adjusted from id to userId
+        console.log('Authenticated User:', req.user);
+        next();
+    } catch (err) {
+        console.error('Token verification error:', err);
+        return res.status(403).json({ message: 'Forbidden' });
+    }
 };
+
 
 usersRouter.get('/', async (req, res, next) => {
     try {
@@ -46,19 +49,19 @@ usersRouter.get('/me', authenticateToken, async (req, res, next) => {
 });
 
 
-usersRouter.post('/login', async(req, res, next) => {
+usersRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
-    if(!email || !password) {
+    if (!email || !password) {
         next({
             name: 'MissingCredentialsError',
             message: 'Please supply both an email and password'
         });
     }
     try {
-        const user = await getUser({email, password});
-        if(user) {
+        const user = await getUser({ email, password });
+        if (user) {
             const token = jwt.sign({
-                id: user.id,
+                userId: user.id,
                 email
             }, process.env.JWT_SECRET, {
                 expiresIn: '1w'
@@ -68,18 +71,16 @@ usersRouter.post('/login', async(req, res, next) => {
                 message: 'Login successful!',
                 token
             });
-        }
-        else {
+        } else {
             next({
                 name: 'IncorrectCredentialsError',
                 message: 'Username or password is incorrect'
             });
         }
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 });
-
 usersRouter.post('/register', async(req, res, next) => {
     const { name, email, password } = req.body;
 
