@@ -1,31 +1,25 @@
 import React, { useState } from 'react';
 
 const SearchBar = ({ onSearch }) => {
-    const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-    const handleSearch = async () => {
-        try {
-            const response = await fetch(`/api/movies?query=${query}`);
-            const data = await response.json();
+  const handleSearch = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+    onSearch(newQuery);
+  };
 
-            // Assuming the backend responds with an array of movies
-            onSearch(data);
-        } catch (error) {
-            console.error('Error searching for movies:', error);
-        }
-    };
-
-    return (
-        <div>
-            <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for movies..."
-            />
-            <button onClick={handleSearch}>Search</button>
-        </div>
-    );
+  return (
+    <div>
+      <h2 className="searchbar-h2">Search by Title or Category</h2>
+      <input className="search-bar"
+        type="text"
+        placeholder="Enter movie title..."
+        value={query}
+        onChange={handleSearch}
+      />
+    </div>
+  );
 };
 
 export default SearchBar;

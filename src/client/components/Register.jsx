@@ -40,12 +40,14 @@ const Register = () => {
 
         // Redirect to login page
         navigate('/login');
-      } else {
-        // Handling registration failure and displaying an error message
-        setErrorMessage(data.message || 'Registration failed');
+      } 
+        else {
+          const data = await response.json();
+          console.error('Registration failed:', data.message);
+          setErrorMessage(data.message || 'Email already exists. Please try again');
       }
     } catch (error) {
-      // Handling network errors
+      console.error('An error occurred during registration:', error);
       setErrorMessage('An error occurred during registration');
     }
   };

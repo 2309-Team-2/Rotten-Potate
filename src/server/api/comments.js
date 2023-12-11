@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getAllComments, getCommentById, createComment, updateComment, deleteComment } = require('../db/comments');
-
+const { authenticateToken } = require('./authenticateToken'); // Import your authentication middleware
+const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
+router.use(authenticateToken);
 // GET all comments
 router.get('/', async (req, res) => {
   try {
@@ -11,7 +12,16 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+//GET comment by review_id
+router.get('/reviews/:review_id', async (req, res) => {
+  try {
+    const reviewId = req.params.review_id;
+    const comments = await getCommentsByReviewId(reviewId);
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // GET comment by ID
 router.get('/:id', async (req, res) => { 
   try {
@@ -28,13 +38,14 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST new comment
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
-    const { content, review_ID, user_ID } = req.body;
-    if (!content || !review_ID || !user_ID) {
-      res.status(400).json({ message: 'Content, review ID, and user ID are required' });
+    const { content, review_id, user_id } = req.body;
+    // Only content is required
+    if (!content) {
+      res.status(400).json({ message: 'Content is required' });
     } else {
-      const newComment = await createComment({ content, review_ID, user_ID }); 
+      const newComment = await createComment({ content, review_id, user_id });
       res.status(201).json(newComment);
     }
   } catch (err) {
@@ -43,14 +54,15 @@ router.post('/', async (req, res) => {
 });
 
 // PATCH comment by ID
-router.patch('/:id', async (req, res) => { 
+router.patch('/:id', authenticateToken, async (req, res) => { 
   try {
     const commentId = req.params.id;
     const { content, review_ID, user_ID } = req.body;
-    if (!content && !review_ID && !user_ID) {
-      res.status(400).json({ message: 'At least one field (content, review ID, or user ID) is required' });
+    // Only content is required
+    if (!content) {
+      res.status(400).json({ message: 'Content is required' });
     } else {
-      const updatedComment = await updateComment(commentId, { content, review_ID, user_ID }); // Added await
+      const updatedComment = await updateComment(commentId, { content, review_ID, user_ID });
       if (updatedComment) {
         res.json(updatedComment);
       } else {
@@ -63,10 +75,10 @@ router.patch('/:id', async (req, res) => {
 });
 
 // DELETE comment by ID
-router.delete('/:id', async (req, res) => { // Removed '/comments' from the path
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const commentId = req.params.id;
-    const deletedComment = await deleteComment(commentId); // Added await
+    const deletedComment = await deleteComment(commentId);
     if (deletedComment) {
       res.json({ message: 'Comment deleted successfully' });
     } else {

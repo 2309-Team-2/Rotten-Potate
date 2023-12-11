@@ -10,26 +10,31 @@ const users = [
     name: "Emily Johnson",
     email: "emily@example.com",
     password: "securepass",
+    role: "admin"
   },
   {
     name: "Liu Wei",
     email: "liu@example.com",
     password: "strongpass",
+    role: "user",
   },
   {
     name: "Isabella García",
     email: "bella@example.com",
     password: "pass1234",
+    role: "user",
   },
   {
     name: "Mohammed Ahmed",
     email: "mohammed@example.com",
     password: "mysecretpassword",
+    role: "user",
   },
   {
     name: "John Smith",
     email: "john@example.com",
     password: "password123",
+    role: "user",
   },
 ];
 
@@ -37,14 +42,14 @@ const users = [
 
 const comments = [
   {
+    reviewId: 1,
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    review_id: 1,
-    user_id: 2,
+    userId: 1
   },
   {
-    content: "Live-action version of classic has some crude, scary moments.",
     review_id: 2,
+    content: "Live-action version of classic has some crude, scary moments.",
     user_id: 1,
   },
 ];
@@ -52,13 +57,15 @@ const comments = [
 // ... reviews data ...
 
 const reviews = [
-  {
-    movie_id: 1,
-    user_id: 2,
-    rating: 4.4,
-    comment:
-      "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
-  },
+    {
+      movie_id: 1,
+      user_id: 2,
+      rating: 4.4,
+      comment:
+        "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
+    },
+
+  
   {
     movie_id: 2,
     user_id: 1,
@@ -109,6 +116,7 @@ async function createTables() {
           name VARCHAR(255) NOT NULL,
           email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
+          role VARCHAR(50),
           created_at TIMESTAMP
       )`);
 
@@ -120,16 +128,16 @@ async function createTables() {
           description VARCHAR(500) NOT NULL,
           genre VARCHAR (50) NOT NULL,
           release_year INTEGER NOT NULL,
-          rating DECIMAL(4,2) NOT NULL
+          rating DECIMAL(3, 1) NOT NULL
       )`);
 
     await db.query(`
       CREATE TABLE IF NOT EXISTS reviews (
           id SERIAL PRIMARY KEY,
+          movie_id INTEGER,
           rating DECIMAL(4,2) NOT NULL,
           comment VARCHAR(555),
           user_id INTEGER,
-          movie_id INTEGER,
           created_at TIMESTAMP,
           updated_at TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users (id),
@@ -146,11 +154,12 @@ async function createTables() {
         updated_at TIMESTAMP,
         FOREIGN KEY (review_id) REFERENCES reviews (id),
         FOREIGN KEY (user_id) REFERENCES users (id)
-      )`);
+      )`)
   } catch (err) {
     throw err;
   }
 }
+
 
 async function insertUsers() {
   try {
@@ -165,6 +174,7 @@ async function insertUsers() {
         name: user.name,
         email: user.email,
         password: user.password,
+        role: user.role || "user",
         created_at: formattedDate,
       });
     }
@@ -177,11 +187,7 @@ async function insertUsers() {
 async function insertComments() {
   try {
     for (let i = 0; i < comments.length; i++) {
-      // const reviewId = reviews[i % reviews.length].id;
-      // const userId = users[i % users.length].id;
-      const commentContent = comments[i].content;
-      const reviewId = comments[i].review_id;
-      const usersId = comments[i].user_id;
+      const { content, review_id, user_id } = comments[i];
       const createdAt = new Date().toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -192,13 +198,8 @@ async function insertComments() {
         month: "long",
         day: "numeric",
       });
-      await createComment(
-        commentContent,
-        reviewId,
-        usersId,
-        createdAt,
-        updatedAt
-      );
+      
+      await createComment(content, review_id, user_id, createdAt, updatedAt);
     }
 
     console.log("Seed data inserted successfully.");

@@ -1,10 +1,11 @@
-import React from 'react'
+import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Navigations() {
   return (
     <nav>
       <div className="navbar">
+        <Link className="navbar-link" to="/Home">Home</Link>
         <Link className="navbar-link" to="/allmovies">
           All Movies
         </Link>
@@ -16,8 +17,8 @@ export default function Navigations() {
         >
           Now Playing
         </a>
-        <Link className="navbar-link" to="/categories">
-          Random Movie
+        <Link className="navbar-link" to="/random">
+          Watch Next
         </Link>
       </div>
     </nav>

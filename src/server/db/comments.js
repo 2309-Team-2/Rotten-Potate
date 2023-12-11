@@ -7,6 +7,8 @@ const createComment = async (
   createdAt,
   updatedAt
 ) => {
+
+
   try {
     const { rows } = await db.query(
       `INSERT INTO comments (content, review_id, user_id, created_at, updated_at)
@@ -30,6 +32,17 @@ const getCommentById = async (id) => {
     throw error;
   }
 };
+const getCommentsByReviewId = async (reviewId) => {
+  try {
+    const { rows } = await db.query("SELECT * FROM comments WHERE review_id = $1", [
+      reviewId,
+    ]);
+    return rows;
+  } catch (err) {
+    throw new Error(`Error getting comments by review_id: ${err.message}`);
+  }
+}
+
 const getAllComments = async () => {
   try {
     const { rows } = await db.query("SELECT * FROM comments"); // Corrected table name
@@ -38,7 +51,7 @@ const getAllComments = async () => {
     throw error;
   }
 };
-const updateComments = async (id, content, reviewId, updatedAt) => {
+const updateComment = async (id, content, reviewId, updatedAt) => {
   try {
     const { rows } = await db.query(
       "UPDATE comments SET CONTENT = $2, review_id = $3, updated_at = $4 WHERE id = $1 RETURNING *",
@@ -50,9 +63,22 @@ const updateComments = async (id, content, reviewId, updatedAt) => {
   }
 };
 
+const deleteComment = async (id) => {
+  try {
+    const { rows } = await db.query("DELETE FROM comments WHERE id = $1 RETURNING *", [id]);
+    return rows[0];
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createComment,
   getCommentById,
   getAllComments,
-  updateComments,
+  updateComment, // Corrected function name
+  getCommentsByReviewId,
+  deleteComment, // Added deleteComment function
 };
+
+

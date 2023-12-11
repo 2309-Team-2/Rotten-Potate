@@ -4,29 +4,37 @@ const Profile = ({ token, setToken }) => {
     const [user, setUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [error, setError] = useState(null);
-
+    const [isLoading, setIsLoading] = useState(true);
     const fetchUserData = async () => {
+        setIsLoading(true);
         try {
-          console.log('Authorization Token:', `Bearer ${token}`);
+            console.log('Fetching user data with token:', token);
             const response = await fetch('/api/users/me', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
+    
+            console.log('Server response:', response);
+    
             if (response.ok) {
                 const userData = await response.json();
+                console.log('User data fetched successfully:', userData);
                 setUser(userData);
                 setIsLoggedIn(true);
             } else {
-                console.error('Error fetching user data:', response.statusText);
+                const errorData = await response.json();
+                console.error('Error fetching user data:', response.status, response.statusText, errorData);
                 setIsLoggedIn(false);
             }
         } catch (error) {
             console.error('Error during user data fetch:', error);
             setIsLoggedIn(false);
+        }finally {
+            setIsLoading(false);
         }
     };
-
+    
     useEffect(() => {
         if (token) {
             fetchUserData();
@@ -34,14 +42,22 @@ const Profile = ({ token, setToken }) => {
     }, [token]);
 
     const handleLogout = () => {
+        console.log('Logging out...');
+    
         setUser({});
         setToken(null);
+    
+        // Clear token from localStorage
+        localStorage.removeItem('userToken');
+    
         setIsLoggedIn(false);
     };
 
     return (
         <div className='account'>
-            {isLoggedIn ? (
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : isLoggedIn ? (
                 <>
                     <h2>Account Details</h2>
                     <p>Email: {user.email}</p>
