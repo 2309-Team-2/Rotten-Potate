@@ -42,14 +42,14 @@ const users = [
 
 const comments = [
   {
+    reviewId: 1,
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    userId: 2,
-    reviewId: 1,
+    userId: 1
   },
   {
-    content: "Live-action version of classic has some crude, scary moments.",
     review_id: 2,
+    content: "Live-action version of classic has some crude, scary moments.",
     user_id: 1,
   },
 ];
@@ -57,14 +57,6 @@ const comments = [
 // ... reviews data ...
 
 const reviews = [
-    {
-      movie_id: 5,
-      user_id: 1,
-      rating: 8.9,
-      comment: "not bad, not bad at all"
-    },
-
-
     {
       movie_id: 1,
       user_id: 2,
@@ -136,7 +128,7 @@ async function createTables() {
           description VARCHAR(500) NOT NULL,
           genre VARCHAR (50) NOT NULL,
           release_year INTEGER NOT NULL,
-          rating DECIMAL(4,2) NOT NULL
+          rating DECIMAL(3, 1) NOT NULL
       )`);
 
     await db.query(`

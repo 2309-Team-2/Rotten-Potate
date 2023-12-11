@@ -6,7 +6,7 @@ const Login = ({ setToken }) => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -19,8 +19,8 @@ const Login = ({ setToken }) => {
 
   const login = async () => {
     try {
-      setLoading(true); // Set loading to true before the request
-
+      setLoading(true);
+  
       const response = await fetch('http://localhost:3000/api/users/login', {
         method: 'POST',
         headers: {
@@ -31,26 +31,51 @@ const Login = ({ setToken }) => {
           password,
         }),
       });
-
+  
       const result = await response.json();
-      setMessage(result.message);
       console.log(result);
-
-      if (result.token) {
+  
+      if (response.ok && result.token) {
         console.log('Login successful!');
-        setToken(result.token);
+  
+        if (typeof setToken === 'function') {
+          setToken(result.token);
+          console.log('Token set in state:', result.token);
+  
+          try {
+            localStorage.setItem('userToken', result.token);
+            console.log('Token saved to localStorage:', result.token);
+          } catch (localStorageError) {
+            console.error('Error saving token to localStorage:', localStorageError);
+          }
+        } else {
+          console.error('setToken is not a function or not provided.');
+        }
+  
+        // Handle result.message
+        if (result.message instanceof Promise) {
+          result.message.then((resolvedMessage) => setMessage(resolvedMessage));
+        } else {
+          setMessage(result.message || 'Login successful!');
+        }
+  
         navigate('/', { state: { email, password } });
       } else {
-        setError('Invalid email or password.');
+        setError(result.message || 'Invalid email or password.');
       }
-
+  
       setEmail('');
       setPassword('');
     } catch (err) {
       setError('An error occurred during login. Please try again.');
-      console.error(`${err.name}: ${err.message}`);
+      console.error('Login error:', err);
+  
+      // Log the response details if available
+      if (err.response) {
+        console.error('Response details:', await err.response.text());
+      }
     } finally {
-      setLoading(false); // Set loading back to false regardless of success or failure
+      setLoading(false);
     }
   };
 
