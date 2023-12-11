@@ -18,9 +18,8 @@ const MovieDetail = () => {
   
     try {
       const storedUserToken = localStorage.getItem('userToken');
-      setUserToken(storedUserToken);
   
-      if (!userToken) {
+      if (!storedUserToken) {
         console.error('User is not logged in');
         return;
       }
@@ -29,7 +28,7 @@ const MovieDetail = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`,
+          'Authorization': `Bearer ${storedUserToken}`,
         },
         body: JSON.stringify({
           movie_id: movieId,
@@ -48,22 +47,22 @@ const MovieDetail = () => {
       // Update reviews state
       setReviews([...reviews, createdReview]);
       setNewReview('');
-    }  catch (error) {
+    } catch (error) {
       console.error('Error creating review:', error);
-      res.status(500).json({ message: 'Internal server error', error: error.toString() });
+      res.status(500).json({ message: 'Internal server error', error: error.toString() })
+      // Use proper error handling, res is not defined here
+      // res.status(500).json({ message: 'Internal server error', error: error.toString() });
     }
   }
-
   const handleCommentSubmit = async (reviewId) => {
     try {
       if (!userToken) {
         console.error('User is not logged in');
         return;
       }
-  
+
       console.log('Submitting comment:', { content: newComment });
-  
-      // Submit comment with authentication
+
       const response = await fetch('/api/comments', {
         method: 'POST',
         headers: {
@@ -88,7 +87,7 @@ const MovieDetail = () => {
       ]);
       
       setNewComment('');
-    } catch (error) {
+    }   catch (error) {
       console.error('Error submitting comment:', error);
     
       // Check if there's a response object with details
@@ -180,45 +179,38 @@ const MovieDetail = () => {
   useEffect(() => {
     const fetchMovieAndReviews = async () => {
       try {
-        const storedUserToken = localStorage.getItem('userToken');
-        setUserToken(storedUserToken);
+        // Fetch movie details
         const movieResponse = await fetch(`/api/movies/${movieId}`);
         if (!movieResponse.ok) {
-          throw new Error('Movie not found');
+          throw new Error(`Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`);
         }
         const movieData = await movieResponse.json();
         setMovie(movieData);
 
-        const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`, {
-          headers: userToken ? { 'Authorization': `Bearer ${userToken}` } : {},
-        });
+        // Fetch reviews for the movie
+        const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
         if (!reviewsResponse.ok) {
-          throw new Error('Failed to fetch reviews');
+          throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
         }
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData);
 
+        // Fetch users for the reviews
         const userIds = reviewsData.map((review) => review.user_id);
         const usersResponse = await fetch(`/api/users/${userIds.join(',')}`);
         if (!usersResponse.ok) {
-          throw new Error('Failed to fetch users');
+          throw new Error(`Error fetching users. Server returned: ${usersResponse.status} ${usersResponse.statusText}`);
         }
         const usersData = await usersResponse.json();
         setUsers(usersData);
 
-        const commentsData = [];
-        for (const review of reviewsData) {
-          const commentResponse = await fetch(`/api/comments/reviews/${review.id}`, {
-            headers: userToken ? { 'Authorization': `Bearer ${userToken}` } : {},
-          });
-          if (!commentResponse.ok) {
-            throw new Error('Failed to fetch comments');
-          }
-
-          const commentData = await commentResponse.json().comments;;
-          commentsData.push({ reviewId: review.id, comments: commentData });
+        // Fetch comments using comment IDs associated with the reviews
+        const commentIds = reviewsData.flatMap((review) => review.comments.map((comment) => comment.id));
+        const commentsResponse = await fetch(`/api/comments/${commentIds.join(',')}`);
+        if (!commentsResponse.ok) {
+          throw new Error(`Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`);
         }
-
+        const commentsData = await commentsResponse.json();
         setComments(commentsData);
       } catch (error) {
         console.error('Error fetching movie details, reviews, users, or comments:', error);
@@ -226,49 +218,48 @@ const MovieDetail = () => {
     };
 
     fetchMovieAndReviews();
-  }, [movieId, userToken]);
+  }, [movieId]);
 
   if (!movie) {
     return <div>Movie not found!</div>;
   }
+
   return (
     <div className='single-movie-container'>
-      <h2>{movie.title}</h2>
   
-      <img src={movie.image_url} alt={movie.title} />
-      <p>Genre: {movie.genre}</p>
-      <p>Release Year: {movie.release_year}</p>
-      <p>Rating: {movie.rating}</p>
-      <p>Description: {movie.description}</p>
-  
-      <h3>Reviews:</h3>
+  <h2>{movie.title}</h2>
+
+  <img src={movie.image_url} alt={movie.title} />
+  <p>Genre: {movie.genre}</p>
+  <p>Release Year: {movie.release_year}</p>
+  <p>Rating: {movie.rating}</p>
+  <p>Description: {movie.description}</p>
+  <h3>Reviews:</h3>
       {reviews.length > 0 ? (
         <ul>
           {reviews.map((review) => (
-             <li key={review.id}>
+            <li key={review.id}>
               <p>{review.comment}</p>
-  
+
               <h4>Comments:</h4>
-    {comments &&
-      comments
-        .find((item) => item.reviewId === review.id)
-        ?.comments.map((comment) => (
-          <div key={comment.id}>
-            <p>{comment.user}</p>
-            <p>{comment.content}</p>
-          </div>
-        ))}
-    <textarea
-      rows="4"
-      cols="50"
-      value={newComment}
-      onChange={(e) => setNewComment(e.target.value)}
-    />
-    <button onClick={() => handleCommentSubmit(review.id)}>
-      Submit Comment
-    </button>
-  </li>
-))}
+              {comments
+                .filter((comment) => review.comments.includes(comment.id))
+                .map((comment) => (
+                  <div key={comment.id}>
+                    <p>{comment.content}</p>
+                  </div>
+                ))}
+              <textarea
+                rows="4"
+                cols="50"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <button onClick={() => handleCommentSubmit(review.id)}>
+                Submit Comment
+              </button>
+            </li>
+          ))}
         </ul>
       ) : (
         <div>
@@ -276,22 +267,20 @@ const MovieDetail = () => {
         </div>
       )}
   
-      <div>
-        <h3>Leave a Review:</h3>
-        <textarea
-          rows="4"
-          cols="50"
-          value={newReview}
-          onChange={(e) => setNewReview(e.target.value)}
-        />
-        <button type="submit" onClick={handleReviewSubmit}>
-          Submit Review
-        </button>
+        <div>
+          <h3>Leave a Review:</h3>
+          <textarea
+            rows="4"
+            cols="50"
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
+          />
+          <button type="submit" onClick={handleReviewSubmit}>
+            Submit Review
+          </button>
+        </div>
       </div>
-  
-      
-    </div>
-  );
-};
+    );
+  }
 
-export default MovieDetail;
+  export default MovieDetail;
