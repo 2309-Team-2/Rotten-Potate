@@ -17,7 +17,7 @@ export default function Navigations() {
           Now Playing
         </a>
         <Link className="navbar-link" to="/random">
-          Random Movie
+          Watch Next
         </Link>
       </div>
     </nav>

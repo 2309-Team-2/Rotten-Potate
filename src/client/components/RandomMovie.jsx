@@ -36,11 +36,10 @@ function RandomMovie() {
   };
 
   return (
-    <div>
+    <div className="random-movie">
       {randomMovie && (
         <div>
-          <h3>Random Movie:</h3>
-
+          <h3>What to watch:</h3>
           <p>Title: {randomMovie.title}</p>
           <img
             src={randomMovie.image_url}
