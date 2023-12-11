@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getAllReviews, getReviewById, createReview, updateReview, getReviewsByMovieId} = require('../db/reviews'); 
-const authenticateToken = require('./users')
-// const axios = require('axios');
-
+const { authenticateToken } = require('./authenticateToken');
+router.use(authenticateToken)
 // GET all reviews
 router.get('/', async (req, res) => {
   try {

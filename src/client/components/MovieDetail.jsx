@@ -12,90 +12,92 @@ const MovieDetail = () => {
   const [newReview, setNewReview] = useState('');
   const [newComment, setNewComment] = useState('');
 
-  
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-  
+  const handleReviewSubmit = async (req, res) => {
     try {
-      const storedUserToken = localStorage.getItem('userToken');
-  
-      if (!storedUserToken) {
-        console.error('User is not logged in');
-        return;
-      }
-  
-      const response = await fetch('/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${storedUserToken}`,
-        },
-        body: JSON.stringify({
-          movie_id: movieId,
-          rating: 0,
-          comment: newReview,
-        }),
-      });
-  
-      if (!response.ok) {
-        console.error('Failed to submit review. Server returned:', response.status, response.statusText);
-        throw new Error('Failed to submit review');
-      }
-  
-      const createdReview = await response.json();
-  
-      // Update reviews state
-      setReviews([...reviews, createdReview]);
-      setNewReview('');
+        const storedUserToken = req.header('Authorization')?.slice(7);
+
+        if (!storedUserToken) {
+            console.error('User is not logged in');
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const response = await fetch('/api/reviews', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${storedUserToken}`,
+            },
+            body: JSON.stringify({
+                movie_id: movieId,
+                rating: 0,
+                comment: newReview,
+            }),
+        });
+
+        if (!response.ok) {
+            console.error('Failed to submit review. Server returned:', response.status, response.statusText);
+            throw new Error('Failed to submit review');
+        }
+
+        const createdReview = await response.json();
+
+        // Update reviews state
+        setReviews([...reviews, createdReview]);
+        setNewReview('');
+
+        res.status(201).json(createdReview); // Optionally, send a response back to the client
     } catch (error) {
-      console.error('Error creating review:', error);
-      res.status(500).json({ message: 'Internal server error', error: error.toString() })
-      // Use proper error handling, res is not defined here
-      // res.status(500).json({ message: 'Internal server error', error: error.toString() });
+        console.error('Error creating review:', error);
+        res.status(500).json({ message: 'Internal server error', error: error.toString() });
     }
-  }
-  const handleCommentSubmit = async (reviewId) => {
+};
+
+const handleCommentSubmit = async (req, res) => {
     try {
-      if (!userToken) {
-        console.error('User is not logged in');
-        return;
-      }
+        const storedUserToken = req.header('Authorization')?.slice(7);
 
-      console.log('Submitting comment:', { content: newComment });
+        if (!storedUserToken) {
+            console.error('User is not logged in');
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
 
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`,
-        },
-        body: JSON.stringify({
-          content: newComment,
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to submit comment');
-      }
-      
-      const commentResponseData = await response.json(); // Store the JSON data in a variable
-      
-      // Update comments state
-      setComments((prevComments) => [
-        ...prevComments,
-        { reviewId: reviewId, comments: [commentResponseData] },
-      ]);
-      
-      setNewComment('');
-    }   catch (error) {
-      console.error('Error submitting comment:', error);
-    
-      // Check if there's a response object with details
-      if (error.response) {
-        console.error('Response details:', error.response);
-      }
+        const response = await fetch('/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${storedUserToken}`,
+            },
+            body: JSON.stringify({
+                content: newComment,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit comment');
+        }
+
+        const commentResponseData = await response.json();
+
+        // Update comments state
+        setComments((prevComments) => [
+            ...prevComments,
+            { reviewId: review.id, comments: [commentResponseData] },
+        ]);
+
+        setNewComment('');
+
+        res.status(201).json(commentResponseData); // Optionally, send a response back to the client
+    } catch (error) {
+        console.error('Error submitting comment:', error);
+
+        // Check if there's a response object with details
+        if (error.response) {
+            console.error('Response details:', error.response);
+        }
+
+        res.status(500).json({ message: 'Internal server error', error: error.toString() });
     }
-  }
+};
   const handleDeleteComment = async (reviewId, commentId) => {
     try {
       const userToken = localStorage.getItem('userToken');
@@ -186,7 +188,7 @@ const MovieDetail = () => {
         }
         const movieData = await movieResponse.json();
         setMovie(movieData);
-
+  
         // Fetch reviews for the movie
         const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
         if (!reviewsResponse.ok) {
@@ -194,29 +196,64 @@ const MovieDetail = () => {
         }
         const reviewsData = await reviewsResponse.json();
         setReviews(reviewsData);
-
+  
         // Fetch users for the reviews
         const userIds = reviewsData.map((review) => review.user_id);
+        console.log('User IDs:', userIds);
+  
+        if (!userIds || userIds.length === 0) {
+          console.error('No user IDs found in reviewsData');
+          return;
+        }
+  
         const usersResponse = await fetch(`/api/users/${userIds.join(',')}`);
         if (!usersResponse.ok) {
           throw new Error(`Error fetching users. Server returned: ${usersResponse.status} ${usersResponse.statusText}`);
         }
         const usersData = await usersResponse.json();
         setUsers(usersData);
+        console.log('Reviews Data:', reviewsData);
 
-        // Fetch comments using comment IDs associated with the reviews
-        const commentIds = reviewsData.flatMap((review) => review.comments.map((comment) => comment.id));
+        const commentIds = reviewsData.flatMap((review) => {
+          if (review.id) {
+            // Assuming comment has a review_id field linking it to the review
+            return [review.id];
+          } else {
+            console.error('No review ID found in the review:', review);
+            return [];
+          }
+        });
+    
+        console.log('Review IDs:', commentIds);
+    
+        if (!commentIds || commentIds.length === 0) {
+          console.error('No review IDs found in reviewsData');
+          return;
+        }
+    
         const commentsResponse = await fetch(`/api/comments/${commentIds.join(',')}`);
         if (!commentsResponse.ok) {
           throw new Error(`Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`);
         }
+    
         const commentsData = await commentsResponse.json();
+        console.log('Comments Data:', commentsData);
         setComments(commentsData);
       } catch (error) {
         console.error('Error fetching movie details, reviews, users, or comments:', error);
+    
+        // Log additional information about the caught error
+        if (error.response) {
+          console.error('Response details:', error.response);
+        }
+    
+        // Log details about the network request, if available
+        if (error.request) {
+          console.error('Request details:', error.request);
+        }
       }
     };
-
+  
     fetchMovieAndReviews();
   }, [movieId]);
 
@@ -226,15 +263,13 @@ const MovieDetail = () => {
 
   return (
     <div className='single-movie-container'>
-  
-  <h2>{movie.title}</h2>
-
-  <img src={movie.image_url} alt={movie.title} />
-  <p>Genre: {movie.genre}</p>
-  <p>Release Year: {movie.release_year}</p>
-  <p>Rating: {movie.rating}</p>
-  <p>Description: {movie.description}</p>
-  <h3>Reviews:</h3>
+      <h2>{movie.title}</h2>
+      <img src={movie.image_url} alt={movie.title} />
+      <p>Genre: {movie.genre}</p>
+      <p>Release Year: {movie.release_year}</p>
+      <p>Rating: {movie.rating}</p>
+      <p>Description: {movie.description}</p>
+      <h3>Reviews:</h3>
       {reviews.length > 0 ? (
         <ul>
           {reviews.map((review) => (
@@ -242,13 +277,19 @@ const MovieDetail = () => {
               <p>{review.comment}</p>
 
               <h4>Comments:</h4>
-              {comments
-                .filter((comment) => review.comments.includes(comment.id))
-                .map((comment) => (
-                  <div key={comment.id}>
-                    <p>{comment.content}</p>
-                  </div>
-                ))}
+              {review.comments && Array.isArray(review.comments) && review.comments.length > 0 ? (
+                review.comments.map((commentId) => {
+                  const comment = comments.find((c) => c.id === commentId);
+                  return (
+                    <div key={commentId}>
+                      <p>{comment ? comment.content : 'Comment not found'}</p>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No comments available.</p>
+              )}
+              
               <textarea
                 rows="4"
                 cols="50"
@@ -266,21 +307,21 @@ const MovieDetail = () => {
           <p>No reviews available.</p>
         </div>
       )}
-  
-        <div>
-          <h3>Leave a Review:</h3>
-          <textarea
-            rows="4"
-            cols="50"
-            value={newReview}
-            onChange={(e) => setNewReview(e.target.value)}
-          />
-          <button type="submit" onClick={handleReviewSubmit}>
-            Submit Review
-          </button>
-        </div>
-      </div>
-    );
-  }
 
-  export default MovieDetail;
+      <div>
+        <h3>Leave a Review:</h3>
+        <textarea
+          rows="4"
+          cols="50"
+          value={newReview}
+          onChange={(e) => setNewReview(e.target.value)}
+        />
+        <button type="submit" onClick={handleReviewSubmit}>
+          Submit Review
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default MovieDetail;

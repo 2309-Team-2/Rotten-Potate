@@ -37,14 +37,14 @@ const users = [
 
 const comments = [
   {
+    reviewId: 1,
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    userId: 1,
-    reviewId: 1,
+    userId: 1
   },
   {
-    content: "Live-action version of classic has some crude, scary moments.",
     review_id: 2,
+    content: "Live-action version of classic has some crude, scary moments.",
     user_id: 1,
   },
 ];
@@ -52,14 +52,6 @@ const comments = [
 // ... reviews data ...
 
 const reviews = [
-    {
-      movie_id: 5,
-      user_id: 1,
-      rating: 8.9,
-      comment: "not bad, not bad at all"
-    },
-
-
     {
       movie_id: 1,
       user_id: 2,

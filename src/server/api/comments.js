@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const  authenticateToken  = require('./users'); // Import your authentication middleware
-
+const { authenticateToken } = require('./authenticateToken'); // Import your authentication middleware
 const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
-
+router.use(authenticateToken);
 // GET all comments
 router.get('/', async (req, res) => {
   try {
