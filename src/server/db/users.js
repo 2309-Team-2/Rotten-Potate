@@ -100,10 +100,28 @@ const getUserByEmail = async (email) => {
   }
 };
 
+// Assuming you are using a SQL database and a library like `pg` for PostgreSQL
+async function deleteUser(userId) {
+  const client = await pool.connect();
+  try {
+      await client.query('BEGIN');
+      const deleteQuery = 'DELETE FROM users WHERE id = $1';
+      const res = await client.query(deleteQuery, [userId]);
+      await client.query('COMMIT');
+      return res.rowCount; 
+  } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
+  } finally {
+      client.release();
+  }
+}
+
 module.exports = {
   createUser,
   getUser,
   getUserById,
   getUserByEmail,
   getAllUsers,
+  deleteUser,
 };

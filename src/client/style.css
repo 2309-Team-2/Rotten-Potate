@@ -391,3 +391,58 @@ button:disabled {
   color: orange;
 }
 
+// AdminDashboard.css
+.admin-dashboard {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-dashboard h2 {
+    color: #d3d1d1;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+}
+
+.admin-dashboard p {
+    color: #666;
+}
+
+.admin-dashboard ul {
+    list-style: none;
+    padding: 3;
+    margin: 0 auto; 
+    max-width: 600px;
+}
+
+.admin-dashboard li {
+    background: black;
+    border: 1px solid #ddd;
+    color: lightsteelblue;
+    padding: 10px 20px;
+    margin-top: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px beige;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.admin-dashboard button {
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.admin-dashboard button:hover {
+    background: #ff7875;
+}
