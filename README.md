@@ -1,52 +1,35 @@
-#  🚀 Capstone Boilerplate
+# Welcome to Rotten Potatoes - movie review website
+using the PERN (PostgreSQL, Express.js, React, Node.js) stack our group (Tristan Anderson, Cameron Dixon, Aaron Jiles, Junior Pizzati, and Danh Cao) created a movie review website. 
 
-A template for building web applications using the PERN (PostgreSQL, Express.js, React, Node.js) stack. 
+##  How to deploy our site
+1. Copy repo and git clone to you're desktop
 
-##  🏁 Getting Started
 
-1. **Don't fork or clone this repo!** Instead, create a new, empty directory on your machine and `git init` (or create an _empty_ repo on GitHub and clone it to your local machine)
-
-2. Add this template as a remote and merge it into your own repository
-
-```bash
-git remote add boilermaker git@github.com:FullstackAcademy/capstone-app-template.git
-git fetch boilermaker
-git merge boilermaker/main
-```
-
-3. Install packages
-
-```bash
-npm i
-```
-
-4. Add a `.env` file with your secret value for auth
+2. Add a `.env` file with your secret value for authentication
 ```
 JWT_SECRET='somesecretvalue'
 ```
 
-5. Create the database
+3. Install packages
+npm i
 
-```bash
+
+4. Create the database
 createdb your-database-name
 ```
 
-6. Update `src/server/db/client.js` to reflect the name of your database
-
-```js
+5. Update `src/server/db/client.js` to reflect the name of your database
 const connectionString = process.env.DATABASE_URL || 'https://localhost:5432/your-database-name';
 ```
 
-7. Seed the database
-```bash
+6. Seed the database
 npm run seed
 ```
 
-8. Start the server
-```bash
+7. Start the server
 npm run dev
 ```
 
-9. Open your browser at `http://localhost:3000`
+8. Open your browser at `http://localhost:3000`
 
-10. Build something cool! 😎
+9. Build something cool! 😎
