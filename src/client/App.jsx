@@ -30,9 +30,14 @@ function App() {
   </Link>
   <div className="button-container">
     {token ? (
+      <>
       <Link to="/profile" className="profile-link">
         My Profile
       </Link>
+      <Link to="/admin" className="admin-link">
+        Admin Dashboard
+      </Link>
+      </>
     ) : (
       <>
         <Link to="/login" className="login-link">
@@ -47,10 +52,10 @@ function App() {
 </div>
 
         <Navigations />
-        <AdminDashboard token={token} />
+        
 
         <Routes>
-          <Route path="/logo" element={<Home token={token} />} />
+          <Route path="/" element={<Home token={token} />} />
           <Route path="/login" element={<Login setToken={setToken} />} />
           <Route
             path="/profile"
@@ -62,6 +67,7 @@ function App() {
           <Route path="/movies/:movieId" element={<MovieDetail />} />
           <Route path="/random" element={<RandomMovie />} />
           <Route path="/Home" element={<Home/>} />
+          <Route path="/admin" element={<AdminDashboard token={token} />} />
         </Routes>
       </>
     </Router>
