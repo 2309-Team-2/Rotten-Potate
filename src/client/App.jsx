@@ -47,6 +47,7 @@ function App() {
 </div>
 
         <Navigations />
+        <AdminDashboard token={token} />
 
         <Routes>
           <Route path="/logo" element={<Home token={token} />} />

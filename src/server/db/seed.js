@@ -10,26 +10,31 @@ const users = [
     name: "Emily Johnson",
     email: "emily@example.com",
     password: "securepass",
+    role: "admin"
   },
   {
     name: "Liu Wei",
     email: "liu@example.com",
     password: "strongpass",
+    role: "user",
   },
   {
     name: "Isabella García",
     email: "bella@example.com",
     password: "pass1234",
+    role: "user",
   },
   {
     name: "Mohammed Ahmed",
     email: "mohammed@example.com",
     password: "mysecretpassword",
+    role: "user",
   },
   {
     name: "John Smith",
     email: "john@example.com",
     password: "password123",
+    role: "user",
   },
 ];
 
@@ -119,6 +124,7 @@ async function createTables() {
           name VARCHAR(255) NOT NULL,
           email VARCHAR(255) UNIQUE NOT NULL,
           password VARCHAR(255) NOT NULL,
+          role VARCHAR(50),
           created_at TIMESTAMP
       )`);
 
@@ -176,6 +182,7 @@ async function insertUsers() {
         name: user.name,
         email: user.email,
         password: user.password,
+        role: user.role || "user",
         created_at: formattedDate,
       });
     }
