@@ -32,6 +32,7 @@ const Register = () => {
       if (response.ok) {
         console.log(data);
         localStorage.setItem('token', data.token);
+        navigate('/login')
         // ...
       } else {
         console.error('Registration failed:', data.message);
