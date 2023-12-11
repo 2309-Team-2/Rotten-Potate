@@ -53,7 +53,7 @@ function RandomMovie() {
           {/* Add other movie properties as needed */}
         </div>
       )}
-      <button onClick={handleRandomMovieClick}>Generate Random Movie</button>
+      <button className="random-button" onClick={handleRandomMovieClick}>Watch Next</button>
     </div>
   );
 }

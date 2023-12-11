@@ -39,7 +39,7 @@ function FeaturedMovie({ movies }) {
       <div className="featured-movie-box">
         <div className="featured-content">
           {/* Navigation buttons */}
-          <button onClick={handlePrevClick} disabled={currentPage === 1}>
+          <button className="prev-button" onClick={handlePrevClick} disabled={currentPage === 1}>
             Prev
           </button>
 
@@ -59,7 +59,7 @@ function FeaturedMovie({ movies }) {
             </Link>
           </div>
 
-          <button
+          <button className="next-button"
             onClick={handleNextClick}
             disabled={
               currentPage === Math.ceil(latestReleases.length / moviesPerPage)
@@ -74,11 +74,11 @@ function FeaturedMovie({ movies }) {
           {Array.from(
             { length: Math.ceil(latestReleases.length / moviesPerPage) },
             (_, index) => (
-              <button
+              <button className="123-button"
                 key={index}
                 onClick={() => setCurrentPage(index + 1)}
                 disabled={currentPage === index + 1}
-                className={currentPage === index + 1 ? "active" : ""}
+                
               >
                 {index + 1}
               </button>
