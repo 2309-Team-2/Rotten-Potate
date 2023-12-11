@@ -3,11 +3,13 @@ const usersRouter = express.Router();
 const { getAllUsers, getUserById } = require('../db/users');
 const { authenticateToken } = require('./authenticateToken');
 const jwt = require("jsonwebtoken")
+// const { deleteUser } = require('../db/users');
 
 const {
     createUser,
     getUser,
-    getUserByEmail
+    getUserByEmail,
+    deleteUser
 } = require('../db/');
 
 usersRouter.post('/register', async (req, res, next) => {
@@ -117,6 +119,23 @@ usersRouter.get('/:id', async (req, res, next) => {
     }
 });
 
+usersRouter.delete('/:userId', async (req, res, next) => {
+    const userId = req.params.userId;
+
+    try {
+        const deleteCount = await deleteUser(userId);
+
+        if (deleteCount === 0) {
+            return res.status(404).json({
+                error: "User not found or already deleted"
+            });
+        }
+
+        res.status(204).end(); // No content to send back, but the deletion was successful
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = usersRouter;
 	
