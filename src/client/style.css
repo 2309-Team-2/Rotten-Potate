@@ -168,6 +168,38 @@ body {
   margin-bottom: 10px;
 }
 
+.review-header {
+  color: orange;
+  text-align: center;
+}
+/* single movie container */
+
+.single-movie-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.single-movie-container textarea {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.single-movie-container button {
+  background-color: orange;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.single-movie-container button:hover {
+  background-color: #0056b3;
+}
+
 .movie-details {
   flex-grow: 1;
   padding: 0 20px;

@@ -50,6 +50,7 @@ function FeaturedMovie({ movies }) {
               className="movie-link"
               style={{ textDecoration: "none" }}
             >
+              <h2 className="review-header">Leave you're first review!</h2>
               <h3>{featuredMovie.title}</h3>
               <img src={featuredMovie.image_url} alt={featuredMovie.title} />
               <p>Genre: {featuredMovie.genre}</p>
