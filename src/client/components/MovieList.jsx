@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CategoryFilter from './CategoryFilter';
+import SearchBar from './SearchBar';
 
 async function fetchAllMovies() {
   try {
@@ -11,23 +12,20 @@ async function fetchAllMovies() {
 
     const moviesData = await response.json();
     return moviesData;
-    
   } catch (error) {
     console.error('Error fetching movies:', error.message);
     return [];
   }
 }
 
-function MovieList({searchResults}) {
+function MovieList({ searchResults }) {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
 
   useEffect(() => {
-    // If there are search results, set them as filteredMovies
     if (searchResults && searchResults.length > 0) {
       setFilteredMovies(searchResults);
     } else {
-      // Otherwise, set the original list of movies
       setFilteredMovies(movies);
     }
   }, [searchResults, movies]);
@@ -36,7 +34,7 @@ function MovieList({searchResults}) {
     async function fetchData() {
       const moviesData = await fetchAllMovies();
       setMovies(moviesData);
-      setFilteredMovies(moviesData); // Initialize filtered movies with all movies
+      setFilteredMovies(moviesData);
     }
 
     fetchData();
@@ -44,9 +42,6 @@ function MovieList({searchResults}) {
 
   const handleFilterChange = async (selectedCategory) => {
     try {
-      console.log('Selected Category:', selectedCategory);
-  
-      // If the selected category is 'All', set the original list of movies
       if (selectedCategory === 'All') {
         setFilteredMovies(movies);
       } else {
@@ -54,11 +49,8 @@ function MovieList({searchResults}) {
         if (!response.ok) {
           throw new Error(`Failed to fetch movies. Status: ${response.status}`);
         }
-  
+
         const moviesData = await response.json();
-        console.log('Filtered Movies:', moviesData);
-  
-        // Update the state with the fetched movies
         setFilteredMovies(moviesData);
       }
     } catch (error) {
@@ -66,20 +58,51 @@ function MovieList({searchResults}) {
     }
   };
 
+  // Define the handleSearch function for SearchBar
+  const handleSearch = async (query) => {
+    try {
+      console.log('Query:', query);
+
+      // Ensure that query is a string before performing the search
+      if (typeof query === 'string') {
+        const filteredMovies = movies.filter((movie) =>
+          movie.title.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setFilteredMovies(filteredMovies);
+      } else {
+        console.error('Invalid query:', query);
+      }
+    } catch (error) {
+      console.error('Error handling search results:', error.message);
+    }
+  };
+
+
+  
+
   return (
     <div>
-      <h2 className="movies-list-title">Movies List</h2>
-      <CategoryFilter onFilterChange={handleFilterChange} />
+      <div className="movies-header-container">
+        <div className="movies-header">
+        <h2>All Movies</h2>
+        </div>
+        <div className="search-bar-container">
+        <SearchBar onSearch={handleSearch} />
+        </div>
+        <div className="category-filter">
+        <CategoryFilter onFilterChange={handleFilterChange} />
+        </div>
+      </div>
+
       <ul className='all-movies-list'>
         {filteredMovies.map((movie, index) => (
           <li key={movie.id || index} className="movie-item">
             <Link to={`/movies/${movie.id}`} className="movie-link">
               <img src={movie.image_url} alt={movie.title} className="movie-image" />
               <h3>{movie.title}</h3>
-              {/* Display the movie image */}
               <p>Release Year: {movie.releaseYear}</p>
               <p>Rating: {movie.rating}</p>
-              {/* Add more details as needed */}
             </Link>
           </li>
         ))}

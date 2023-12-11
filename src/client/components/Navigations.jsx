@@ -5,6 +5,7 @@ export default function Navigations() {
   return (
     <nav>
       <div className="navbar">
+        <Link className="navbar-link" to="/Home">Home</Link>
         <Link className="navbar-link" to="/allmovies">
           All Movies
         </Link>
