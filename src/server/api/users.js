@@ -2,7 +2,7 @@ const express = require('express')
 const usersRouter = express.Router();
 const { getAllUsers, getUserById } = require('../db/users');
 const { authenticateToken } = require('./authenticateToken');
-
+const jwt = require("jsonwebtoken")
 
 const {
     createUser,
@@ -10,19 +10,18 @@ const {
     getUserByEmail
 } = require('../db/');
 
-usersRouter.post('/register', async(req, res, next) => {
+usersRouter.post('/register', async (req, res, next) => {
     const { name, email, password } = req.body;
-
+  
     try {
-        const _user = await getUserByEmail(email);
-
-        if(_user) {
-            next({
-                name: 'UserExistsError',
-                message: 'A user with that email already exists'
-            });
-        }
-
+      const _user = await getUserByEmail(email);
+  
+      if (_user) {
+        next({
+          name: 'UserExistsError',
+          message: 'A user with that email already exists',
+        });
+      }
         const user = await createUser({
             name,
             email,
@@ -40,10 +39,12 @@ usersRouter.post('/register', async(req, res, next) => {
             message: 'Sign up successful!',
             token
         });
-    } catch({name, message}) {
-        next({name, message})
-    }
-})
+    } catch ({ name, message }) {
+        next({ name, message });
+      }
+    });
+
+
 usersRouter.post('/login', async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -85,7 +86,8 @@ usersRouter.get('/', async (req, res, next) => {
         next(error);
     }
 });
-usersRouter.use(authenticateToken)
+
+
 usersRouter.get('/me', authenticateToken, async (req, res, next) => {
     try {
         delete req.user.password;
