@@ -80,10 +80,16 @@ function MovieList({ searchResults }) {
 
   return (
     <div>
-      <div className="movies-header">
-        <CategoryFilter onFilterChange={handleFilterChange} className="category-filter" />
-        <h2 className="movies-list-title">All Movies</h2>
-        <SearchBar onSearch={handleSearch} className="search-bar" />
+      <div className="movies-header-container">
+        <div className="movies-header">
+        <h2>All Movies</h2>
+        </div>
+        <div className="search-bar-container">
+        <SearchBar onSearch={handleSearch} />
+        </div>
+        <div className="category-filter">
+        <CategoryFilter onFilterChange={handleFilterChange} />
+        </div>
       </div>
 
       <ul className='all-movies-list'>

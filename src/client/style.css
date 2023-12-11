@@ -67,32 +67,19 @@ body {
   align-items: center;
 }
 
-.search-bar input {
-  padding: 10px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.search-bar button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  background-color: #3498db;
-  color: #ffffff;
-  cursor: pointer;
-}
-
 .search-length {
   width: 500px;
+}
+ /* login, register, profile */
+
+ .button-container {
+  margin-left: auto;
+  display: flex;
 }
 
 .login-link,
 .register-link,
 .profile-link {
-  margin-left: auto;
   text-decoration: none;
   font-weight: bold;
   font-size: 18px;
@@ -243,30 +230,36 @@ button:disabled {
 
 /* Movie List */
 
-.movies-list-title {
+.movies-header-container {
   font-size: 28px;
   margin-bottom: 20px;
   color: orange;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
 }
 
 .movies-header {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 20px;
+}
+
+.searchbar-h2 {
+  font-size: 12px;
+}
+
+.search-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .category-filter {
-  margin-right: auto;
-  margin-right: 20px;
-}
-
-.search-bar {
-  margin-left: auto;
-  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .all-movies-list {

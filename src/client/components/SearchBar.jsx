@@ -11,8 +11,8 @@ const SearchBar = ({ onSearch }) => {
 
   return (
     <div>
-      <h2>Search by Title</h2>
-      <input
+      <h2 className="searchbar-h2">Search by Title or Category</h2>
+      <input className="search-bar"
         type="text"
         placeholder="Enter movie title..."
         value={query}

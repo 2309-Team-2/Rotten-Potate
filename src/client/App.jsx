@@ -25,32 +25,30 @@ function App() {
   return (
     <Router>
       <>
-        <div className="header-container">
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <h1 className="title">
-              <img id="logo-img" src="./holderlogo.png" alt="logo" />
-              Rotten Potatoes
-            </h1>
-          </Link>
-          {token ? (
-            // If the user is logged in, display the profile link and a logout button
-            <div>
-              <Link to="/profile" className="profile-link">
-                My Profile
-              </Link>
-            </div>
-          ) : (
-            // If the user is not logged in, display the login/register link
-            <div>
-              <Link to="/login" className="login-link">
-                Log In
-              </Link>
-              <Link to="/register" className="register-link">
-                Register
-              </Link>
-            </div>
-          )}
-        </div>
+      <div className="header-container">
+  <Link to="/" style={{ textDecoration: "none" }}>
+    <h1 className="title">
+      <img id="logo-img" src="./holderlogo.png" alt="logo" />
+      Rotten Potatoes
+    </h1>
+  </Link>
+  <div className="button-container">
+    {token ? (
+      <Link to="/profile" className="profile-link">
+        My Profile
+      </Link>
+    ) : (
+      <>
+        <Link to="/login" className="login-link">
+          Log In
+        </Link>
+        <Link to="/register" className="register-link">
+          Register
+        </Link>
+      </>
+    )}
+  </div>
+</div>
 
         <Navigations />
 
