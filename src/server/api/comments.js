@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('./authenticateToken'); // Import your authentication middleware
 const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
-router.use(authenticateToken);
 // GET all comments
 router.get('/', async (req, res) => {
   try {
@@ -37,6 +36,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.use(authenticateToken);
 // POST new comment
 router.post('/', authenticateToken, async (req, res) => {
   try {
