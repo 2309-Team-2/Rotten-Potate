@@ -35,7 +35,6 @@ const CategoryFilter = ({ onFilterChange }) => {
 
     return (
         <div>
-          <h2>Filter by Category</h2>
           <select value={selectedCategory} onChange={(e) => handleCategoryChange(e.target.value)}>
             {categories.map((category) => (
               <option key={category} value={category}>
