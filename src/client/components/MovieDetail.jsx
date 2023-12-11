@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CommentSection from "./CommentSection"; // Import CommentSection component
@@ -178,131 +176,96 @@ const MovieDetail = () => {
       console.error('Error updating comment:', error.message);
     }
   };
-  
   useEffect(() => {
     const fetchMovieAndReviews = async () => {
       try {
-       
-    
-        console.log('Fetching Movie');
+        // Fetch movie details
         const movieResponse = await fetch(`/api/movies/${movieId}`);
         if (!movieResponse.ok) {
           throw new Error(`Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`);
         }
         const movieData = await movieResponse.json();
-        console.log('Movie Data:', movieData);
         setMovie(movieData);
-    
-        console.log('Fetching Reviews');
+
+        // Fetch reviews for the movie
         const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
         if (!reviewsResponse.ok) {
           throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
         }
         const reviewsData = await reviewsResponse.json();
-        console.log('Reviews Data:', reviewsData);
         setReviews(reviewsData);
-    
-        console.log('Fetching Users');
+
+        // Fetch users for the reviews
         const userIds = reviewsData.map((review) => review.user_id);
-        console.log('User IDs:', userIds);
-    
-        const usersResponse = await fetch(`/api/users/${userIds.join(',')}`, {
-          headers: {
-            'Accept': 'application/json', // Explicitly state that the client expects JSON
-          },
-        });
-    
+        const usersResponse = await fetch(`/api/users/${userIds.join(',')}`);
         if (!usersResponse.ok) {
           throw new Error(`Error fetching users. Server returned: ${usersResponse.status} ${usersResponse.statusText}`);
         }
-    
-        let usersData;
-    
-        try {
-          const responseText = await usersResponse.text();
-          console.log('Users API Response Text:', responseText); // Log the response text
-    
-          usersData = JSON.parse(responseText);
-        } catch (jsonError) {
-          console.error('Failed to parse JSON for users:', jsonError);
-          console.error('Response text:', await usersResponse.text());
-          throw new Error('Failed to parse JSON for users');
-        }
-    
+        const usersData = await usersResponse.json();
         setUsers(usersData);
-    
-        console.log('Fetching Comments');
-        const commentsData = [];
-    
-        for (const review of reviewsData) {
-          const commentResponse = await fetch(`/api/comments/reviews/${review.id}`);
-    
-          if (!commentResponse.ok) {
-            throw new Error(`Error fetching comments for review ${review.id}. Server returned: ${commentResponse.status} ${commentResponse.statusText}`);
-          }
-    
-          const commentData = (await commentResponse.json()).comments;
-          commentsData.push({ reviewId: review.id, comments: commentData });
+
+        // Fetch comments using comment IDs associated with the reviews
+        const commentIds = reviewsData.flatMap((review) => review.comments.map((comment) => comment.id));
+        const commentsResponse = await fetch(`/api/comments/${commentIds.join(',')}`);
+        if (!commentsResponse.ok) {
+          throw new Error(`Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`);
         }
-    
-        console.log('Comments Data:', commentsData);
-    
-        // Move the setComments outside the loop
+        const commentsData = await commentsResponse.json();
         setComments(commentsData);
       } catch (error) {
         console.error('Error fetching movie details, reviews, users, or comments:', error);
       }
     };
-  
+
     fetchMovieAndReviews();
-  }, [movieId ]);
+  }, [movieId]);
+
+  if (!movie) {
+    return <div>Movie not found!</div>;
+  }
+
+  return (
+    <div className='single-movie-container'>
   
-    if (!movie) {
-      return <div>Movie not found!</div>;
-    }
-    return (
-      <div className='single-movie-container'>
-        <h2>{movie.title}</h2>
-  
-        <img src={movie.image_url} alt={movie.title} />
-        <p>Genre: {movie.genre}</p>
-        <p>Release Year: {movie.release_year}</p>
-        <p>Rating: {movie.rating}</p>
-        <p>Description: {movie.description}</p>
-  
-        <h3>Reviews:</h3>
-        {reviews.length > 0 ? (
-          <ul>
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <p>{review.comment}</p>
-  
-                <h4>Comments:</h4>
-                {comments &&
-  comments
-    .find((item) => item.review_id === review.id)
-    ?.comments?.map((comment) => (
-      <div key={comment.id}>
-                        <p>{comments.content}</p>
-                      </div>
-                    ))}
-                <textarea
-                  rows="4"
-                  cols="50"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-                <button onClick={() => handleCommentSubmit(review.id)}>
-                  Submit Comment
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div>
-            <p>No reviews available.</p>
-          </div>
-        )}
+  <h2>{movie.title}</h2>
+
+  <img src={movie.image_url} alt={movie.title} />
+  <p>Genre: {movie.genre}</p>
+  <p>Release Year: {movie.release_year}</p>
+  <p>Rating: {movie.rating}</p>
+  <p>Description: {movie.description}</p>
+  <h3>Reviews:</h3>
+      {reviews.length > 0 ? (
+        <ul>
+          {reviews.map((review) => (
+            <li key={review.id}>
+              <p>{review.comment}</p>
+
+              <h4>Comments:</h4>
+              {comments
+                .filter((comment) => review.comments.includes(comment.id))
+                .map((comment) => (
+                  <div key={comment.id}>
+                    <p>{comment.content}</p>
+                  </div>
+                ))}
+              <textarea
+                rows="4"
+                cols="50"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <button onClick={() => handleCommentSubmit(review.id)}>
+                Submit Comment
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>
+          <p>No reviews available.</p>
+        </div>
+      )}
   
         <div>
           <h3>Leave a Review:</h3>
