@@ -194,7 +194,7 @@ body {
 
 /* Navigation buttons and Pagination bar */
 button {
-  background-color: #3498db;
+  background-color: orange;
   color: #fff;
   padding: 10px 15px;
   border: none;
@@ -215,7 +215,7 @@ button:disabled {
 }
 
 .pagination-bar button {
-  background-color: #3498db;
+  background-color: orange;
   color: #fff;
 }
 
@@ -381,8 +381,11 @@ button:disabled {
 .random-movie > button {
   margin-top: 5px;
   margin-bottom: 5px;
+  background-color: orange;
 }
-=======
+
+
+
 /* home page */ 
 .top-movies-box {
   color: orange;
