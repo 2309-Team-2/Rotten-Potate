@@ -75,11 +75,10 @@ function FeaturedMovie({ movies }) {
           {Array.from(
             { length: Math.ceil(latestReleases.length / moviesPerPage) },
             (_, index) => (
-              <button className="123-button"
+              <button className="pag-button"
                 key={index}
                 onClick={() => setCurrentPage(index + 1)}
-                disabled={currentPage === index + 1}
-                
+                disabled={currentPage === index + 1}                
               >
                 {index + 1}
               </button>

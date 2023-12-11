@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { getAllReviews, getReviewById, createReview, updateReview, getReviewsByMovieId} = require('../db/reviews'); 
 const { authenticateToken } = require('./authenticateToken');
-router.use(authenticateToken)
 // GET all reviews
 router.get('/', async (req, res) => {
   try {
@@ -17,7 +16,7 @@ router.get('/movies/:movie_id', async (req, res) => {
   try {
     const reviewByMovieId = parseInt(req.params.movie_id);
     const reviewByMovie = await getReviewsByMovieId(reviewByMovieId);
-
+    
     if (reviewByMovie) {
       res.json(reviewByMovie);
     } else {
@@ -33,7 +32,7 @@ router.get('/:id', async (req, res) => {
   try {
     const reviewId = parseInt(req.params.id); // Ensure the ID is an integer
     const review = await getReviewById(reviewId);
-
+    
     if (review) {
       res.json(review);
     } else {
@@ -44,6 +43,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.use(authenticateToken)
 // POST new review
 router.post('/', authenticateToken, async (req, res) => {
   try {

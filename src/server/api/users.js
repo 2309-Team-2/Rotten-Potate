@@ -78,6 +78,25 @@ usersRouter.post('/login', async (req, res, next) => {
     }
 });
 
+usersRouter.get('/me', authenticateToken, async (req, res, next) => {
+    try {
+        // Assuming that the authenticated user information is stored in req.user
+        const user = req.user;
+
+        // Remove sensitive information (e.g., password) before sending the response
+        if (user) {
+            delete user.password;
+        }
+
+        // Send the user data in the response
+        res.status(200).json(user);
+    } catch (error) {
+        // Handle errors
+        console.error('Error in /me route:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 usersRouter.get('/', async (req, res, next) => {
     try {
         const users = await getAllUsers();
@@ -88,14 +107,6 @@ usersRouter.get('/', async (req, res, next) => {
 });
 
 
-usersRouter.get('/me', authenticateToken, async (req, res, next) => {
-    try {
-        delete req.user.password;
-        res.send( req.user );
-    } catch (error) {
-        next(error);
-    }
-});
 
 
 usersRouter.get('/:id', async (req, res, next) => {

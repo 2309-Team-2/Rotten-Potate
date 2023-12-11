@@ -235,7 +235,7 @@ button {
   margin: 0 5px;
 }
 
-button:disabled {
+.pag-button:disabled {
   background-color: #555;
   cursor: not-allowed;
 }
