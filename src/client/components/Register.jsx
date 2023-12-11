@@ -13,7 +13,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-
+  
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -26,26 +26,18 @@ const Register = () => {
           password,
         }),
       });
-
-      const data = await response.json();
-
+      
+      const data = await response.json(); // Read the response body once
+      
       if (response.ok) {
         console.log(data);
         localStorage.setItem('token', data.token);
-
-        // Clear form fields on successful registration
-        setName('');
-        setEmail('');
-        setPassword('');
-
-        // Redirect to login page
-        navigate('/login');
-      } 
-        else {
-          const data = await response.json();
-          console.error('Registration failed:', data.message);
-          setErrorMessage(data.message || 'Email already exists. Please try again');
+        // ...
+      } else {
+        console.error('Registration failed:', data.message);
+        setErrorMessage(data.message || 'Email already exists. Please try again');
       }
+      
     } catch (error) {
       console.error('An error occurred during registration:', error);
       setErrorMessage('An error occurred during registration');
