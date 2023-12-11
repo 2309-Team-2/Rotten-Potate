@@ -78,6 +78,9 @@ function MovieList({ searchResults }) {
     }
   };
 
+
+  
+
   return (
     <div>
       <div className="movies-header-container">

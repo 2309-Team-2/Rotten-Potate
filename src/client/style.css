@@ -332,3 +332,7 @@ button:disabled {
   background-color: #3498db;
   color: #fff;
 }
+/* home page */ 
+.top-movies-box {
+  color: orange;
+}

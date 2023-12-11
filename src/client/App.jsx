@@ -16,17 +16,13 @@ import RandomMovie from './components/RandomMovie';
 
 function App() {
   const [token, setToken] = useState(null);
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearch = (data) => {
-    setSearchResults(data);
-  };
+  const [searchResults] = useState([]);
 
   return (
     <Router>
       <>
       <div className="header-container">
-  <Link to="/" style={{ textDecoration: "none" }}>
+  <Link to="/logo" style={{ textDecoration: "none" }}>
     <h1 className="title">
       <img id="logo-img" src="./holderlogo.png" alt="logo" />
       Rotten Potatoes
@@ -53,7 +49,7 @@ function App() {
         <Navigations />
 
         <Routes>
-          <Route path="/" element={<Home token={token} />} />
+          <Route path="/logo" element={<Home token={token} />} />
           <Route path="/login" element={<Login setToken={setToken} />} />
           <Route
             path="/profile"
@@ -64,6 +60,7 @@ function App() {
           <Route path="/search" element={<MovieList searchResults={searchResults} />} />
           <Route path="/movies/:movieId" element={<MovieDetail />} />
           <Route path="/random" element={<RandomMovie />} />
+          <Route path="/Home" element={<Home/>} />
         </Routes>
       </>
     </Router>

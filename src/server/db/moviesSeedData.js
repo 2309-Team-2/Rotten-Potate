@@ -565,7 +565,7 @@ const moviesSeedData = [
     imageUrl: 'https://m.media-amazon.com/images/I/71zR7dYIjzL._AC_UF894,1000_QL80_.jpg',
     title: "Star Trek",
     description: "The film follows a young James T. Kirk and Spock as they join Starfleet and become part of the crew on the USS Enterprise. Together, they face a powerful Romulan threat that could alter the course of the future.",
-    genre: "Science Fiction",
+    genre: "Sci-Fi",
     releaseYear: 2009,
     rating: 7.9
   },
