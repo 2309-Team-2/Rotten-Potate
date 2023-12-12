@@ -209,9 +209,8 @@ const handleCommentSubmit = async () => {
   if (!movie) {
     return <div>Movie not found!</div>;
   }
-
-  return (
-    <div className='single-movie-container'>
+return(
+  <div className='single-movie-container'>
       <h2>{movie.title}</h2>
       <img src={movie.image_url} alt={movie.title} />
       <p>Genre: {movie.genre}</p>
@@ -252,19 +251,19 @@ const handleCommentSubmit = async () => {
         ) : (
           <p>No comments available.</p>
         )}
-        {selectedReviewId === review.id ? (
-          <div>
-            <textarea
-              rows="4"
-              cols="50"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <button onClick={handleCommentSubmit}>Submit Comment</button>
-          </div>
-        ) : (
-          <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
-        )}
+         {selectedReviewId === review.id ? (
+                <div>
+                  <textarea
+                    rows="4"
+                    cols="50"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  />
+                  <button onClick={handleCommentSubmit}>Submit Comment</button>
+                </div>
+              ) : (
+                <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
+              )}
       </li>
     ))}
   </ul>
@@ -273,7 +272,8 @@ const handleCommentSubmit = async () => {
     <p>No reviews available.</p>
   </div>
 )}
-    </div>
 </div>
+</div>
+
 )}
 export default MovieDetail;
