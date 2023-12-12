@@ -42,38 +42,38 @@ const users = [
 
 const comments = [
   {
-    reviewId: 1,
-    content:
-      "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    userId: 1
+    review_id: 1,
+    content: "Live-action version of classic has some crude, scary moments.",
+    user_id: 1,
   },
   {
     review_id: 2,
-    content: "Live-action version of classic has some crude, scary moments.",
-    user_id: 1,
+    content:
+      "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
+    userId: 1
   },
 ];
 
 // ... reviews data ...
 
 const reviews = [
-    {
-      movie_id: 1,
-      user_id: 2,
-      rating: 4.4,
-      comment:
-        "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
-    },
-
-  
   {
-    movie_id: 2,
+    movie_id: 1,
     user_id: 1,
     rating: 4.4,
     comment:
       "As a point of reference, I have always loved the character of the Grinch… As I've got older, I have found myself more and more being able to relate to the Grinch!!!!!! His grumpiness, his depression, his loneliness and even his dislike for Christmas… I've also even been described as a bit of a Grinch myself, so I think that's why it has become a tradition in my household to watch this film every Christmas!",
   },
+  {
+    movie_id: 63,
+    user_id: 2,
+    rating: 4.4,
+    comment:
+    "Inception is not just a movie; it's a journey into the uncharted territories of the human mind. Directed by the visionary Christopher Nolan, this film is a mind-bending masterpiece that captivates and challenges its audience in ways few movies ever dare. From its gripping storyline to its breathtaking visual effects and stellar performances, Inception is a cinematic experience that will linger in your thoughts long after the credits roll.",
+  },
+  
 ];
+  
 
 async function seedDatabase() {
   try {

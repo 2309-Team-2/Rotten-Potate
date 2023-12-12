@@ -44,6 +44,28 @@ router.get('/:id', async (req, res) => {
 });
 
 router.use(authenticateToken)
+router.post('/movies/:movieId', authenticateToken, async (req, res) => {
+  try {
+    const { comment } = req.body;
+    const { movieId } = req.params;
+
+    if (!comment) {
+      return res.status(400).json({ message: 'Comment is required' });
+    }
+
+    const user_id = req.user_id; // Assuming the user ID is available in req.user
+
+    // Additional validation for movieId can be done here...
+
+    // Create a new review associated with the specified movie ID
+    const newReview = await createReview({ user_id, movie_id: movieId, comment });
+
+    res.status(201).json(newReview);
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 // POST new review
 router.post('/', authenticateToken, async (req, res) => {
   try {

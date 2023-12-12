@@ -15,18 +15,25 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  try {
-      const id = parseInt(req.params.id, 10); // Ensure the ID is an integer
-      const movie = await getMovieById(id); // This function needs to be implemented in movie.js
-      if (movie) {
-          res.json(movie);
-      } else {
-          res.status(404).json({ error: 'Movie not found' });
+    try {
+      const id = parseInt(req.params.id, 10);
+  
+      if (isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid movie ID' });
       }
-  } catch (err) {
-      res.status(500).json({ error: err.message });
-  }
-});
+  
+      const movie = await getMovieById(id);
+  
+      if (movie) {
+        res.json(movie);
+      } else {
+        res.status(404).json({ error: 'Movie not found' });
+      }
+    } catch (err) {
+      console.error('Error handling movie request:', err.message);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 
 
 

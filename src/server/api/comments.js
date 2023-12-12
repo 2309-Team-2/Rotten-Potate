@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('./authenticateToken'); // Import your authentication middleware
-const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId } = require('../db/comments');
+const { getAllComments, getCommentById, createComment, updateComment, deleteComment, getCommentsByReviewId} = require('../db/comments');
+const { getReviewById } = require('../db/reviews')
 // GET all comments
 router.get('/', async (req, res) => {
   try {
@@ -9,6 +10,25 @@ router.get('/', async (req, res) => {
     res.json(comments);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Call the getCommentById function
+    const comment = await getCommentById(id);
+
+    // Check if the comment exists
+    if (!comment) {
+      return res.status(404).json({ error: 'Comment not found' });
+    }
+
+    // Send the comment as JSON response
+    res.json(comment);
+  } catch (error) {
+    console.error('Error fetching comment by ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 //GET comment by review_id
@@ -21,22 +41,47 @@ router.get('/reviews/:review_id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-// GET comment by ID
-router.get('/:id', async (req, res) => { 
+
+
+router.use(authenticateToken)
+router.post('/reviews/:reviewId', authenticateToken, async (req, res) => {
   try {
-    const commentId = req.params.id;
-    const comment = await getCommentById(commentId);
-    if (comment) {
-      res.json(comment);
-    } else {
-      res.status(404).json({ message: 'Comment not found' });
+    const { content } = req.body;
+    const { reviewId } = req.params;
+    const userId = req.user.id;
+
+    // Validate content
+    if (!content) {
+      return res.status(400).json({ error: 'Content is required for a comment' });
     }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    // Assuming you have a function to check if the reviewId exists
+    // and get the associated movieId (for additional validation if needed)
+    const reviewDetails = await getReviewById(reviewId);
+
+    if (!reviewDetails) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+
+    // Get current timestamp
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    // Your createComment function should handle inserting a comment into the database
+    const comment = await createComment(content, reviewId, userId);
+
+    res.status(201).json(comment);
+  } catch (error) {
+    console.error('Error submitting comment:', error);
+    console.error('Error details:', error);
+
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-router.use(authenticateToken);
 // POST new comment
 router.post('/', authenticateToken, async (req, res) => {
   try {
