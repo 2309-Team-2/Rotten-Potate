@@ -117,6 +117,34 @@ async function deleteUser(userId) {
   }
 }
 
+async function updateUser(userId, data) {
+  const { name, email } = data;
+
+  try {
+    const {
+      rows: [updatedUser],
+    } = await db.query(
+      'UPDATE users SET name = $2, email = $3 WHERE id = $1 RETURNING *',
+      [userId, name, email]
+    );
+
+    if (!updatedUser) {
+      throw new Error('User not found');
+    }
+
+    // Assuming you are using a SQL database and 'pg' library, 
+    // and that your data structure may include additional fields
+    return updatedUser;
+  } catch (err) {
+    throw err;
+  }
+}
+
+module.exports = {
+  // Other exports...
+  updateUser,
+};
+
 async function updateUserRole(userId, newRole) {
   try {
     const {
@@ -143,5 +171,6 @@ module.exports = {
   getUserByEmail,
   getAllUsers,
   deleteUser,
+  updateUser,
   updateUserRole, 
 };

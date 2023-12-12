@@ -1,6 +1,6 @@
 const express = require('express')
 const usersRouter = express.Router();
-const { getAllUsers, getUserById, updateUserRole } = require('../db/users');
+const { getAllUsers, getUserById, updateUser, updateUserRole } = require('../db/users');
 const { authenticateToken } = require('./authenticateToken');
 const jwt = require("jsonwebtoken")
 // const { deleteUser } = require('../db/users');
@@ -105,6 +105,25 @@ usersRouter.get('/', async (req, res, next) => {
         res.send({ users });
     } catch (error) {
         next(error);
+    }
+});
+
+
+usersRouter.put('/me', authenticateToken, async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const { name, email } = req.body;
+
+        const updatedUser = await updateUser(userId, { name, email });
+
+        // Respond with the updated user or any other relevant information
+        res.status(200).json({
+            message: 'User data updated successfully.',
+            user: updatedUser,
+        });
+    } catch (error) {
+        console.error('Error updating user data:', error);
+        res.status(500).json({ error: error.message });
     }
 });
 

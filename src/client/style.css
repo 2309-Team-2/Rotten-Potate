@@ -380,8 +380,12 @@ button:hover {
 }
 
 .account button {
-  background-color: #3498db;
+  background-color: orange;
   color: #fff;
+}
+
+.account button:hover {
+  background: #ff7875;
 }
 
 /* Media query for smaller screens */
@@ -490,7 +494,7 @@ button:hover {
     max-width: 800px;
     margin: auto;
     padding: 20px;
-    background: orange;
+    background: gray;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -513,7 +517,7 @@ button:hover {
 }
 
 .admin-dashboard li {
-    background: #555;
+    background: #282c34;
     border: 1px solid black;
     color: white;
     padding: 10px 20px;
@@ -527,7 +531,7 @@ button:hover {
 }
 
 .admin-dashboard button {
-    background: #ff4d4f;
+    background: orange;
     color: white;
     border: none;
     padding: 8px 16px;
