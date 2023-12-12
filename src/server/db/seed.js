@@ -76,9 +76,13 @@ const reviews = [
   
 
 async function seedDatabase() {
+  const client = await db.connect();
+
   try {
+    await client.query('BEGIN'); // Start a transaction
+
     for (let movie of moviesSeedData) {
-      await db.query(
+      await client.query(
         "INSERT INTO movies (title, description, genre, release_year, rating) VALUES ($1, $2, $3, $4, $5)",
         [
           movie.title,
@@ -89,12 +93,16 @@ async function seedDatabase() {
         ]
       );
     }
+
+    await client.query('COMMIT'); // Commit the transaction
     console.log("Database seeded successfully");
   } catch (err) {
+    await client.query('ROLLBACK'); // Rollback the transaction in case of an error
     console.error("Error seeding database:", err);
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 }
-
 const dropTables = async () => {
   try {
     await db.query(`
