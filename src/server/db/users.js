@@ -100,10 +100,48 @@ const getUserByEmail = async (email) => {
   }
 };
 
+// Assuming you are using a SQL database and a library like `pg` for PostgreSQL
+async function deleteUser(userId) {
+  try {
+    const {
+      rows: [user],
+    } = await db.query('DELETE FROM users WHERE id = $1 RETURNING *', [userId]);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function updateUserRole(userId, newRole) {
+  try {
+    const {
+      rows: [user],
+    } = await db.query('UPDATE users SET role = $2 WHERE id = $1 RETURNING *', [
+      userId,
+      newRole,
+    ]);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createUser,
   getUser,
   getUserById,
   getUserByEmail,
   getAllUsers,
+  deleteUser,
+  updateUserRole, 
 };

@@ -70,16 +70,17 @@ body {
 .search-length {
   width: 500px;
 }
- /* login, register, profile */
+/* login, register, profile */
 
- .button-container {
+.button-container {
   margin-left: auto;
   display: flex;
 }
 
 .login-link,
 .register-link,
-.profile-link {
+.profile-link,
+.admin-link {
   text-decoration: none;
   font-weight: bold;
   font-size: 18px;
@@ -93,7 +94,8 @@ body {
 
 .login-link:hover,
 .register-link:hover,
-.profile-link:hover {
+.profile-link:hover,
+.admin-link:hover {
   background-color: #ffffff;
   color: #333;
 }
@@ -108,30 +110,29 @@ body {
 }
 
 .featured-movie-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 20px;
+  background-color: #333;
+  color: white;
   border-radius: 8px;
-  overflow: hidden;
+  margin: 0 auto;
   width: 100vh;
 }
 
 .featured-content {
   display: flex;
   align-items: center;
-  height: 50vh;
-  width: 100%;
 }
 
 .featured-movie-box img {
-  height: 25vh;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 .featured-container {
   display: flex;
   justify-content: center;
+  margin: 0 auto; /* Center the box horizontally */
 }
 
 .top-movies-box {
@@ -225,17 +226,8 @@ body {
 }
 
 /* Navigation buttons and Pagination bar */
-button {
-  background-color: orange;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 5px;
-}
-
-.pag-button:disabled {
+.pag-button:disabled,
+.featured-container button:disabled {
   background-color: #555;
   cursor: not-allowed;
 }
@@ -246,18 +238,45 @@ button {
   margin-top: 10px;
 }
 
-.pagination-bar button {
+.pag-button,
+.prev-button,
+.next-button {
   background-color: orange;
   color: #fff;
+  margin: 5px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.pagination-bar button:hover {
+.pag-button:hover,
+.prev-button:hover,
+.next-button:hover {
   text-decoration: underline;
 }
 
-.pagination-bar button.active {
+.pag-button.active,
+.prev-button.active,
+.next-button.active {
   background-color: #555;
-  text-decoration: none;
+  cursor: not-allowed;
+}
+
+button {
+  background-color: orange;
+  color: #fff;
+  margin: 5px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: darkorange; 
+  color: #fff; 
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); 
 }
 
 /* Movie List */
@@ -365,7 +384,6 @@ button {
   color: #fff;
 }
 
-
 /* Media query for smaller screens */
 @media only screen and (max-width: 768px) {
   .header-container {
@@ -388,6 +406,50 @@ button {
   .search-bar-container {
     justify-content: center;
     margin-top: 10px;
+  }
+
+  .featured-movie-box {
+    width: 75%;
+  }
+
+  .featured-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination-bar {
+    margin-top: 10px;
+  }
+
+  .pagination-bar button {
+    margin: 5px;
+  }
+
+  .movie-details {
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .movie-details img {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+  }
+
+  .pagination-bar button {
+    margin: 5px;
+  }
+
+  .pagination-bar {
+    flex-wrap: wrap;
+  }
+
+  .pagination-bar button:nth-child(-n + 5) {
+    order: 1;
+  }
+
+  .pagination-bar button:nth-child(n + 6) {
+    order: 2;
   }
 }
 
@@ -416,10 +478,64 @@ button {
   background-color: orange;
 }
 
-
-
-/* home page */ 
+/* home page */
 .top-movies-box {
   color: orange;
+}
+
+
+.admin-dashboard {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: orange;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-dashboard h2 {
+    color: whitesmoke;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 10px;
+}
+
+.admin-dashboard p {
+    color: whitesmoke;
+}
+
+.admin-dashboard ul {
+    list-style: none;
+    padding: 3;
+    margin: 0 auto; 
+    max-width: 600px;
+}
+
+.admin-dashboard li {
+    background: black;
+    border: 1px solid #ddd;
+    color: lightsteelblue;
+    padding: 10px 20px;
+    margin-top: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px beige;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.admin-dashboard button {
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.admin-dashboard button:hover {
+    background: #ff7875;
 }
 
