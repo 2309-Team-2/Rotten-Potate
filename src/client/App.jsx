@@ -101,7 +101,7 @@ function App() {
           <Route path="/movies/:movieId" element={<MovieDetail />} />
           <Route path="/random" element={<RandomMovie />} />
           <Route path="/Home" element={<Home />} />
-          <Route path="/admin" element={<AdminDashboard token={token} />} />
+          <Route path="/admin" element={<AdminDashboard token={token} setToken={setToken} />} />
         </Routes>
       </>
     </Router>
