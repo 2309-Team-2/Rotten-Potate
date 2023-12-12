@@ -77,6 +77,28 @@ const AdminDashboard = ({ token }) => {
         }
     };
 
+    const availableRoles = ['Admin', 'User', 'Editor']; // Adjust based on your roles
+
+    const changeUserRole = async (userId, newRole) => {
+        try {
+            const response = await fetch(`/api/users/${userId}/role`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ role: newRole })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update user role');
+            }
+            // Update state with new role
+            setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <div className='admin-dashboard'>
             {isLoggedIn && isAdmin ? (
@@ -88,7 +110,13 @@ const AdminDashboard = ({ token }) => {
                     <ul>
                         {users.map(user => (
                             <li key={user.id}>
-                                {user.name} - <button onClick={() => handleDelete(user.id)}>Delete</button>
+                                {user.name}
+                                <select onChange={(e) => changeUserRole(user.id, e.target.value)} defaultValue={user.role}>
+                                    {availableRoles.map(role => (
+                                        <option key={role} value={role}>{role}</option>
+                                    ))}
+                                </select>
+                                <button onClick={() => handleDelete(user.id)}>Delete</button>
                             </li>
                         ))}
                     </ul>
@@ -100,6 +128,7 @@ const AdminDashboard = ({ token }) => {
             )}
         </div>
     );
+    
 };
 
 export default AdminDashboard;

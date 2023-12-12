@@ -117,6 +117,25 @@ async function deleteUser(userId) {
   }
 }
 
+async function updateUserRole(userId, newRole) {
+  try {
+    const {
+      rows: [user],
+    } = await db.query('UPDATE users SET role = $2 WHERE id = $1 RETURNING *', [
+      userId,
+      newRole,
+    ]);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   createUser,
   getUser,
@@ -124,4 +143,5 @@ module.exports = {
   getUserByEmail,
   getAllUsers,
   deleteUser,
+  updateUserRole, 
 };

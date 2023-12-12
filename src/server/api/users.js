@@ -1,6 +1,6 @@
 const express = require('express')
 const usersRouter = express.Router();
-const { getAllUsers, getUserById } = require('../db/users');
+const { getAllUsers, getUserById, updateUserRole } = require('../db/users');
 const { authenticateToken } = require('./authenticateToken');
 const jwt = require("jsonwebtoken")
 // const { deleteUser } = require('../db/users');
@@ -9,7 +9,7 @@ const {
     createUser,
     getUser,
     getUserByEmail,
-    deleteUser
+    deleteUser,
 } = require('../db/');
 
 usersRouter.post('/register', async (req, res, next) => {
@@ -134,6 +134,17 @@ usersRouter.delete('/:userId', async (req, res, next) => {
         res.status(204).end(); // No content to send back, but the deletion was successful
     } catch (error) {
         next(error);
+    }
+});
+
+usersRouter.put('/:userId/role', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const { role } = req.body;
+        await updateUserRole(userId, role);
+        res.status(200).json({ message: 'User role updated successfully.' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 });
 

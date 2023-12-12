@@ -391,25 +391,24 @@ button:disabled {
   color: orange;
 }
 
-// AdminDashboard.css
 .admin-dashboard {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     max-width: 800px;
     margin: auto;
     padding: 20px;
-    background: #f4f4f4;
+    background: orange;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .admin-dashboard h2 {
-    color: #d3d1d1;
+    color: whitesmoke;
     border-bottom: 2px solid #eaeaea;
     padding-bottom: 10px;
 }
 
 .admin-dashboard p {
-    color: #666;
+    color: whitesmoke;
 }
 
 .admin-dashboard ul {
