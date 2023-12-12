@@ -77,7 +77,7 @@ const AdminDashboard = ({ token, setToken }) => {
         }
     };
 
-    const availableRoles = ['Admin', 'User', 'Editor']; // Adjust based on your roles
+    const availableRoles = ['admin', 'user', 'editor']; // Adjust based on your roles
 
     const changeUserRole = async (userId, newRole) => {
         try {
