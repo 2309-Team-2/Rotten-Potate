@@ -44,7 +44,7 @@ function FeaturedMovie({ movies }) {
           </button>
 
           {/* Movie details */}
-          <div className="movie-details">
+          <div className="feat-details">
             <Link
               to={`/movies/${featuredMovie.id}`}
               className="movie-link"
