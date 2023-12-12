@@ -30,13 +30,17 @@ const AdminDashboard = ({ token, setToken }) => {
     };
 
     useEffect(() => {
-        if (token) {
-            fetchUserData();
-        }
-    
+        const checkAdminStatus = async () => {
+            if (token) {
+                await fetchUserData();
+            }
+        };
+
+        checkAdminStatus(); // Call the function directly to check admin status on mount
+
         const fetchAllUsers = async () => {
             if (token && isAdmin) {
-                setIsLoading(true); // Ensure loading state is set while fetching
+                setIsLoading(true);
                 try {
                     const response = await fetch('/api/users', {
                         headers: {
@@ -47,29 +51,25 @@ const AdminDashboard = ({ token, setToken }) => {
                     if (response.ok && result.users && Array.isArray(result.users)) {
                         setUsers(result.users);
                     } else {
-                        // Handle cases where users is not present or not an array
                         console.error('Expected an array of users, but received:', result);
-                        setUsers([]); // Reset users to an empty array to avoid errors in rendering
+                        setUsers([]);
                     }
                 } catch (error) {
                     console.error('Error fetching all users:', error);
                 }
-                setIsLoading(false); // Set loading state to false after fetching
+                setIsLoading(false);
             }
         };
-    
-        fetchAllUsers(); // Fetch all users when isAdmin state is determined
-    }, [token, isAdmin]); // Dependency array includes isAdmin to refetch when it changes
-    
+
+        fetchAllUsers();
+    }, [token, isAdmin]);
 
     const handleDelete = async (userId) => {
         try {
             const response = await fetch(`/api/users/${userId}`, { method: 'DELETE' });
             if (response.ok) {
-                // Remove the deleted user from the state
                 setUsers(users.filter(user => user.id !== userId));
             } else {
-                // Handle error
                 console.error('Failed to delete user');
             }
         } catch (error) {
@@ -77,7 +77,7 @@ const AdminDashboard = ({ token, setToken }) => {
         }
     };
 
-    const availableRoles = ['admin', 'user', 'editor']; // Adjust based on your roles
+    const availableRoles = ['admin', 'user', 'editor'];
 
     const changeUserRole = async (userId, newRole) => {
         try {
@@ -92,7 +92,6 @@ const AdminDashboard = ({ token, setToken }) => {
             if (!response.ok) {
                 throw new Error('Failed to update user role');
             }
-            // Update state with new role
             setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
         } catch (error) {
             console.error(error);
@@ -100,17 +99,13 @@ const AdminDashboard = ({ token, setToken }) => {
     };
 
     const handleLogout = () => {
-      console.log('Logging out...');
-  
-      setUser({});
-      setToken(null);
-  
-      // Clear token from localStorage
-      localStorage.removeItem('userToken');
-  
-      setIsLoggedIn(false);
-      setIsAdmin(false);
-  };
+        console.log('Logging out...');
+        setUser({});
+        setToken(null);
+        localStorage.removeItem('userToken');
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+    };
 
     return (
         <div className='admin-dashboard'>
@@ -142,7 +137,6 @@ const AdminDashboard = ({ token, setToken }) => {
             )}
         </div>
     );
-    
 };
 
 export default AdminDashboard;
