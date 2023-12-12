@@ -120,6 +120,9 @@ const AdminDashboard = ({ token, setToken }) => {
                         {users.map(user => (
                             <li key={user.id}>
                                 {user.name}
+                                <div className="admin-d-email">
+                                {user.email}
+                                </div>
                                 <select onChange={(e) => changeUserRole(user.id, e.target.value)} defaultValue={user.role}>
                                     {availableRoles.map(role => (
                                         <option key={role} value={role}>{role}</option>

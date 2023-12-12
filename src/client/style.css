@@ -483,6 +483,7 @@ button:hover {
   color: orange;
 }
 
+/* admin dashboard */
 
 .admin-dashboard {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -512,13 +513,13 @@ button:hover {
 }
 
 .admin-dashboard li {
-    background: black;
-    border: 1px solid #ddd;
-    color: lightsteelblue;
+    background: #555;
+    border: 1px solid black;
+    color: white;
     padding: 10px 20px;
     margin-top: 8px;
     border-radius: 4px;
-    box-shadow: 0 2px 4px beige;
+    box-shadow: 0 2px 4px black;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -537,5 +538,9 @@ button:hover {
 
 .admin-dashboard button:hover {
     background: #ff7875;
+}
+.admin-d-email {
+  margin-left: 10px;
+  
 }
 
