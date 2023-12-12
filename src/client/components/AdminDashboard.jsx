@@ -4,6 +4,8 @@ const AdminDashboard = ({ token }) => {
     const [user, setUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchUserData = async () => {
         try {
@@ -31,7 +33,71 @@ const AdminDashboard = ({ token }) => {
         if (token) {
             fetchUserData();
         }
-    }, [token]);
+    
+        const fetchAllUsers = async () => {
+            if (token && isAdmin) {
+                setIsLoading(true); // Ensure loading state is set while fetching
+                try {
+                    const response = await fetch('/api/users', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.users && Array.isArray(result.users)) {
+                        setUsers(result.users);
+                    } else {
+                        // Handle cases where users is not present or not an array
+                        console.error('Expected an array of users, but received:', result);
+                        setUsers([]); // Reset users to an empty array to avoid errors in rendering
+                    }
+                } catch (error) {
+                    console.error('Error fetching all users:', error);
+                }
+                setIsLoading(false); // Set loading state to false after fetching
+            }
+        };
+    
+        fetchAllUsers(); // Fetch all users when isAdmin state is determined
+    }, [token, isAdmin]); // Dependency array includes isAdmin to refetch when it changes
+    
+
+    const handleDelete = async (userId) => {
+        try {
+            const response = await fetch(`/api/users/${userId}`, { method: 'DELETE' });
+            if (response.ok) {
+                // Remove the deleted user from the state
+                setUsers(users.filter(user => user.id !== userId));
+            } else {
+                // Handle error
+                console.error('Failed to delete user');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const availableRoles = ['Admin', 'User', 'Editor']; // Adjust based on your roles
+
+    const changeUserRole = async (userId, newRole) => {
+        try {
+            const response = await fetch(`/api/users/${userId}/role`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ role: newRole })
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update user role');
+            }
+            // Update state with new role
+            setUsers(users.map(user => user.id === userId ? { ...user, role: newRole } : user));
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <div className='admin-dashboard'>
@@ -41,6 +107,19 @@ const AdminDashboard = ({ token }) => {
                     <p>Email: {user.email}</p>
                     <p>First Name: {user.name}</p>
                     <p>Role: {user.role}</p>
+                    <ul>
+                        {users.map(user => (
+                            <li key={user.id}>
+                                {user.name}
+                                <select onChange={(e) => changeUserRole(user.id, e.target.value)} defaultValue={user.role}>
+                                    {availableRoles.map(role => (
+                                        <option key={role} value={role}>{role}</option>
+                                    ))}
+                                </select>
+                                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
                 </>
             ) : isLoggedIn ? (
                 <p>You do not have admin privileges. Please log in as an admin.</p>
@@ -49,6 +128,7 @@ const AdminDashboard = ({ token }) => {
             )}
         </div>
     );
+    
 };
 
 export default AdminDashboard;
