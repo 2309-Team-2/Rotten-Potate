@@ -13,7 +13,7 @@ const {
 } = require('../db/');
 
 usersRouter.post('/register', async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
   
     try {
       const _user = await getUserByEmail(email);
@@ -27,7 +27,8 @@ usersRouter.post('/register', async (req, res, next) => {
         const user = await createUser({
             name,
             email,
-            password
+            password,
+            role: "user"
         });
 
         const token = jwt.sign({

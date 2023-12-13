@@ -35,7 +35,14 @@ router.get('/:id', async (req, res) => {
     }
   });
 
-
+  router.post('/add', async (req, res) => {
+    try {
+        const newMovie = await addMovie(req.body);
+        res.status(201).json(newMovie);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 router.post('/', async (req, res) => {
   try {

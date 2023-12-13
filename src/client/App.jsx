@@ -13,6 +13,7 @@ import SingleMovie from "./components/SingleMovie";
 import Profile from "./components/Profile";
 import MovieList from "./components/MovieList";
 import RandomMovie from "./components/RandomMovie";
+import lasers from "./assets/lasers2.mp4"
 
 function App() {
   const [token, setToken] = useState(null);
@@ -32,6 +33,14 @@ function App() {
     }
   }, [token]);
 
+  useEffect(() => {
+    // Check the validity of the token on page load
+    const storedToken = localStorage.getItem('userToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const fetchUserData = async () => {
     try {
       const response = await fetch("/api/users/me", {
@@ -45,15 +54,26 @@ function App() {
         setUserRole(userData.role);
       } else {
         console.error("Error fetching user data:", response.statusText);
+        // Clear the token if it's invalid
+        setToken(null);
+        setUserRole(null);
+        localStorage.removeItem('userToken');
       }
     } catch (error) {
       console.error("Error during user data fetch:", error);
+      // Clear the token if there's an error
+      setToken(null);
+      setUserRole(null);
+      localStorage.removeItem('userToken');
     }
   };
 
   return (
     <Router>
       <>
+        {/* <div className="background-container">
+          <video className="video" src={lasers} autoPlay loop muted />
+        </div> */}
         <div className="header-container">
           <Link to="/" style={{ textDecoration: "none" }}>
             <h1 className="title">

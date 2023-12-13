@@ -75,6 +75,7 @@ const Profile = ({ token, setToken }) => {
     }
   };
 
+
   return (
     <div className='account'>
       {isLoading ? (

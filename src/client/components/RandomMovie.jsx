@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 function RandomMovie() {
   const [movies, setMovies] = useState([]); // Array of movies
@@ -40,7 +41,8 @@ function RandomMovie() {
       {randomMovie && (
         <div>
           <h3>What to watch:</h3>
-          <p>Title: {randomMovie.title}</p>
+          <Link to={`/movies/${randomMovie.id}`} className="movie-link" style={{textDecoration:'none'}}>
+          <h2>{randomMovie.title}</h2>
           <img
             src={randomMovie.image_url}
             alt={randomMovie.title}
@@ -50,6 +52,7 @@ function RandomMovie() {
           <p>Description: {randomMovie.description}</p>
           <p>Release Year: {randomMovie.release_year}</p>
           <p>Rating: {randomMovie.rating}</p>
+          </Link>
           {/* Add other movie properties as needed */}
         </div>
       )}
