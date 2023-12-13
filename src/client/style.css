@@ -418,59 +418,100 @@ button:hover {
   color: orange;
 }
 
+/* Admin Dashboard */
 .admin-dashboard {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background: orange;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.admin-dashboard h2 {
-  color: whitesmoke;
-  border-bottom: 2px solid #eaeaea;
-  padding-bottom: 10px;
-}
-
-.admin-dashboard p {
-  color: whitesmoke;
-}
-
-.admin-dashboard ul {
-  list-style: none;
-  padding: 3;
-  margin: 0 auto;
-  max-width: 600px;
-}
-
-.admin-dashboard li {
-  background: black;
-  border: 1px solid #ddd;
-  color: lightsteelblue;
-  padding: 10px 20px;
-  margin-top: 8px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px beige;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: box-shadow 0.2s ease-in-out;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #444;
+  border: 1px solid #555;
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 10px;
 }
 
-.admin-dashboard button {
-  background: #ff4d4f;
-  color: white;
+.admin-container {
+  flex: 1;
+  display: flex;
+}
+
+.admin-box {
+  margin-right: 10px;
+}
+
+.users-list-box {
+  margin-left: 10px;
+}
+
+.admin-box,
+.user-actions-box,
+.users-list-box {
+  padding: 20px;
+  background-color: #555;
+  border: 1px solid #666;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-box h2,
+.user-actions-box h3,
+.user-actions-box h2,
+.users-list-box h3 {
+  color: orange;
+}
+
+.admin-box button,
+.user-actions-box button {
+  background-color: orange;
+  color: #fff;
+  padding: 10px 15px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
-.admin-dashboard button:hover {
-  background: #ff7875;
+.admin-box button:hover,
+.user-actions-box button:hover {
+  background-color: darkorange;
+}
+
+.users-list-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.users-list-box li {
+  margin-bottom: 15px;
+}
+
+.users-list-box select {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.dlt-btn {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dlt-btn:hover {
+  background-color: #c82333;
+}
+
+.user-info {
+  margin-bottom: 10px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
 }
 
 /* Movie Details */
@@ -751,5 +792,31 @@ button:hover {
   .comment-item,
   .reply-section {
     padding: 10px;
+  }
+
+  .admin-dashboard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-box,
+  .user-actions-box,
+  .users-list-box {
+    width: 90%;
+    margin: 0 0 20px; /* Add some spacing between the boxes */
+  }
+
+  .users-list-box {
+    margin-top: 20px;
+  }
+
+  .admin-box button,
+  .user-actions-box button,
+  .dlt-btn {
+    width: auto;
   }
 }
