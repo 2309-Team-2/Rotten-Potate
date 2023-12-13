@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import AddMovieForm from './AddMovies';
 
 const AdminDashboard = ({ token, setToken }) => {
     const [user, setUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [users, setUsers] = useState([]);
+    const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchUserData = async () => {
@@ -112,16 +114,43 @@ const AdminDashboard = ({ token, setToken }) => {
       setIsAdmin(false);
   };
 
+  const handleMovieAdded = (newMovie) => {
+    // Logic to handle after a new movie is added
+    // For example, you might want to refresh the movies list
+    setMovies(prevMovies => [...prevMovies, newMovie]);
+    console.log('New movie added:', newMovie);
+};
+
+const handleMovieDeleted = (deletedMovieId) => {
+    setMovies(prevMovies => prevMovies.filter(movie => movie.id !== deletedMovieId));
+    console.log('Movie deleted:', deletedMovieId);
+};
+
     return (
         <div className='admin-dashboard'>
             {isLoggedIn && isAdmin ? (
                 <>
                     <h2>Admin Dashboard</h2>
                     <p>Email: {user.email}</p>
-                    <p>First Name: {user.name}</p>
+                    <p>Name: {user.name}</p>
                     <p>Role: {user.role}</p>
                     <button onClick={handleLogout}>Logout</button>
+                    <AddMovieForm onMovieAdded={handleMovieAdded} onMovieDeleted={handleMovieDeleted}  />
+                    <div>
+                        <h3>Movies</h3>
+                        {isLoading ? <p>Loading movies...</p> :
+                          <ul>
+                            {movies.map(movie => (
+                              <li key={movie.id}>{movie.title} - {movie.genre}
+                              <img src={movie.imageUrl} alt={movie.title} style={{ width: '100px', height: 'auto' }} />
+                              </li> 
+                            ))}
+                          </ul>
+                        }
+                    </div>
+                    <br />
                     <ul>
+                        <h3>Users</h3>
                         {users.map(user => (
                             <li key={user.id}>
                                 {user.name}
