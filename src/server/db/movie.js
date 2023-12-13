@@ -14,17 +14,21 @@ async function getAllMovies() {
 
 async function getMovieById(id) {
     try {
-      const result = await db.query('SELECT * FROM movies WHERE id = $1',[id]);
-      return result.rows.length ? result.rows[0] : null;
+        const result = await db.query('SELECT * FROM movies WHERE id = $1', [id]);
+        if (result.rows.length) {
+            return result.rows[0];
+        } else {
+            return null;
+        }
     } catch (err) {
-      console.error('Error fetching movie by ID:', err.message);
-      throw err;
+        throw err;
     }
-  }
+}
 
 
   async function addMovie(movieData) {
     try {
+
         const { imageUrl, title, description, genre, releaseYear, rating } = movieData;
         const result = await db.query(
             'INSERT INTO movies (image_url, title, description, genre, release_year, rating) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;',
@@ -33,6 +37,7 @@ async function getMovieById(id) {
         return result.rows[0];
     } catch (err) {
         throw err;
+
     }
 }
     

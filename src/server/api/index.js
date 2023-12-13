@@ -6,13 +6,14 @@ const volleyball = require('volleyball')
 const reviewsRouter = require('./reviews');
 const usersRouter = require('./users');
 const commentsRouter = require('./comments');
+const ratingRouter = require('./rates')
 
 apiRouter.use(volleyball);
 apiRouter.use('/movies', moviesRouter);
 apiRouter.use('/reviews', reviewsRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/comments', commentsRouter);
-
+apiRouter.use('/rates', ratingRouter);
 // TO BE COMPLETED - set `req.user` if possible, using token sent in the request header
 apiRouter.use(async (req, res, next) => {
   const auth = req.header('Authorization');

@@ -85,7 +85,7 @@ const Login = ({ setToken }) => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
