@@ -76,9 +76,13 @@ const reviews = [
   
 
 async function seedDatabase() {
+  const client = await db.connect();
+
   try {
+    await client.query('BEGIN'); // Start a transaction
+
     for (let movie of moviesSeedData) {
-      await db.query(
+      await client.query(
         "INSERT INTO movies (title, description, genre, release_year, rating) VALUES ($1, $2, $3, $4, $5)",
         [
           movie.title,
@@ -89,12 +93,16 @@ async function seedDatabase() {
         ]
       );
     }
+
+    await client.query('COMMIT'); // Commit the transaction
     console.log("Database seeded successfully");
   } catch (err) {
+    await client.query('ROLLBACK'); // Rollback the transaction in case of an error
     console.error("Error seeding database:", err);
+  } finally {
+    client.release(); // Release the client back to the pool
   }
 }
-
 const dropTables = async () => {
   try {
     await db.query(`
@@ -181,6 +189,34 @@ async function insertUsers() {
     console.log("Seed data inserted successfully.");
   } catch (error) {
     console.error("Error inserting seed data:", error);
+  }
+}
+
+async function insertReviews() {
+  try {
+    for (const review of reviews) {
+      const { user_id, movie_id, rating, comment } = review;
+      const createdAt = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const updatedAt = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const result = await db.query(
+        `INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+        [user_id, movie_id, rating, comment, createdAt, updatedAt]
+      );
+      console.log(result.rows[0]); // This will log the inserted review to the console
+
+      // Update movie rating after inserting a review
+      await updateMovieRating(movie_id);
+    }
+  } catch (err) {
+    console.error("Error inserting reviews:", err.stack);
   }
 }
 
