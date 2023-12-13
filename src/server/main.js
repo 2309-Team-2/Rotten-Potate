@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'))
 
 app.use('/api/genres', genreRouter);
-
 const db = require('./db/client')
 db.connect()
 

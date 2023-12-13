@@ -192,6 +192,34 @@ async function insertUsers() {
   }
 }
 
+async function insertReviews() {
+  try {
+    for (const review of reviews) {
+      const { user_id, movie_id, rating, comment } = review;
+      const createdAt = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const updatedAt = new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      const result = await db.query(
+        `INSERT INTO reviews (user_id, movie_id, rating, comment, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+        [user_id, movie_id, rating, comment, createdAt, updatedAt]
+      );
+      console.log(result.rows[0]); // This will log the inserted review to the console
+
+      // Update movie rating after inserting a review
+      await updateMovieRating(movie_id);
+    }
+  } catch (err) {
+    console.error("Error inserting reviews:", err.stack);
+  }
+}
+
 async function insertComments() {
   try {
     for (let i = 0; i < comments.length; i++) {
