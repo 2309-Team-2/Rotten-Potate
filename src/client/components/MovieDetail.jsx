@@ -24,18 +24,21 @@ const MovieDetail = () => {
           comment: newReview,
         }),
       });
-
+  
       if (!response.ok) {
         console.error('Failed to submit review. Server returned:', response.status, response.statusText);
         throw new Error('Failed to submit review');
       }
-
+  
       const createdReview = await response.json();
-
+  
       // Update reviews state
       setReviews([...reviews, createdReview]);
       setNewReview('');
-
+  
+      // Update local storage with the new reviews
+      localStorage.setItem('reviews', JSON.stringify([...reviews, createdReview]));
+  
     } catch (error) {
       console.error('Error creating review:', error);
     }
@@ -150,14 +153,9 @@ const handleCommentSubmit = async () => {
   useEffect(() => {
     const fetchMovieAndReviews = async () => {
       try {
-        // Convert movieId to an integer
-        const id = parseInt(movieId, 10);
-    
-        if (isNaN(id)) {
-          console.error('Invalid movie ID:', movieId);
-          return;
-        }
-    
+        // ... (previous code)
+  
+        console.log('Fetching movie details...');
         // Fetch movie details
         const movieResponse = await fetch(`/api/movies/${movieId}`);
         if (!movieResponse.ok) {
@@ -167,20 +165,34 @@ const handleCommentSubmit = async () => {
           throw new Error(`Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`);
         }
         const movieData = await movieResponse.json();
+        console.log('Movie details:', movieData);
         setMovie(movieData);
-    
-        // Fetch reviews for the movie
-        const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
-        if (!reviewsResponse.ok) {
-          throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
+  
+        // Check if reviews are stored in localStorage
+        const storedReviews = localStorage.getItem('reviews');
+        if (storedReviews) {
+          console.log('Fetching reviews from localStorage...');
+          setReviews(JSON.parse(storedReviews));
+        } else {
+          console.log('Fetching reviews from the server...');
+          // Fetch reviews for the movie
+          const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
+          if (!reviewsResponse.ok) {
+            throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
+          }
+  
+          const reviewsData = await reviewsResponse.json();
+          console.log('Reviews from the server:', reviewsData);
+          setReviews(reviewsData);
+  
+          // Store reviews in localStorage
+          localStorage.setItem('reviews', JSON.stringify(reviewsData));
+          console.log('Reviews stored in localStorage.');
         }
-    
-        const reviewsData = await reviewsResponse.json();
-        setReviews(reviewsData);
-    
+  
         // Fetch comments for each review
         const commentsData = await Promise.all(
-          reviewsData.map(async (review) => {
+          reviews.map(async (review) => {
             const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
             if (!commentsResponse.ok) {
               throw new Error(`Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`);
@@ -188,22 +200,26 @@ const handleCommentSubmit = async () => {
             return await commentsResponse.json();
           })
         );
-    
+  
+        console.log('Comments for each review:', commentsData);
         setComments(commentsData);
       } catch (error) {
         console.error('Error fetching movie details, reviews, or comments:', error);
-    
+  
         if (error.response) {
           console.error('Response details:', error.response);
         }
-    
+  
         if (error.request) {
           console.error('Request details:', error.request);
         }
       }
     };
-
-    fetchMovieAndReviews();
+  
+    if (movieId && userToken) {
+      console.log('Fetching movie and reviews...');
+      fetchMovieAndReviews();
+    }
   }, [movieId, userToken]);
 
   if (!movie) {
@@ -225,8 +241,8 @@ return(
           value={newReview}
           onChange={(e) => setNewReview(e.target.value)}
           />
-        <button type="submit" onClick={handleReviewSubmit}>
-          Submit Review
+        <button type="submit" onClick={(event) => handleReviewSubmit(event)}>
+        Submit Review
         </button>
         <h3>Reviews:</h3>
         {reviews.length > 0 ? (
@@ -259,7 +275,7 @@ return(
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                   />
-                  <button onClick={handleCommentSubmit}>Submit Comment</button>
+                  <button onClick={(event) => handleCommentSubmit(event)}>Submit Comment</button>
                 </div>
               ) : (
                 <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
