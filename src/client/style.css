@@ -491,6 +491,10 @@ button:hover {
   max-width: 600px;
 }
 
+.movie-details p{
+  margin-top: 10px;
+}
+
 .movie-image {
   width: 100%;
   max-width: 400px;
