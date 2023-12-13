@@ -61,7 +61,7 @@ const Profile = ({ token, setToken }) => {
                 <>
                     <h2>Account Details</h2>
                     <p>Email: {user.email}</p>
-                    <p>First Name: {user.name}</p>
+                    <p>Name: {user.name}</p>
                     <button onClick={handleLogout}>Logout</button>
                 </>
             ) : (
