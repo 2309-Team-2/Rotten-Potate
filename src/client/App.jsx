@@ -13,6 +13,7 @@ import SingleMovie from "./components/SingleMovie";
 import Profile from "./components/Profile";
 import MovieList from "./components/MovieList";
 import RandomMovie from "./components/RandomMovie";
+import lasers from "./assets/lasers2.mp4"
 
 function App() {
   const [token, setToken] = useState(null);
@@ -63,6 +64,9 @@ function App() {
   return (
     <Router>
       <>
+        {/* <div className="background-container">
+          <video className="video" src={lasers} autoPlay loop muted />
+        </div> */}
         <div className="header-container">
           <Link to="/" style={{ textDecoration: "none" }}>
             <h1 className="title">
@@ -117,7 +121,7 @@ function App() {
           <Route path="/movies/:movieId" element={<MovieDetail />} />
           <Route path="/random" element={<RandomMovie />} />
           <Route path="/Home" element={<Home />} />
-          <Route path="/admin" element={<AdminDashboard token={token} />} />
+          <Route path="/admin" element={<AdminDashboard token={token} setToken={setToken} />} />
         </Routes>
       </>
     </Router>

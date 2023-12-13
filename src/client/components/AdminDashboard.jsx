@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const AdminDashboard = ({ token }) => {
+const AdminDashboard = ({ token, setToken }) => {
     const [user, setUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -77,7 +77,7 @@ const AdminDashboard = ({ token }) => {
         }
     };
 
-    const availableRoles = ['Admin', 'User', 'Editor']; // Adjust based on your roles
+    const availableRoles = ['admin', 'user', 'editor']; // Adjust based on your roles
 
     const changeUserRole = async (userId, newRole) => {
         try {
@@ -99,6 +99,19 @@ const AdminDashboard = ({ token }) => {
         }
     };
 
+    const handleLogout = () => {
+      console.log('Logging out...');
+  
+      setUser({});
+      setToken(null);
+  
+      // Clear token from localStorage
+      localStorage.removeItem('userToken');
+  
+      setIsLoggedIn(false);
+      setIsAdmin(false);
+  };
+
     return (
         <div className='admin-dashboard'>
             {isLoggedIn && isAdmin ? (
@@ -107,6 +120,7 @@ const AdminDashboard = ({ token }) => {
                     <p>Email: {user.email}</p>
                     <p>First Name: {user.name}</p>
                     <p>Role: {user.role}</p>
+                    <button onClick={handleLogout}>Logout</button>
                     <ul>
                         {users.map(user => (
                             <li key={user.id}>

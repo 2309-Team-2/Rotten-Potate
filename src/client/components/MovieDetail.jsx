@@ -6,19 +6,19 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [comments, setComments] = useState([]);
-  const [userToken, setUserToken] = useState(localStorage.getItem('userToken'));
-  const [newReview, setNewReview] = useState('');
-  const [newComment, setNewComment] = useState('');
+  const [userToken, setUserToken] = useState(localStorage.getItem("userToken"));
+  const [newReview, setNewReview] = useState("");
+  const [newComment, setNewComment] = useState("");
   const [selectedReviewId, setSelectedReviewId] = useState(null);
   const [userRating, setUserRating] = useState(5); // Default user rating
 
   const handleReviewSubmit = async () => {
     try {
       const response = await fetch(`/api/reviews/movies/${movieId}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify({
           rating: userRating,
@@ -27,17 +27,22 @@ const MovieDetail = () => {
       });
 
       if (!response.ok) {
-        console.error('Failed to submit review. Server returned:', response.status, response.statusText);
-        throw new Error('Failed to submit review');
+        console.error(
+          "Failed to submit review. Server returned:",
+          response.status,
+          response.statusText
+        );
+        throw new Error("Failed to submit review");
       }
 
       const createdReview = await response.json();
 
       // Update reviews state
+
       setReviews((prevReviews) => (prevReviews ? [...prevReviews, createdReview] : [createdReview]));
       setNewReview('');
     } catch (error) {
-      console.error('Error creating review:', error);
+      console.error("Error creating review:", error);
     }
   };
 
@@ -61,6 +66,7 @@ const MovieDetail = () => {
       }
 
       // Implement your logic to submit a comment for the selected review
+
       const response = await fetch(`/api/comments/reviews/${selectedReviewId}`, {
         method: 'POST',
         headers: {
@@ -116,32 +122,37 @@ const MovieDetail = () => {
   const handleDeleteComment = async (commentId) => {
     try {
       const response = await fetch(`/api/comments/${commentId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${userToken}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
 
       if (!response.ok) {
-        console.error('Failed to delete comment. Server returned:', response.status, response.statusText);
-        throw new Error('Failed to delete comment');
+        console.error(
+          "Failed to delete comment. Server returned:",
+          response.status,
+          response.statusText
+        );
+        throw new Error("Failed to delete comment");
       }
 
       // Update comments state
-      setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
-
+      setComments((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId)
+      );
     } catch (error) {
-      console.error('Error deleting comment:', error.message);
+      console.error("Error deleting comment:", error.message);
     }
   };
 
   const handleUpdateComment = async (commentId, updatedText) => {
     try {
       const response = await fetch(`/api/comments/${commentId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify({
           content: updatedText,
@@ -149,8 +160,12 @@ const MovieDetail = () => {
       });
 
       if (!response.ok) {
-        console.error('Failed to update comment. Server returned:', response.status, response.statusText);
-        throw new Error('Failed to update comment');
+        console.error(
+          "Failed to update comment. Server returned:",
+          response.status,
+          response.statusText
+        );
+        throw new Error("Failed to update comment");
       }
 
       const updatedComment = await response.json();
@@ -158,12 +173,13 @@ const MovieDetail = () => {
       // Update comments state
       setComments((prevComments) =>
         prevComments.map((comment) =>
-          comment.id === commentId ? { ...comment, content: updatedComment.content } : comment
+          comment.id === commentId
+            ? { ...comment, content: updatedComment.content }
+            : comment
         )
       );
-
     } catch (error) {
-      console.error('Error updating comment:', error.message);
+      console.error("Error updating comment:", error.message);
     }
   };
 
@@ -205,17 +221,21 @@ const MovieDetail = () => {
         const id = parseInt(movieId, 10);
 
         if (isNaN(id)) {
-          console.error('Invalid movie ID:', movieId);
+          console.error("Invalid movie ID:", movieId);
           return;
         }
 
         // Fetch movie details
         const movieResponse = await fetch(`/api/movies/${movieId}`);
         if (!movieResponse.ok) {
-          console.error(`Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`);
+          console.error(
+            `Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`
+          );
           const responseText = await movieResponse.text();
-          console.error('Response body:', responseText);
-          throw new Error(`Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`);
+          console.error("Response body:", responseText);
+          throw new Error(
+            `Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`
+          );
         }
         const movieData = await movieResponse.json();
         setMovie(movieData);
@@ -223,7 +243,9 @@ const MovieDetail = () => {
         // Fetch reviews for the movie
         const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
         if (!reviewsResponse.ok) {
-          throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
+          throw new Error(
+            `Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`
+          );
         }
 
         const reviewsData = await reviewsResponse.json();
@@ -232,14 +254,17 @@ const MovieDetail = () => {
         // Fetch comments for each review
         const commentsData = await Promise.all(
           reviewsData.map(async (review) => {
-            const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
+            const commentsResponse = await fetch(
+              `/api/comments/reviews/${review.id}`
+            );
             if (!commentsResponse.ok) {
-              throw new Error(`Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`);
+              throw new Error(
+                `Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`
+              );
             }
             return await commentsResponse.json();
           })
         );
-
         // Convert the array to an object with review IDs as keys
         const organizedComments = commentsData.reduce((acc, curr, index) => {
           acc[reviewsData[index].id] = curr;
@@ -251,11 +276,11 @@ const MovieDetail = () => {
         console.error('Error fetching movie details, reviews, or comments:', error);
 
         if (error.response) {
-          console.error('Response details:', error.response);
+          console.error("Response details:", error.response);
         }
 
         if (error.request) {
-          console.error('Request details:', error.request);
+          console.error("Request details:", error.request);
         }
       }
     };
@@ -266,7 +291,7 @@ const MovieDetail = () => {
   }, [movieId, userToken]); // Update the dependency array
 
   if (!movie) {
-    return <div>Movie not found!</div>;
+    return <div className="single-movie-container">Movie not found!</div>;
   }
 
   return (
