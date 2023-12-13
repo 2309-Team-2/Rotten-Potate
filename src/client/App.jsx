@@ -26,6 +26,14 @@ function App() {
     }
   }, [token]);
 
+  useEffect(() => {
+    // Check the validity of the token on page load
+    const storedToken = localStorage.getItem('userToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
   const fetchUserData = async () => {
     try {
       const response = await fetch("/api/users/me", {
@@ -39,9 +47,17 @@ function App() {
         setUserRole(userData.role);
       } else {
         console.error("Error fetching user data:", response.statusText);
+        // Clear the token if it's invalid
+        setToken(null);
+        setUserRole(null);
+        localStorage.removeItem('userToken');
       }
     } catch (error) {
       console.error("Error during user data fetch:", error);
+      // Clear the token if there's an error
+      setToken(null);
+      setUserRole(null);
+      localStorage.removeItem('userToken');
     }
   };
 

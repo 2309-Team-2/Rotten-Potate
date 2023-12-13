@@ -14,13 +14,16 @@ async function getAllMovies() {
 
 async function getMovieById(id) {
     try {
-      const result = await db.query('SELECT * FROM movies WHERE id = $1',[id]);
-      return result.rows.length ? result.rows[0] : null;
+        const result = await db.query('SELECT * FROM movies WHERE id = $1', [id]);
+        if (result.rows.length) {
+            return result.rows[0];
+        } else {
+            return null;
+        }
     } catch (err) {
-      console.error('Error fetching movie by ID:', err.message);
-      throw err;
+        throw err;
     }
-  }
+}
 
 
 async function addMovie(movieData) {
