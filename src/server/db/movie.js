@@ -40,15 +40,15 @@ async function addMovie(movieData) {
     }
     
     async function updateMovie(id, movieData) {
-      const { title, description, genre, releaseYear, rating } = movieData;
+      const { imageUrl, title, description, genre, releaseYear, rating } = movieData;
       try {
-          const result = await db.query(
-              'UPDATE movies SET title = $2, description = $3, genre = $4, release_year = $5, rating = $6 WHERE id = $1 RETURNING *',
-              [id, title, description, genre, releaseYear, rating]
-          );
-          return result.rows[0];
+        const result = await db.query(
+          'UPDATE movies SET image_url = $2, title = $3, description = $4, genre = $5, release_year = $6, rating = $7 WHERE id = $1 RETURNING *',
+          [id, imageUrl, title, description, genre, releaseYear, rating]
+        );
+        return result.rows[0];
       } catch (err) {
-          throw err;
+        throw err;
       }
     }
     

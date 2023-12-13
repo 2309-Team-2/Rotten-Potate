@@ -35,7 +35,6 @@ const AdminDashboard = ({ token, setToken }) => {
     }
   };
 
-
   useEffect(() => {
     if (token) {
       fetchUserData();
@@ -73,8 +72,8 @@ const AdminDashboard = ({ token, setToken }) => {
         method: "DELETE",
       });
       if (response.ok) {
-        // Remove the deleted user from the state
-        setUsers(users.filter((user) => user.id !== userId));
+        // Remove the deleted user from the state immediately
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
       } else {
         // Handle error
         console.error("Failed to delete user");
@@ -130,6 +129,7 @@ const AdminDashboard = ({ token, setToken }) => {
   };
 
   const handleMovieDeleted = (deletedMovieId) => {
+    // Remove the deleted movie from the state immediately
     setMovies((prevMovies) =>
       prevMovies.filter((movie) => movie.id !== deletedMovieId)
     );
@@ -145,30 +145,32 @@ const AdminDashboard = ({ token, setToken }) => {
   const handleSaveUserName = async (userId) => {
     try {
       const response = await fetch(`/api/users/${userId}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: editedUserName || user.name,
-          email: editedUserEmail || user.email, 
+          email: editedUserEmail || user.email,
         }),
       });
-  
+
       if (response.ok) {
         setUsers(
           users.map((user) =>
-            user.id === userId ? { ...user, name: editedUserName, email: editedUserEmail } : user
+            user.id === userId
+              ? { ...user, name: editedUserName, email: editedUserEmail }
+              : user
           )
         );
         setEditingUserNameId(null);
         setIsEditingUserName(false);
       } else {
-        console.error('Failed to update user name');
+        console.error("Failed to update user name");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
   const handleCancelEditUserName = () => {
@@ -189,25 +191,27 @@ const AdminDashboard = ({ token, setToken }) => {
           </div>
 
           <div className="user-actions-box">
-            <h2>Add a Movie</h2>
+            <h2 style={{textAlign:"center"}}>Add a Movie</h2>
             <AddMovieForm
               onMovieAdded={handleMovieAdded}
               onMovieDeleted={handleMovieDeleted}
             />
             <div>
-              <h3>Movies</h3>
+              <h3>Movies Added</h3>
               {isLoading ? (
                 <p>Loading movies...</p>
               ) : (
                 <ul>
                   {movies.map((movie) => (
-                    <li key={movie.id}>
-                      {movie.title} - {movie.genre}
+                    <li key={movie.id} style={{listStyle:"none"}}>
                       <img
-                        src={movie.imageUrl}
+                        src={movie.image_url}
                         alt={movie.title}
                         style={{ width: "100px", height: "auto" }}
                       />
+                      <div>
+                        <p>{movie.title} - {movie.genre}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -256,19 +260,19 @@ const AdminDashboard = ({ token, setToken }) => {
                       <div>
                         <label>
                           New Username:
-                        <input
-                          type="text"
-                          value={editedUserName}
-                          onChange={(e) => setEditedUserName(e.target.value)}
-                        />
+                          <input
+                            type="text"
+                            value={editedUserName}
+                            onChange={(e) => setEditedUserName(e.target.value)}
+                          />
                         </label>
                         <label>
                           New Email:
-                        <input
-                          type="text"
-                          value={editedUserEmail}
-                          onChange={(e) => setEditedEmail(e.target.value)}
-                        />
+                          <input
+                            type="text"
+                            value={editedUserEmail}
+                            onChange={(e) => setEditedEmail(e.target.value)}
+                          />
                         </label>
                         <button onClick={() => handleSaveUserName(user.id)}>
                           Save
