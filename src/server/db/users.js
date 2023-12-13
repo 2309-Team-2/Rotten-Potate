@@ -145,6 +145,7 @@ module.exports = {
   updateUser,
 };
 
+
 async function updateUserRole(userId, newRole) {
   try {
     const {

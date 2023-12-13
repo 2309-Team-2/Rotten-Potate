@@ -10,6 +10,7 @@ const AdminDashboard = ({ token, setToken }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [editingUserNameId, setEditingUserNameId] = useState(null);
   const [editedUserName, setEditedUserName] = useState("");
+  const [editedUserEmail, setEditedEmail] = useState("");
   const [isEditingUserName, setIsEditingUserName] = useState(false);
 
   const fetchUserData = async () => {
@@ -144,30 +145,32 @@ const AdminDashboard = ({ token, setToken }) => {
   const handleSaveUserName = async (userId) => {
     try {
       const response = await fetch(`/api/users/${userId}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: editedUserName }),
+        body: JSON.stringify({
+          name: editedUserName || user.name,
+          email: editedUserEmail || user.email, 
+        }),
       });
-
+  
       if (response.ok) {
         setUsers(
           users.map((user) =>
-            user.id === userId ? { ...user, name: editedUserName } : user
+            user.id === userId ? { ...user, name: editedUserName, email: editedUserEmail } : user
           )
         );
         setEditingUserNameId(null);
         setIsEditingUserName(false);
       } else {
-        console.error("Failed to update user name");
+        console.error('Failed to update user name');
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
-
   const handleCancelEditUserName = () => {
     setEditingUserNameId(null);
     setIsEditingUserName(false);
@@ -251,11 +254,22 @@ const AdminDashboard = ({ token, setToken }) => {
                     )}
                     {user.id === editingUserNameId && (
                       <div>
+                        <label>
+                          New Username:
                         <input
                           type="text"
                           value={editedUserName}
                           onChange={(e) => setEditedUserName(e.target.value)}
                         />
+                        </label>
+                        <label>
+                          New Email:
+                        <input
+                          type="text"
+                          value={editedUserEmail}
+                          onChange={(e) => setEditedEmail(e.target.value)}
+                        />
+                        </label>
                         <button onClick={() => handleSaveUserName(user.id)}>
                           Save
                         </button>
