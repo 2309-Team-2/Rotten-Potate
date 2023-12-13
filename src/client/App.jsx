@@ -21,6 +21,13 @@ function App() {
   const [searchResults] = useState([]);
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('userToken');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+  useEffect(() => {
     if (token) {
       fetchUserData();
     }

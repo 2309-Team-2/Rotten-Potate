@@ -186,6 +186,7 @@ body {
   margin-bottom: 10px;
 }
 
+
 .feat-details {
   flex-grow: 1;
   padding: 0 20px;
@@ -365,7 +366,7 @@ button:hover {
 }
 
 .account button {
-  background-color: #3498db;
+  background-color: orange;
   color: #fff;
 }
 
@@ -787,7 +788,7 @@ button:hover {
   .review-section {
     padding: 0 10px;
   }
-
+  
   .review-item,
   .comment-item,
   .reply-section {

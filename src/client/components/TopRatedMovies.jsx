@@ -12,7 +12,7 @@ const TopRatedMovies = () => {
         const response = await fetch('/api/movies');
         const movies = await response.json();
 
-        // Sort movies by rating in descending order and take the top 5
+        // Sort movies by rating in descending order and take the top 10
         const topMovies = movies
           .sort((a, b) => b.rating - a.rating)
           .slice(0, 10);

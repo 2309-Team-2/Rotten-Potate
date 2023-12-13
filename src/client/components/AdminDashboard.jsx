@@ -34,6 +34,7 @@ const AdminDashboard = ({ token, setToken }) => {
     }
   };
 
+
   useEffect(() => {
     if (token) {
       fetchUserData();
@@ -62,7 +63,6 @@ const AdminDashboard = ({ token, setToken }) => {
         setIsLoading(false); // Set loading state to false after fetching
       }
     };
-
     fetchAllUsers(); // Fetch all users when isAdmin state is determined
   }, [token, isAdmin]); // Dependency array includes isAdmin to refetch when it changes
 
