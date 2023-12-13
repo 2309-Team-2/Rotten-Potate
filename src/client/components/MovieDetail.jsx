@@ -288,50 +288,59 @@ const MovieDetail = () => {
         />
       </label>
       <button onClick={handleUpdateRating}>Update Rating</button>
+      <h3>Leave a Review:</h3>
+        <textarea
+          rows="4"
+          cols="50"
+          value={newReview}
+          onChange={(e) => setNewReview(e.target.value)}/>
+             <button type="submit" onClick={handleReviewSubmit}>
+          Submit Review
+        </button>
       <h3>Reviews:</h3>
       {reviews.length > 0 ? (
         <ul>
-          {reviews.map((review) => (
-            <li key={review.id}>
-              <p>{review.comment}</p>
-              <h4>Comments:</h4>
-              {comments[review.id] && comments[review.id].length > 0 ? (
-                <ul>
-                  {comments[review.id].map((comment) => (
-                    <li key={`${review.id}-${comment.id}`}>
-                      <p>{comment.content}</p>
-                      {/* Uncomment these lines to include delete and update buttons */}
-                      {/* <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-                      <button onClick={() => handleUpdateComment(comment.id, prompt('Enter updated text:', comment.content))}>
-                        Update
-                      </button> */}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No comments available.</p>
-              )}
-              {selectedReviewId === review.id ? (
-                <div>
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  />
-                  <button onClick={handleCommentSubmit}>Submit Comment</button>
-                </div>
-              ) : (
-                <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div>
-          <p>No reviews available.</p>
-        </div>
-      )}
+        {reviews.map((review) => (
+          <li key={review.id}>
+            <p>{review.comment}</p>
+            <h4>Comments:</h4>
+            {comments[review.id] && comments[review.id].length > 0 ? (
+              <ul>
+                {comments[review.id].map((comment) => (
+                   <li key={`${review.Id}-${comment.id}`}>
+                    <p>{comment.content}</p>
+                    {/* Uncomment these lines to include delete and update buttons */}
+                    {/* <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                    <button onClick={() => handleUpdateComment(comment.id, prompt('Enter updated text:', comment.content))}>
+                      Update
+                    </button> */}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No comments available.</p>
+            )}
+            {selectedReviewId === review.id ? (
+              <div>
+                <textarea
+                  rows="4"
+                  cols="50"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+                <button onClick={handleCommentSubmit}>Submit Comment</button>
+              </div>
+            ) : (
+              <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>
+        <p>No reviews available.</p>
+      </div>
+    )}
     </div>
   );
 };
