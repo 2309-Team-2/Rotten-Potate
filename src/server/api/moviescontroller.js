@@ -103,4 +103,29 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+router.patch('/:id', async (req, res) => {
+  const movieId = req.params.id;
+  const updatedMovieData = req.body;
+
+  try {
+    // Check if the movie exists
+    const existingMovie = await getMovieById(movieId);
+    if (!existingMovie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+
+    // Check if there are reviews associated with the movie
+    const reviews = await getReviewsByMovieId(movieId);
+    if (reviews.length > 0) {
+      return res.status(400).json({ message: 'Cannot update a movie with associated reviews' });
+    }
+
+    // Update the movie
+    const updatedMovie = await updateMovie(movieId, updatedMovieData);
+    res.json(updatedMovie);
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error', error: err.message });
+  }
+});
+
 module.exports = router;
