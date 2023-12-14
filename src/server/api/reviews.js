@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllReviews, getReviewById, createReview, updateReview, getReviewsByMovieId} = require('../db/reviews'); 
+const { getAllReviews, getReviewById, createReview, updateReview, getReviewsByMovieId, getUserReviews, deleteReview } = require('../db/reviews'); 
 const { authenticateToken } = require('./authenticateToken');
 // GET all reviews
 router.get('/', async (req, res) => {
@@ -86,17 +86,17 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-
 router.patch('/:id', authenticateToken, async (req, res) => {
   try {
     const reviewId = parseInt(req.params.id);
-    const { comment } = req.body;
-    // Validate input fields
-    if (comment == null) {
-      return res.status(400).json({ message: 'Comment is required to update a review' });
+    const { comment, rating } = req.body;
+
+    if (comment == null && rating == null) {
+      return res.status(400).json({ message: 'Comment or rating is required to update a review' });
     }
-    const updatedFields = { ...(comment && { comment }) };
-    // Update the review in the database
+
+    const updatedFields = { ...(comment && { comment }), ...(rating && { rating }) };
+
     const updatedReview = await updateReview(reviewId, updatedFields);
     if (updatedReview) {
       res.json(updatedReview);
@@ -112,6 +112,32 @@ router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const reviewId = parseInt(req.params.id);
     const deletedReview = await deleteReview(reviewId);
+    if (deletedReview) {
+      res.json({ message: 'Review deleted successfully' });
+    } else {
+      res.status(404).json({ message: 'Review not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error', error: error.toString() });
+  }
+});
+
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const userReviews = await getUserReviews(userId);
+    res.json(userReviews);
+  } catch (error) {
+    console.error('Error fetching user reviews:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.delete('/user/:userId/:reviewId', authenticateToken, async (req, res) => {
+  try {
+    const { userId, reviewId } = req.params;
+    const deletedReview = await deleteReview(reviewId);
+
     if (deletedReview) {
       res.json({ message: 'Review deleted successfully' });
     } else {

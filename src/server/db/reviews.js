@@ -77,6 +77,41 @@ async function deleteReviewsByMovieId(movieId) {
   }
 }
 
+async function getUserReviews(userId) {
+  try {
+    const query = `
+      SELECT reviews.*, movies.title as movie_name
+      FROM reviews
+      JOIN movies ON reviews.movie_id = movies.id
+      WHERE reviews.user_id = $1`;
+    const values = [userId];
+    const result = await db.query(query, values);
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function deleteReviewById(reviewId) {
+  const client = await db.connect();
+  try {
+    await client.query('BEGIN');
+
+    await client.query('DELETE FROM comments WHERE review_id = $1', [reviewId]);
+
+    const result = await client.query('DELETE FROM reviews WHERE id = $1 RETURNING *', [reviewId]);
+
+    await client.query('COMMIT');
+
+    return result.rows[0]; 
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   getAllReviews,
   getReviewById,
@@ -85,4 +120,6 @@ module.exports = {
   deleteReview,
   getReviewsByMovieId,
   deleteReviewsByMovieId,
+  getUserReviews,
+  deleteReviewById
 };

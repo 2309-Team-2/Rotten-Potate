@@ -31,9 +31,8 @@ const Login = ({ setToken }) => {
           password,
         }),
       });
-  
+      console.log('Login response:', response);
       const result = await response.json();
-      console.log(result);
   
       if (response.ok && result.token) {
         console.log('Login successful!');
