@@ -14,7 +14,10 @@ const MovieDetail = () => {
 
   const handleReviewSubmit = async () => {
     try {
-      const response = await fetch(`/api/reviews/movies/${movieId}`, {
+      // Ensure movieId is accessible within the closure
+      const currentMovieId = movieId;
+  
+      const response = await fetch(`/api/reviews/movies/${currentMovieId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,6 +26,7 @@ const MovieDetail = () => {
         body: JSON.stringify({
           rating: userRating,
           comment: newReview,
+          movieId: parseInt(currentMovieId, 10), // Convert to number if needed
         }),
       });
   
@@ -37,13 +41,14 @@ const MovieDetail = () => {
   
       const createdReview = await response.json();
   
-      // Update reviews state
-
-      setReviews([...reviews, createdReview]);
-      setNewReview('');
+      // Update reviews state using the functional form of setReviews
+      setReviews((prevReviews) => {
+        const updatedReviews = [...prevReviews, { ...createdReview, movieId: currentMovieId }];
+        localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+        return updatedReviews;
+      });
   
-      // Update local storage with the new reviews
-      localStorage.setItem('reviews', JSON.stringify([...reviews, createdReview]));
+      setNewReview("");
   
     } catch (error) {
       console.error("Error creating review:", error);
@@ -54,25 +59,25 @@ const MovieDetail = () => {
     // Set the selected review ID when the "Reply" button is clicked
     setSelectedReviewId(reviewId);
   };
-
   const handleCommentSubmit = async () => {
     try {
+      // Ensure reviewId is accessible within the closure
+      const currentReviewId = selectedReviewId;
+  
       // Check if a review is selected
-      if (!selectedReviewId) {
+      if (!currentReviewId) {
         console.error("No review selected for comment.");
         return;
       }
-
+  
       // Check if the new comment is not empty
       if (!newComment.trim()) {
         console.error("Comment cannot be empty.");
         return;
       }
-
-      // Implement your logic to submit a comment for the selected review
-
+  
       const response = await fetch(
-        `/api/comments/reviews/${selectedReviewId}`,
+        `/api/comments/reviews/${currentReviewId}`,
         {
           method: "POST",
           headers: {
@@ -86,7 +91,7 @@ const MovieDetail = () => {
           }),
         }
       );
-
+  
       if (!response.ok) {
         console.error(
           `Error submitting comment. Server returned: ${response.status} ${response.statusText}`
@@ -94,40 +99,40 @@ const MovieDetail = () => {
         // Optionally handle specific error scenarios
         return;
       }
-
+  
       console.log(
-        `Comment submitted successfully for review ID: ${selectedReviewId}, Comment: ${newComment}`
+        `Comment submitted successfully for review ID: ${currentReviewId}, Comment: ${newComment}`
       );
-
+  
       // Clear the comment textarea and reset selectedReviewId
       setNewComment("");
       setSelectedReviewId(null);
-
+  
       // Fetch updated comments for the selected review
       const updatedCommentsResponse = await fetch(
-        `/api/comments/reviews/${selectedReviewId}`
+        `/api/comments/reviews/${currentReviewId}`
       );
       if (!updatedCommentsResponse.ok) {
         throw new Error(
           `Error fetching updated comments. Server returned: ${updatedCommentsResponse.status} ${updatedCommentsResponse.statusText}`
         );
       }
-
+  
       const updatedCommentsData = await updatedCommentsResponse.json();
-
+  
       // Update comments state for the selected review only
       setComments((prevComments) => {
         const newComments = { ...prevComments };
-
-        if (Array.isArray(newComments[selectedReviewId])) {
-          newComments[selectedReviewId] = [
-            ...newComments[selectedReviewId],
+  
+        if (Array.isArray(newComments[currentReviewId])) {
+          newComments[currentReviewId] = [
+            ...newComments[currentReviewId],
             updatedCommentsData,
           ];
         } else {
-          newComments[selectedReviewId] = [updatedCommentsData];
+          newComments[currentReviewId] = [updatedCommentsData];
         }
-
+  
         return newComments;
       });
     } catch (error) {
@@ -242,22 +247,25 @@ const MovieDetail = () => {
         // ... (previous code)
   
         console.log('Fetching movie details...');
+   // Fetch movie details
+   const movieResponse = await fetch(`/api/movies/${movieId}`);
+   if (!movieResponse.ok) {
+     // Error handling...
+   }
+   const movieData = await movieResponse.json();
+   console.log('Movie details:', movieData);
+   setMovie(movieData);
 
+   // Fetch reviews for the movie
+   const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
+   if (!reviewsResponse.ok) {
+     // Error handling...
+   }
+
+   const reviewsData = await reviewsResponse.json();
+   console.log('Reviews from the server:', reviewsData);
+   setReviews(reviewsData);
         // Fetch movie details
-        const movieResponse = await fetch(`/api/movies/${movieId}`);
-        if (!movieResponse.ok) {
-          console.error(
-            `Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`
-          );
-          const responseText = await movieResponse.text();
-          console.error("Response body:", responseText);
-          throw new Error(
-            `Error fetching movie. Server returned: ${movieResponse.status} ${movieResponse.statusText}`
-          );
-        }
-        const movieData = await movieResponse.json();
-        console.log('Movie details:', movieData);
-        setMovie(movieData);
   
         // Check if reviews are stored in localStorage
         const storedReviews = localStorage.getItem('reviews');
@@ -269,35 +277,32 @@ const MovieDetail = () => {
           // Fetch reviews for the movie
           const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
           if (!reviewsResponse.ok) {
-            throw new Error(`Error fetching reviews. Server returned: ${reviewsResponse.status} ${reviewsResponse.statusText}`);
+            // Error handling...
           }
-  
+          
           const reviewsData = await reviewsResponse.json();
           console.log('Reviews from the server:', reviewsData);
           setReviews(reviewsData);
-  
-          // Store reviews in localStorage
-          localStorage.setItem('reviews', JSON.stringify(reviewsData));
-          console.log('Reviews stored in localStorage.');
-        }
-  
-        // Fetch comments for each review
-        const commentsData = await Promise.all(
-          reviews.map(async (review) => {
-            const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
-
-            if (!commentsResponse.ok) {
-              throw new Error(
-                `Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`
-              );
-            }
-            return await commentsResponse.json();
-          })
-        );
-
-  
-        console.log('Comments for each review:', commentsData);
-        setComments(commentsData);
+          
+          // Fetch comments for each review
+          const commentsData = await Promise.all(
+            reviewsData.map(async (review) => {
+              const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
+          
+              if (!commentsResponse.ok) {
+                throw new Error(
+                  `Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`
+                );
+              }
+              return await commentsResponse.json();
+            })
+          );
+          
+          // Log commentsData to check the structure
+          console.log('Comments for each review:', commentsData);
+          
+          // Update comments state for the selected review only
+          setComments(commentsData);}
       } catch (error) {
         console.error('Error fetching movie details, reviews, or comments:', error);
   
@@ -315,78 +320,90 @@ const MovieDetail = () => {
       console.log('Fetching movie and reviews...');
       fetchMovieAndReviews();
     }
-  }, [movieId, userToken]);
+  }, [movieId, userToken,]);
 
 
   if (!movie) {
     return <div className="single-movie-container">Movie not found!</div>;
   }
-  
-return(
-  <div className='single-movie-container'>
+  return (
+    <div className='single-movie-container'>
       <h2>{movie.title}</h2>
       <img src={movie.image_url} alt={movie.title} />
       <p>Genre: {movie.genre}</p>
       <p>Release Year: {movie.release_year}</p>
       <p>Rating: {movie.rating}</p>
+{movie.averageRating && <p>Average Rating: {movie.averageRating}</p>}
       <p>Description: {movie.description}</p>
-      <div>
-        <h3>Leave a Review:</h3>
+      <label>
+        Your Rating:
+        <input
+          type="number"
+          min="1"
+          max="10"
+          value={userRating}
+          onChange={(e) => setUserRating(parseInt(e.target.value, 10))}
+        />
+      </label>
+      <button onClick={handleUpdateRating}>Update Rating</button>
+
+      <h3>Leave a Review:</h3>
         <textarea
           rows="4"
           cols="50"
           value={newReview}
-          onChange={(e) => setNewReview(e.target.value)}
-          />
-        <button type="submit" onClick={(event) => handleReviewSubmit(event)}>
-        Submit Review
+          onChange={(e) => setNewReview(e.target.value)}/>
+             <button type="submit" onClick={handleReviewSubmit}>
+          Submit Review
         </button>
         <h3>Reviews:</h3>
-        {reviews.length > 0 ? (
+{reviews.length > 0 ? (
   <ul>
-    {reviews.map((review) => (
-      <li key={review.id}>
-        <p>{review.comment}</p>
-        <h4>Comments:</h4>
-        {comments.length > 0 && Array.isArray(comments[0]) && comments[0].length > 0 ? (
-          <ul>
-            {comments[0].map((comment) => (
-              <li key={comment.id}>
-                <p>{comment.content}</p>
-                {/* Uncomment these lines to include delete and update buttons */}
-                {/* <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-                <button onClick={() => handleUpdateComment(comment.id, prompt('Enter updated text:', comment.content))}>
-                  Update
-                </button> */}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No comments available.</p>
-        )}
-         {selectedReviewId === review.id ? (
-                <div>
-                  <textarea
-                    rows="4"
-                    cols="50"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                  />
-                  <button onClick={(event) => handleCommentSubmit(event)}>Submit Comment</button>
-                </div>
-              ) : (
-                <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
-              )}
+    {reviews
+      .filter((review) => review.movieId === movieId) // Filter reviews by movieId
+      .map((review) => (
+        <li key={review.id}>
+          <p>{review.comment}</p>
+          <h4>Comments:</h4>
+              {comments[review.id] && comments[review.id].length > 0 ? (
+  <ul>
+    {comments[review.id].map((comment) => (
+      <li key={`${review.id}-${comment.id}`}>
+        <p>{comment.content}</p>
+        {/* Uncomment these lines to include delete and update buttons */}
+        {/* <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+        <button onClick={() => handleUpdateComment(comment.id, prompt('Enter updated text:', comment.content))}>
+          Update
+        </button> */}
       </li>
     ))}
   </ul>
 ) : (
-  <div>
-    <p>No reviews available.</p>
-  </div>
+  <p>No comments available.</p>
 )}
-</div>
-</div>
+            {selectedReviewId === review.id ? (
+              <div>
+                <textarea
+                  rows="4"
+                  cols="50"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+                <button onClick={handleCommentSubmit}>Submit Comment</button>
+              </div>
+            ) : (
+              <button onClick={() => handleReplyButtonClick(review.id)}>Reply</button>
+            )}
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div>
+        <p>No reviews available.</p>
+      </div>
+    )}
+    </div>
+  );
+};
 
-)}
 export default MovieDetail;
