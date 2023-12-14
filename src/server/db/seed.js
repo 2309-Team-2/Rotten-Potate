@@ -50,7 +50,7 @@ const comments = [
     review_id: 2,
     content:
       "Inception engaged on a mainly intellectually level, but that isn't to say that film didn't pack an emotional impact.",
-    userId: 1
+    user_id: 1
   },
 ];
 
