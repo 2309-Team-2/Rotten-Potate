@@ -243,84 +243,106 @@ const MovieDetail = () => {
   useEffect(() => {
     const fetchMovieAndReviews = async () => {
       try {
-
-        // ... (previous code)
-  
-        console.log('Fetching movie details...');
-   // Fetch movie details
-   const movieResponse = await fetch(`/api/movies/${movieId}`);
-   if (!movieResponse.ok) {
-     // Error handling...
-   }
-   const movieData = await movieResponse.json();
-   console.log('Movie details:', movieData);
-   setMovie(movieData);
-
-   // Fetch reviews for the movie
-   const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
-   if (!reviewsResponse.ok) {
-     // Error handling...
-   }
-
-   const reviewsData = await reviewsResponse.json();
-   console.log('Reviews from the server:', reviewsData);
-   setReviews(reviewsData);
         // Fetch movie details
+        const movieResponse = await fetch(`/api/movies/${movieId}`);
+        if (!movieResponse.ok) {
+          // Handle error for movie details
+          console.error('Error fetching movie details:', movieResponse.status, movieResponse.statusText);
+          return;
+        }
+        
+        const movieData = await movieResponse.json();
+        console.log('Movie details:', movieData);
+        setMovie(movieData);
   
         // Check if reviews are stored in localStorage
         const storedReviews = localStorage.getItem('reviews');
         if (storedReviews) {
           console.log('Fetching reviews from localStorage...');
-          setReviews(JSON.parse(storedReviews));
-        } else {
-          console.log('Fetching reviews from the server...');
-          // Fetch reviews for the movie
-          const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
-          if (!reviewsResponse.ok) {
-            // Error handling...
-          }
-          
-          const reviewsData = await reviewsResponse.json();
-          console.log('Reviews from the server:', reviewsData);
-          setReviews(reviewsData);
+          const storedReviewsData = JSON.parse(storedReviews);
+  
+          // Update reviews state with locally stored reviews
+          setReviews(storedReviewsData);
           
           // Fetch comments for each review
           const commentsData = await Promise.all(
-            reviewsData.map(async (review) => {
+            storedReviewsData.map(async (review) => {
               const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
-          
+              
               if (!commentsResponse.ok) {
                 throw new Error(
                   `Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`
                 );
               }
+              
               return await commentsResponse.json();
             })
           );
-          
+  
           // Log commentsData to check the structure
           console.log('Comments for each review:', commentsData);
           
           // Update comments state for the selected review only
-          setComments(commentsData);}
+          setComments(commentsData);
+  
+          // Exit the function here to avoid fetching reviews from the server unnecessarily
+          return;
+        }
+  
+        console.log('Fetching reviews from the server...');
+        // Fetch reviews for the movie
+        const reviewsResponse = await fetch(`/api/reviews/movies/${movieId}`);
+        if (!reviewsResponse.ok) {
+          // Handle error for reviews
+          console.error('Error fetching reviews:', reviewsResponse.status, reviewsResponse.statusText);
+          return;
+        }
+  
+        const reviewsData = await reviewsResponse.json();
+        console.log('Reviews from the server:', reviewsData);
+        setReviews(reviewsData);
+  
+        // Update localStorage with the newly fetched reviews
+        localStorage.setItem('reviews', JSON.stringify(reviewsData));
+  
+        // Fetch comments for each review
+        const commentsData = await Promise.all(
+          reviewsData.map(async (review) => {
+            const commentsResponse = await fetch(`/api/comments/reviews/${review.id}`);
+            
+            if (!commentsResponse.ok) {
+              throw new Error(
+                `Error fetching comments. Server returned: ${commentsResponse.status} ${commentsResponse.statusText}`
+              );
+            }
+            
+            return await commentsResponse.json();
+          })
+        );
+  
+        // Log commentsData to check the structure
+        console.log('Comments for each review:', commentsData);
+        
+        // Update comments state for the selected review only
+        setComments(commentsData);
       } catch (error) {
         console.error('Error fetching movie details, reviews, or comments:', error);
   
         if (error.response) {
           console.error("Response details:", error.response);
         }
-
+  
         if (error.request) {
           console.error("Request details:", error.request);
         }
       }
     };
   
-    if (movieId && userToken) {
+    if (movieId) {
       console.log('Fetching movie and reviews...');
       fetchMovieAndReviews();
     }
-  }, [movieId, userToken,]);
+  }, [movieId, userToken]);
 
 
   if (!movie) {
