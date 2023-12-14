@@ -63,9 +63,8 @@ const Profile = ({ token, setToken }) => {
       });
 
       if (response.ok) {
-        // If the update is successful, fetch user data again to get the updated information
-        await fetchUserData(); // Wait for fetchUserData to complete before proceeding
-        setIsEditing(false); // Close the editing mode after saving
+        await fetchUserData(); 
+        setIsEditing(false);
       } else {
         const errorData = await response.json();
         console.error('Error updating user data:', response.status, response.statusText, errorData);

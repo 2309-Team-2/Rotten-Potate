@@ -10,6 +10,7 @@ const AdminDashboard = ({ token, setToken }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [editingUserNameId, setEditingUserNameId] = useState(null);
   const [editedUserName, setEditedUserName] = useState("");
+  const [editedUserEmail, setEditedEmail] = useState("");
   const [isEditingUserName, setIsEditingUserName] = useState(false);
 
   const fetchUserData = async () => {
@@ -33,7 +34,6 @@ const AdminDashboard = ({ token, setToken }) => {
       setIsLoggedIn(false);
     }
   };
-
 
   useEffect(() => {
     if (token) {
@@ -72,8 +72,8 @@ const AdminDashboard = ({ token, setToken }) => {
         method: "DELETE",
       });
       if (response.ok) {
-        // Remove the deleted user from the state
-        setUsers(users.filter((user) => user.id !== userId));
+        // Remove the deleted user from the state immediately
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
       } else {
         // Handle error
         console.error("Failed to delete user");
@@ -129,6 +129,7 @@ const AdminDashboard = ({ token, setToken }) => {
   };
 
   const handleMovieDeleted = (deletedMovieId) => {
+    // Remove the deleted movie from the state immediately
     setMovies((prevMovies) =>
       prevMovies.filter((movie) => movie.id !== deletedMovieId)
     );
@@ -149,13 +150,18 @@ const AdminDashboard = ({ token, setToken }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: editedUserName }),
+        body: JSON.stringify({
+          name: editedUserName || user.name,
+          email: editedUserEmail || user.email,
+        }),
       });
 
       if (response.ok) {
         setUsers(
           users.map((user) =>
-            user.id === userId ? { ...user, name: editedUserName } : user
+            user.id === userId
+              ? { ...user, name: editedUserName, email: editedUserEmail }
+              : user
           )
         );
         setEditingUserNameId(null);
@@ -167,7 +173,6 @@ const AdminDashboard = ({ token, setToken }) => {
       console.error("Error:", error);
     }
   };
-
   const handleCancelEditUserName = () => {
     setEditingUserNameId(null);
     setIsEditingUserName(false);
@@ -186,25 +191,27 @@ const AdminDashboard = ({ token, setToken }) => {
           </div>
 
           <div className="user-actions-box">
-            <h2>Add a Movie</h2>
+            <h2 style={{textAlign:"center"}}>Add a Movie</h2>
             <AddMovieForm
               onMovieAdded={handleMovieAdded}
               onMovieDeleted={handleMovieDeleted}
             />
             <div>
-              <h3>Movies</h3>
+              <h3>Movies Added</h3>
               {isLoading ? (
                 <p>Loading movies...</p>
               ) : (
                 <ul>
                   {movies.map((movie) => (
-                    <li key={movie.id}>
-                      {movie.title} - {movie.genre}
+                    <li key={movie.id} style={{listStyle:"none"}}>
                       <img
-                        src={movie.imageUrl}
+                        src={movie.image_url}
                         alt={movie.title}
                         style={{ width: "100px", height: "auto" }}
                       />
+                      <div>
+                        <p>{movie.title} - {movie.genre}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -251,11 +258,22 @@ const AdminDashboard = ({ token, setToken }) => {
                     )}
                     {user.id === editingUserNameId && (
                       <div>
-                        <input
-                          type="text"
-                          value={editedUserName}
-                          onChange={(e) => setEditedUserName(e.target.value)}
-                        />
+                        <label>
+                          New Username:
+                          <input
+                            type="text"
+                            value={editedUserName}
+                            onChange={(e) => setEditedUserName(e.target.value)}
+                          />
+                        </label>
+                        <label>
+                          New Email:
+                          <input
+                            type="text"
+                            value={editedUserEmail}
+                            onChange={(e) => setEditedEmail(e.target.value)}
+                          />
+                        </label>
                         <button onClick={() => handleSaveUserName(user.id)}>
                           Save
                         </button>

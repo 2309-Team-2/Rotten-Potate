@@ -168,6 +168,24 @@ usersRouter.delete('/:userId', async (req, res, next) => {
     }
 });
 
+usersRouter.put('/:userId', authenticateToken, async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const { name, email } = req.body;
+
+    const updatedUser = await updateUser(userId, { name, email });
+
+    // Respond with the updated user or any other relevant information
+    res.status(200).json({
+      message: 'User data updated successfully.',
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 usersRouter.put('/:userId/role', authenticateToken, async (req, res) => {
     try {
         const userId = req.params.userId;
