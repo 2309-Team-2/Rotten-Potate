@@ -137,10 +137,12 @@ const Profile = ({ token, setToken }) => {
       });
 
       if (response.ok) {
+
         fetchUserReviews();
         setEditingReviewId(null);
         setUpdatedComment("");
         setUpdatedRating("");
+
       } else {
         const errorData = await response.json();
         console.error(
